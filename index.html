@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#05070F">
+<script>(function(){try{var t=localStorage.getItem("ft-theme")||"dark";document.documentElement.dataset.theme=t;var l=localStorage.getItem("ft-lang");if(l==="en"){document.documentElement.lang="en";document.documentElement.dir="ltr"}}catch(e){}})();</script>
+<title>Fast Techno · Employee Management</title>
+<meta name="description" content="Fast Techno employee departments, reporting hierarchy and projects.">
+<meta property="og:title" content="Fast Techno · Employee Management">
+<meta property="og:description" content="Employee departments, reporting hierarchy and projects.">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/png;base64,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">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root,html[data-theme="dark"]{--input-bg:rgba(5,7,15,.6);--aside-bg:rgba(5,7,15,.75);--feat:var(--feat);--star-off:var(--star-off);--track:rgba(255,255,255,.06);--hover:rgba(255,255,255,.015);--pop-shadow:0 20px 60px rgba(0,0,0,.6);--bg:#05070F;--bg-2:#0B1120;--surface-1:rgba(14,20,36,.72);--surface-2:rgba(20,28,48,.85);--cyan:#3FD4FF;--blue:#3A7BFF;--violet:#6C7CFF;--white:#EEF3FB;--muted:#8A97AD;--glass:rgba(255,255,255,.035);--line:rgba(150,170,205,.12);--line-strong:rgba(150,170,205,.22);--grad:linear-gradient(120deg,#5FE0FF,#3A7BFF 60%,#6C7CFF);--ok:#2fd18b;--warn:#ffb547;--bad:#ff5d6c;--r:16px}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--white);background-image:radial-gradient(900px 500px at 85% -10%,rgba(58,123,255,.18),transparent 60%),radial-gradient(700px 500px at 0% 100%,rgba(63,212,255,.08),transparent 60%);background-attachment:fixed}
+.en{font-family:'Space Grotesk','Cairo',sans-serif}
+a{color:var(--cyan)}
+button,input,select,textarea{font-family:inherit;font-size:14px}
+.hidden{display:none!important}
+.grad-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* buttons */
+.btn{border:1px solid var(--line-strong);background:var(--glass);color:var(--white);padding:9px 16px;border-radius:12px;cursor:pointer;font-weight:600;transition:.2s;display:inline-flex;align-items:center;gap:6px}
+.btn:hover{border-color:var(--cyan);transform:translateY(-1px)}
+.btn.primary{background:var(--grad);border:0;color:#fff;box-shadow:0 8px 24px -8px rgba(58,123,255,.6)}
+.btn.danger{border-color:rgba(255,93,108,.4);color:var(--bad)}
+.btn.sm{padding:5px 10px;font-size:12px;border-radius:9px}
+input,select,textarea{width:100%;background:var(--input-bg);border:1px solid var(--line-strong);color:var(--white);border-radius:11px;padding:10px 12px;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(63,212,255,.12)}
+input:disabled,select:disabled{opacity:.55;cursor:not-allowed}
+.password-field{position:relative;width:100%}
+.password-field input{padding-left:52px}
+.password-field .password-toggle{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:40px;height:36px;padding:0;justify-content:center;border:0;background:transparent;color:var(--muted);border-radius:8px}
+.password-field .password-toggle:hover{transform:translateY(-50%);color:var(--cyan);background:var(--glass)}
+.password-toggle:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
+.password-toggle svg{width:20px;height:20px;pointer-events:none}
+@media(max-width:480px){.modal .form .password-field input{padding-left:52px}}
+label{display:block;font-size:12.5px;color:var(--muted);margin:0 0 5px;font-weight:600}
+.card{background:var(--surface-1);border:1px solid var(--line);border-radius:var(--r);padding:20px;backdrop-filter:blur(14px)}
+/* login */
+#login{min-height:100vh;display:grid;place-items:center;padding:20px}
+.login-box{width:min(420px,100%);text-align:center}
+.login-box img{height:74px;margin-bottom:10px;filter:drop-shadow(0 0 22px rgba(63,212,255,.35))}
+.login-box h1{font-size:22px;margin:4px 0 2px}
+.login-box form{text-align:start;display:grid;gap:14px;margin-top:22px}
+.err{color:var(--bad);font-size:13px;min-height:18px}
+.hint{font-size:12px;color:var(--muted);margin-top:14px;line-height:1.8}
+/* layout */
+#app{display:grid;grid-template-columns:250px 1fr;min-height:100vh}
+aside{border-inline-end:1px solid var(--line);background:var(--aside-bg);backdrop-filter:blur(14px);padding:20px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column}
+aside .brand{display:flex;align-items:center;gap:10px;padding:4px 8px 20px;border-bottom:1px solid var(--line);margin-bottom:14px}
+aside .brand img{height:38px}
+aside .brand b{font-size:15px;display:block}
+aside .brand small{color:var(--muted);font-size:11px}
+nav a{display:flex;gap:10px;align-items:center;padding:11px 12px;border-radius:12px;color:var(--muted);text-decoration:none;font-weight:600;margin-bottom:4px;cursor:pointer}
+nav a:hover{background:var(--glass);color:var(--white)}
+nav a.active{background:linear-gradient(120deg,rgba(95,224,255,.14),rgba(58,123,255,.18));color:var(--white);border:1px solid var(--line-strong)}
+.me{margin-top:auto;border-top:1px solid var(--line);padding-top:14px;display:flex;align-items:center;gap:10px}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-weight:800;color:#fff;flex:none}
+main{padding:26px clamp(16px,3vw,36px);overflow-x:hidden}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:22px}
+.top h2{margin:0;font-size:24px}
+.top p{margin:2px 0 0;color:var(--muted);font-size:13px}
+.grid{display:grid;gap:16px}
+.stats{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.stat .n{font-size:30px;font-weight:800}
+.stat .l{color:var(--muted);font-size:13px}
+table{width:100%;border-collapse:collapse}
+th,td{padding:11px 10px;border-bottom:1px solid var(--line);text-align:start;font-size:13.5px;vertical-align:middle}
+th{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase}
+tr:hover td{background:var(--hover)}
+.tbl{overflow-x:auto}
+.badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:11.5px;font-weight:700;border:1px solid var(--line-strong);white-space:nowrap}
+.b-plan{background:linear-gradient(120deg,rgba(95,224,255,.15),rgba(108,124,255,.2));color:var(--cyan);font-family:'Space Grotesk'}
+.b-ok{color:var(--ok);border-color:rgba(47,209,139,.4)}
+.b-warn{color:var(--warn);border-color:rgba(255,181,71,.4)}
+.b-bad{color:var(--bad);border-color:rgba(255,93,108,.4)}
+.b-mut{color:var(--muted)}
+.stars{color:#ffc94a;letter-spacing:2px;white-space:nowrap}
+.stars span{cursor:pointer}
+.stars .off{color:var(--star-off)}
+.bar{height:7px;border-radius:9px;background:var(--track);overflow:hidden;min-width:80px}
+.bar i{display:block;height:100%;background:var(--grad);border-radius:9px}
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px}
+.toolbar input,.toolbar select{width:auto;min-width:170px}
+/* plans */
+.plans{grid-template-columns:repeat(auto-fill,minmax(280px,1fr))}
+.plan{position:relative;display:flex;flex-direction:column}
+.plan.featured{border-color:var(--blue);box-shadow:0 0 0 1px var(--blue),0 20px 50px -20px rgba(58,123,255,.5)}
+.plan .ic{font-size:30px}
+.plan h3{margin:6px 0 0;font-family:'Space Grotesk';font-size:22px;letter-spacing:1px}
+.plan .pr{font-size:28px;font-weight:800;margin:10px 0}
+.plan .pr small{font-size:13px;color:var(--muted);font-weight:500}
+.plan ul{padding:0;padding-inline-start:18px;margin:8px 0 14px;color:var(--feat);font-size:13px;line-height:1.9}
+.plan .tag{position:absolute;top:16px;inset-inline-end:16px}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(2,4,10,.72);backdrop-filter:blur(6px);display:grid;place-items:center;z-index:50;padding:16px}
+.modal .card{width:min(760px,100%);max-height:92vh;overflow:auto;background:var(--bg-2);border-color:var(--line-strong)}
+.modal h3{margin:0 0 16px}
+.form{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.form .full{grid-column:1/-1}
+.actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.bell{position:relative;font-size:17px;padding:8px 12px}.bell i{position:absolute;top:-6px;left:-6px;background:#ff4d6d;color:#fff;font-style:normal;font-size:11px;min-width:19px;height:19px;border-radius:99px;display:grid;place-items:center;padding:0 4px;font-family:'Space Grotesk'}
+#npanel{position:fixed;top:70px;left:20px;width:min(400px,calc(100vw - 24px));max-height:75vh;overflow:auto;z-index:60;background:var(--bg-2);border:1px solid var(--line-strong);border-radius:16px;box-shadow:var(--pop-shadow)}
+#npanel .nh{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg-2)}
+.ni{display:flex;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line);cursor:pointer}.ni:hover{background:var(--glass)}.ni.un{background:rgba(63,212,255,.06)}.ni.un b::after{content:" ●";color:var(--cyan);font-size:10px}
+.ni .ic{width:34px;height:34px;flex:none;border-radius:10px;display:grid;place-items:center;background:var(--glass);border:1px solid var(--line)}.ni p{margin:3px 0 0;color:var(--muted);font-size:12.5px;line-height:1.6}.ni small{color:var(--muted);font-size:11px}
+.note{border-inline-start:3px solid var(--cyan)}.note.un{background:rgba(63,212,255,.05)}
+.chip{border:1px solid var(--line-strong);padding:6px 12px;border-radius:99px;cursor:pointer;font-size:13px;user-select:none}
+.chip.on{background:var(--grad);border-color:transparent;color:#fff}
+.lock{font-size:11px;color:var(--warn)}
+/* tracker */
+.trk th,.trk td{text-align:center;padding:7px 6px}
+.trk td.d{text-align:start;white-space:nowrap;font-family:'Space Grotesk'}
+.trk tr.fri td{background:rgba(58,123,255,.07)}
+.trk tr.target td,.trk tr.done td{font-weight:800;background:rgba(95,224,255,.06)}
+.cb{width:22px;height:22px;border-radius:7px;border:1.5px solid var(--line-strong);display:inline-grid;place-items:center;cursor:pointer;transition:.15s}
+.cb.on{background:var(--grad);border-color:transparent}
+.cb.on::after{content:"✓";color:#fff;font-weight:800;font-size:13px}
+.trk input.note{padding:5px 8px;font-size:12px;border-radius:8px;min-width:140px}
+.trk input.num{width:56px;padding:4px;text-align:center}
+.ph{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;flex-wrap:wrap}
+.ph h3{margin:0;font-size:22px}
+.meta{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:13px;margin-top:8px}
+.meta b{color:var(--white)}
+.toast{position:fixed;bottom:20px;left:20px;background:var(--surface-2);border:1px solid var(--cyan);padding:12px 18px;border-radius:12px;z-index:99;animation:up .3s}
+@keyframes up{from{transform:translateY(20px);opacity:0}}
+.empty{text-align:center;color:var(--muted);padding:30px}
+.menu-btn{display:none}
+@media (max-width:900px){#app{grid-template-columns:1fr}aside{position:fixed;inset:0 0 0 auto;width:260px;z-index:40;transform:translateX(100%);transition:.25s}aside.open{transform:none}.menu-btn{display:inline-flex}.form{grid-template-columns:1fr}}
+@media print{aside,.toolbar,.btn,.menu-btn{display:none!important}#app{display:block}body{background:#fff;color:#000}.card{border:1px solid #ccc;background:#fff}}
+
+/* ===== Light theme (same tokens as fasttechnoagency.com) ===== */
+html[data-theme="light"]{--bg:#F6F8FC;--bg-2:#FFFFFF;--surface-1:rgba(255,255,255,.8);--surface-2:#FFFFFF;--cyan:#0A84D6;--blue:#1F5FE0;--violet:#4B5CE6;--white:#0B1530;--muted:#55627A;--glass:rgba(255,255,255,.7);--line:rgba(20,40,90,.09);--line-strong:rgba(20,40,90,.16);--grad:linear-gradient(120deg,#0A9BE0,#1F5FE0 60%,#4B5CE6);--ok:#12a86b;--warn:#d98a0b;--bad:#e23a4b;--input-bg:#fff;--aside-bg:rgba(255,255,255,.85);--feat:#34425c;--star-off:#cfd6e3;--track:rgba(20,40,90,.08);--hover:rgba(20,40,90,.025);--pop-shadow:0 20px 60px rgba(20,40,90,.18)}
+html[data-theme="light"] body{background-image:radial-gradient(900px 500px at 85% -10%,rgba(31,95,224,.10),transparent 60%),radial-gradient(700px 500px at 0% 100%,rgba(10,155,224,.06),transparent 60%)}
+html[data-theme="light"] .modal{background:rgba(11,21,48,.35)}
+html[data-theme="light"] .card{box-shadow:0 30px 70px -40px rgba(31,95,224,.35)}
+body{transition:background-color .3s,color .3s}
+.card,aside,input,select,textarea,.btn,#npanel{transition:background-color .3s,color .3s,border-color .3s}
+/* LTR (English) */
+html[dir="ltr"] .login-box form{text-align:left}
+@media (max-width:900px){html[dir="ltr"] aside{inset:0 auto 0 0;transform:translateX(-100%)}html[dir="ltr"] aside.open{transform:none}}
+html[dir="ltr"] #live{left:auto!important;right:14px}html[dir="ltr"] #npanel{left:auto;right:20px}
+html[dir="ltr"] body{font-family:'Space Grotesk','Cairo',sans-serif}
+/* ===== Theme + language switches (copied from fasttechnoagency.com) ===== */
+.prefs{display:inline-flex;gap:8px;align-items:center}
+#loginPrefs{position:fixed;top:16px;inset-inline-end:16px;z-index:45}
+.icon-btn{font-family:"Segoe UI Symbol","DejaVu Sans",system-ui,sans-serif!important;line-height:1;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line-strong);background:var(--glass);color:var(--white);cursor:pointer;font-size:16px;padding:0}
+.lang-switch{direction:ltr;position:relative;display:inline-flex;align-items:center;gap:0;padding:3px;border-radius:999px;border:1px solid rgba(124,92,255,.45);background:rgba(10,14,40,.6);box-shadow:0 0 18px rgba(60,140,255,.25),inset 0 0 12px rgba(124,92,255,.2);cursor:pointer;font:600 13px/1 'Space Grotesk','Cairo',sans-serif;color:#cfe3ff;isolation:isolate;flex:none;white-space:nowrap}
+.lang-switch span{position:relative;z-index:1;padding:8px 12px;border-radius:999px;transition:color .4s;min-width:2.4em;text-align:center}
+.lang-switch::before{content:"";position:absolute;z-index:0;top:3px;bottom:3px;left:3px;width:calc(50% - 3px);border-radius:999px;background:linear-gradient(135deg,#2f7bff,#8a4dff);box-shadow:0 0 16px rgba(120,90,255,.7);transition:transform .6s cubic-bezier(.7,-.4,.3,1.4)}
+html[lang="ar"] .lang-switch::before{transform:translateX(100%)}
+.lang-switch span.on{color:#fff}
+.lang-switch:focus-visible{outline:2px solid #5aa2ff;outline-offset:3px}
+html[data-theme="light"] .lang-switch{background:var(--surface-2);border-color:var(--line-strong);color:var(--white)}
+html[data-theme="light"] .lang-switch span.on{color:#fff}
+#langFx{position:fixed;inset:0;z-index:9999;pointer-events:none;visibility:hidden;perspective:1200px}
+#langFx .pane{position:absolute;top:0;bottom:0;width:20.2%;background:linear-gradient(180deg,#060a22,#120a35);transform-origin:center;transform:rotateY(90deg);box-shadow:inset 0 0 40px rgba(90,140,255,.35);border-inline:1px solid rgba(120,160,255,.35)}
+#langFx .pane::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(120,180,255,.08) 0 2px,transparent 2px 5px)}
+#langFx .core{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%) scale(.6);opacity:0;text-align:center;font:700 clamp(34px,11vw,96px)/1 'Space Grotesk','Cairo',sans-serif;color:#fff;text-shadow:0 0 20px #3b8cff,0 0 50px #8a4dff;width:90vw}
+#langFx .core small{display:block;margin-top:14px;font-size:clamp(10px,2.8vw,14px);letter-spacing:.3em;color:#8fc0ff;text-shadow:none;font-weight:500}
+#langFx .ring{position:absolute;left:50%;top:50%;width:min(260px,62vw);height:min(260px,62vw);margin:calc(min(260px,62vw) / -2);border-radius:50%;border:2px solid transparent;border-top-color:#3b8cff;border-bottom-color:#8a4dff;opacity:0;filter:drop-shadow(0 0 12px #5a7bff)}
+#langFx .scan{position:absolute;left:0;right:0;height:3px;top:0;background:linear-gradient(90deg,transparent,#6fb6ff,#b07bff,transparent);box-shadow:0 0 20px #6fb6ff;opacity:0}
+#langFx.run{visibility:visible}
+#langFx.run .pane{animation:paneIn 1.5s cubic-bezier(.77,0,.18,1) both}
+#langFx.run .core{animation:coreIn 1.5s ease both}
+#langFx.run .ring{animation:ringSpin 1.5s ease both}
+#langFx.run .scan{animation:scanY 1.5s ease both}
+@keyframes paneIn{0%{transform:rotateY(90deg)}35%,62%{transform:rotateY(0)}100%{transform:rotateY(-90deg)}}
+@keyframes coreIn{0%,25%{opacity:0;transform:translate(-50%,-50%) scale(.6);filter:blur(8px)}42%,58%{opacity:1;transform:translate(-50%,-50%) scale(1);filter:blur(0)}75%,100%{opacity:0;transform:translate(-50%,-50%) scale(1.4);filter:blur(10px)}}
+@keyframes ringSpin{0%,20%{opacity:0;transform:rotate(0) scale(.5)}45%,60%{opacity:1}80%,100%{opacity:0;transform:rotate(540deg) scale(1.6)}}
+@keyframes scanY{0%,30%{opacity:0;top:0}40%{opacity:1}65%{opacity:1;top:100%}70%,100%{opacity:0;top:100%}}
+#app,#login{transition:filter .5s}
+html.lang-busy #app,html.lang-busy #login{filter:blur(6px) saturate(1.6)}
+.lang-glitch{animation:langGlitch .7s steps(2) both}
+@keyframes langGlitch{0%{opacity:0;clip-path:inset(0 0 100% 0);text-shadow:-3px 0 #3b8cff,3px 0 #8a4dff}50%{opacity:1;clip-path:inset(0 0 40% 0);text-shadow:2px 0 #3b8cff,-2px 0 #8a4dff}100%{clip-path:inset(0);text-shadow:none}}
+@media (prefers-reduced-motion:reduce){#langFx{display:none}.lang-glitch{animation:none}}
+@media (max-width:480px){.lang-switch{font-size:11px;padding:2px}.lang-switch::before{top:2px;bottom:2px;left:2px;width:calc(50% - 2px)}.lang-switch span{padding:6px 7px;min-width:2.1em}.icon-btn{width:36px;height:36px}}
+@media print{.prefs,#loginPrefs{display:none!important}}
+html[data-theme="light"] option{background:#fff;color:#0B1530}
+@media(max-width:480px){.modal .form{gap:10px}.modal .actions{margin-top:10px}.modal h3{margin-bottom:12px}.modal .card{max-height:calc(100dvh - 32px);padding:16px}.modal .form input,.modal .form select{padding:8px 10px}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginPrefs" class="prefs"><button type="button" class="icon-btn" data-theme-btn aria-label="Toggle theme" onclick="toggleTheme()">◐</button><button type="button" class="lang-switch" onclick="toggleLang()" aria-label="Switch language"><span data-l="en">EN</span><span data-l="ar">ع</span></button></div>
+<section id="login">
+  <div class="card login-box">
+    <img src="data:image/png;base64,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" alt="Fast Techno logo">
+    <h1><span class="grad-text en">Fast Techno</span> · إدارة الفريق</h1>
+    <div style="color:var(--muted);font-size:13px">Fast Techno Agency · Marketing & IT</div>
+    <form id="loginForm">
+      <div><label>اسم المستخدم · Username</label><input id="lu" autocomplete="username" required></div>
+      <div><label>كلمة المرور · Password</label><input id="lp" type="password" autocomplete="current-password" required></div>
+      <div class="err" id="lerr"></div>
+      <button class="btn primary" style="justify-content:center;padding:12px">تسجيل الدخول</button>
+    </form>
+  </div>
+</section>
+
+<!-- APP -->
+<div id="app" class="hidden">
+  <aside id="side">
+    <div class="brand"><img src="data:image/png;base64,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" alt=""><div><b class="en">Fast Techno</b><small>Employee Management</small></div></div>
+    <nav id="nav"></nav>
+    <div class="me"><div class="avatar" id="meAv"></div><div style="flex:1;min-width:0"><b id="meName" style="display:block;font-size:14px"></b><small id="meRole" style="color:var(--muted)"></small></div><button class="btn sm" id="logout" title="خروج">⏻</button></div>
+  </aside>
+  <main id="main"></main>
+</div>
+
+<div id="modalRoot"></div>
+<div id="langFx" aria-hidden="true"><div class="pane" style="left:0"></div><div class="pane" style="left:20%"></div><div class="pane" style="left:40%"></div><div class="pane" style="left:60%"></div><div class="pane" style="left:80%"></div><div class="scan"></div><div class="ring"></div><div class="core"><span id="langFxText">English</span><small>FAST TECHNO</small></div></div>
+<div id="npanel" class="hidden"></div>
+
+
+<script>
+/* ===== Theme + language (same behaviour as fasttechnoagency.com) ===== */
+let LANG=(()=>{try{return localStorage.getItem("ft-lang")==="en"?"en":"ar"}catch(e){return "ar"}})();
+const PREFS_HTML=()=>`<button type="button" class="icon-btn" data-theme-btn aria-label="Toggle theme" onclick="toggleTheme()">◐</button><button type="button" class="lang-switch" onclick="toggleLang()" aria-label="Switch language"><span data-l="en">EN</span><span data-l="ar">ع</span></button>`.replace(`data-l="${LANG}"`,`data-l="${LANG}" class="on"`);
+function toggleTheme(){const h=document.documentElement,t=h.dataset.theme==="dark"?"light":"dark";h.dataset.theme=t;const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="light"?"#F6F8FC":"#05070F");try{localStorage.setItem("ft-theme",t)}catch(e){}}
+const EN={"البيانات محفوظة في قاعدة بيانات مشتركة وتتحدّث مباشرة لدى جميع المستخدمين. يمكنك تصدير نسخة احتياطية، أو استيراد نسخة سابقة لاستبدال البيانات الحالية لدى الجميع": "Data is stored in a shared database and updates live for all users. You can export a backup, or import a previous one to replace the current data for everyone", "حدد تاريخ البدء والانتهاء للمشروع لعرض جدول المتابعة": "Set the project's start and end dates to show the tracking table", "تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء": "End date must be after the start date", "تغيير اسم المستخدم وكلمة المرور والنسخ الاحتياطي": "Change username, password and backups", "حذف هذا المشروع وكل بيانات المتابعة الخاصة به؟": "Delete this project and all its tracking data?", "الباقات المعتمدة من موقع fasttechnoagency.com": "Official plans from fasttechnoagency.com", "أحرف إنجليزية وأرقام فقط (3 أحرف على الأقل)": "English letters and digits only (at least 3 characters)", "سيتم استبدال جميع البيانات الحالية. متابعة؟": "All current data will be replaced. Continue?", "تعذّر الاتصال بالخادم، تحقق من الإنترنت": "Couldn't reach the server, check your internet", "إدارة حسابات فريق الـ Digital Marketing": "Manage Digital Marketing team accounts", "اسم المستخدم أو كلمة المرور غير صحيحة": "Incorrect username or password", "الباقة المعتمدة (من موقع Fast Techno)": "Approved plan (from the Fast Techno website)", "أرسل ملاحظات للموظفين وتابع من قرأها": "Send notes to employees and track who read them", "جميع مشاريع العملاء لدى Fast Techno": "All client projects at Fast Techno", "الملاحظات المرسلة إليك من الإدارة": "Notes sent to you by management", "يجب أن يبقى مسؤول واحد على الأقل": "At least one admin must remain", "لا توجد مشاريع مسندة لهذا الموظف": "No projects assigned to this employee", "يرجى كتابة العنوان ونص الملاحظة": "Please enter the title and the note text", "يرجى تعبئة اسم العميل والتواريخ": "Please fill in the client name and dates", "كلمة المرور الحالية غير صحيحة": "Current password is incorrect", "تقييم المدير لكل مهمة أنجزتها": "Manager's rating for every task you completed", "الموظفون المسؤولون عن المشروع": "Employees responsible for the project", "ملاحظة المدير على هذه المهمة": "Manager's note on this task", "قيّم كل مهمة أنجزها الموظفون": "Rate every task completed by employees", "اختر موظفاً واحداً على الأقل": "Select at least one employee", "تعذّر الاتصال، لم يتم الحفظ": "Connection failed, not saved", "سجل المهام المنجزة والتقييم": "Completed tasks log & ratings", "تم تعطيلك عن أداء المهام": "You have been disabled from performing tasks", "الاسم و Username مطلوبان": "Name and Username are required", "ملاحظة المدير على مهمتك": "Manager's note on your task", "المتابعة اليومية للمهام": "Daily task tracking", "لا توجد مهام منجزة بعد": "No completed tasks yet", "مهامي المنجزة وتقييمها": "My completed tasks and their ratings", "تم تغيير اسم المستخدم": "Username changed", "تم إسنادك لمشروع جديد": "You were assigned to a new project", "مشروع على هذه الباقة": "projects on this plan", "تم تغيير كلمة المرور": "Password changed", "اسم العميل / المشروع": "Client / project name", "يرجى مراجعة الإدارة": "Please contact management", "العودة لصفحة الدخول": "Back to login", "تجاوزت الـ Deadline": "Past Deadline", "كلمة المرور الحالية (للتأكيد)": "Current password (to confirm)", "كلمة المرور 6 أحرف على الأقل": "Password must be at least 6 characters", "اتركه فارغاً لعدم التغيير": "leave empty to keep unchanged", "الإيراد الشهري (النشطة)": "Monthly revenue (active)", "أضفهم من صفحة الموظفين": "Add them from the Employees page", "اسم المستخدم الحالي": "Current username", "اسم المستخدم الجديد": "New username", "تغيير اسم المستخدم": "Change username", "تصدير المشاريع CSV": "Export projects CSV", "مشروع بهذه الباقة": "projects with this plan", "كلمة المرور الحالية": "Current password", "كلمة المرور الجديدة": "New password", "لا توجد ملاحظات بعد": "No notes yet", "إنجازه في كل مشروع": "Progress in each project", "اطّلع على الملاحظة": "read the note", "تم تحديث صلاحياتك": "Your permissions were updated", "باقات Fast Techno": "Fast Techno Plans", "تغيير كلمة المرور": "Change password", "كل المهام المنجزة": "All completed tasks", "أضاف ملاحظة يومية": "added a daily note", "تعليم الكل كمقروء": "Mark all as read", "مسح كل الإشعارات؟": "Clear all notifications?", "تم إرسال الملاحظة": "Note sent", "حذف هذه الملاحظة؟": "Delete this note?", "مهام منجزة اليوم": "Tasks done today", "المشاريع المسندة": "Assigned projects", "إجمالي المشاريع": "Total projects", "بحث باسم العميل": "Search by client name", "النسخ الاحتياطي": "Backup", "تم حفظ الملاحظة": "Note saved", "بانتظار التقييم": "Awaiting rating", "لا توجد إشعارات": "No notifications", "حذف هذا الحساب؟": "Delete this account?", "بانتظار تقييمك": "Awaiting your rating", "لم تُقيَّم بعد": "Not rated yet", "مسندة إليك بعد": "assigned to you yet", "تعديل المشروع": "Edit project", "لم يقرأها بعد": "Not read yet", "المهام المنجزة": "Completed tasks", "تم حفظ التقييم": "Rating saved", "تم تقييم مهمتك": "Your task was rated", "ترتيب الموظفين": "Employee ranking", "لا يوجد موظفون": "No employees", "لا توجد مشاريع": "No projects", "تاريخ الانتهاء": "End date", "تم تحديث مشروع": "Project updated", "تم حفظ المشروع": "Project saved", "المسمى الوظيفي": "Job title", "متوسط التقييم": "Average rating", "تقدم المشاريع": "Projects progress", "توزيع الباقات": "Plans distribution", "مستخدم مسبقاً": "already in use", "ملاحظة المدير": "Manager's note", "مهام مُقيَّمة": "Rated tasks", "إجمالي إنجازه": "Total completed", "الإنجاز الكلي": "Overall progress", "تعذّر الإرسال": "Couldn't send", "تم حفظ الحساب": "Account saved", "اسم المستخدم": "Username", "تسجيل الدخول": "Sign in", "تعديل الحساب": "Edit account", "متوسط تقييمه": "Average rating", "تقدم المشروع": "Project progress", "ملاحظة جديدة": "New note", "إرسال ملاحظة": "Send a note", "إلى الموظفين": "To employees", "الاسم الكامل": "Full name", "تم الاستيراد": "Imported", "ملف غير صالح": "Invalid file", "تصدير JSON": "Export JSON", "تم الاطلاع": "Acknowledged", "تعديل حساب": "Edit account", "كلمة المرور": "Password", "تعذّر الحفظ": "Couldn't save", "لوحة التحكم": "Dashboard", "مشاريع نشطة": "Active projects", "خلال 5 أيام": "within 5 days", "كل الموظفين": "All employees", "وقت الإنجاز": "Completed at", "مهام مكتملة": "Completed tasks", "كل المشاريع": "All projects", "نص الملاحظة": "Note text", "تاريخ البدء": "Start date", "المسؤول فقط": "admin only", "مشروع جديد": "New project", "كل الباقات": "All plans", "كل الحالات": "All statuses", "أنجز اليوم": "Done today", "آخر 7 أيام": "Last 7 days", "ألغى إنجاز": "undid", "نظام فريق": "Team system —", "يوم متبقي": "days left", "مسح الكل": "Clear all", "الملاحظات": "Notes", "الإعدادات": "Settings", "موظف جديد": "New employee", "كل المهام": "All tasks", "الإشعارات": "Notifications", "المشاريع": "Projects", "الموظفون": "Employees", "ملاحظاتي": "My notes", "الصلاحية": "Role", "في مشروع": "in project", "مُقيَّمة": "Rated", "التفاصيل": "Details", "المتابعة": "Tracking", "حسب باقة": "based on plan", "مشاريعي": "My projects", "استيراد": "Import", "الباقات": "Plans", "التقييم": "Ratings", "التاريخ": "Date", "المشروع": "Project", "الإنجاز": "Progress", "البداية": "Start", "النهاية": "End", "ملاحظات": "Notes", "العنوان": "Title", "تقييمي": "My ratings", "أهلاً،": "Hello,", "أهلاً": "Hello", "المسمى": "Title", "محذوف": "deleted", "المهمة": "Task", "الحالة": "Status", "مكتملة": "Completed", "الموظف": "Employee", "الباقة": "Plan", "العميل": "Client", "الفريق": "Team", "جديدة": "New", "قرأها": "Read", "ستوري": "Story", "تصميم": "Design", "إعلان": "Ad", "متوقف": "Paused", "مكتمل": "Completed", "مسؤول": "Admin", "متأخر": "Late by", "حسابي": "My account", "الاسم": "Name", "تعديل": "Edit", "طباعة": "Print", "اليوم": "Today", "إلغاء": "Cancel", "إرسال": "Send", "خروج": "Sign out", "الآن": "now", "جديد": "New", "بوست": "Post", "ريلز": "Reels", "مهمة": "task", "الكل": "All", "رجوع": "Back", "أنجز": "completed", "موظف": "Employee", "نشط": "Active", "يوم": "day", "حفظ": "Save", "حذف": "Delete", "قبل": "", "إلى": "To", "من": "From", "د": "m ago", "س": "h ago", "؟": "?", "،": ","};
+const EN_KEYS=Object.keys(EN).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
+const EN_RE=new RegExp("(?<![\\u0621-\\u064A])("+EN_KEYS.join("|")+")(?![\\u0621-\\u064A])","g");
+const trS=s=>s&&/[\u0600-\u06FF]/.test(s)?s.replace(EN_RE,m=>EN[m]).replace(/ {2,}/g," "):s;
+const ATTRS=["placeholder","title","aria-label"];
+function trText(n){if(n.__o===undefined||n.nodeValue!==n.__t){n.__o=n.nodeValue}if(LANG==="en"){const t=trS(n.__o);n.__t=t;if(n.nodeValue!==t)n.nodeValue=t}else{if(n.nodeValue!==n.__o)n.nodeValue=n.__o;n.__t=n.__o}}
+function trAttr(el){ATTRS.forEach(a=>{if(!el.hasAttribute(a))return;const k="__o_"+a,v=el.getAttribute(a);if(el[k]===undefined||v!==el["__t_"+a])el[k]=v;const t=LANG==="en"?trS(el[k]):el[k];el["__t_"+a]=t;if(v!==t)el.setAttribute(a,t)})}
+function trTree(root){if(root.nodeType===3)return trText(root);if(root.nodeType!==1||root.closest&&root.closest("#langFx,.lang-switch,script,style"))return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>/^(SCRIPT|STYLE|TEXTAREA)$/.test(n.parentNode.nodeName)||n.parentNode.closest("#langFx,.lang-switch")?2:1});let n;while(n=w.nextNode())trText(n);trAttr(root);root.querySelectorAll("[placeholder],[title],[aria-label]").forEach(trAttr)}
+const LMO=new MutationObserver(ms=>{LMO.disconnect();ms.forEach(m=>{if(m.type==="characterData")trText(m.target);else m.addedNodes.forEach(trTree)});lObserve()});
+const lObserve=()=>LMO.observe(document.body,{childList:true,subtree:true,characterData:true});
+const _confirm=window.confirm.bind(window);window.confirm=m=>_confirm(LANG==="en"?trS(m):m);
+const _alert=window.alert.bind(window);window.alert=m=>_alert(LANG==="en"?trS(m):m);
+function setLang(l){LANG=l;const h=document.documentElement;h.lang=l;h.dir=l==="ar"?"rtl":"ltr";try{localStorage.setItem("ft-lang",l)}catch(e){}
+  document.querySelectorAll(".lang-switch span").forEach(s=>s.classList.toggle("on",s.dataset.l===l));
+  document.querySelectorAll(".lang-switch").forEach(b=>b.setAttribute("aria-label",l==="ar"?"Switch to English":"التبديل إلى العربية"));
+  LMO.disconnect();try{if(typeof ME!=="undefined"&&ME){start()}}catch(e){}trTree(document.body);lObserve()}
+let LBUSY=false;
+function toggleLang(){if(LBUSY)return;const next=LANG==="ar"?"en":"ar";
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches){setLang(next);return}
+  LBUSY=true;const fx=document.getElementById("langFx");document.getElementById("langFxText").textContent=next==="ar"?"العربية":"English";
+  fx.classList.remove("run");void fx.offsetWidth;fx.classList.add("run");document.documentElement.classList.add("lang-busy");
+  setTimeout(()=>{setLang(next);document.querySelectorAll("h1,h2,h3,nav a").forEach(e=>{e.classList.remove("lang-glitch");void e.offsetWidth;e.classList.add("lang-glitch")})},700);
+  setTimeout(()=>document.documentElement.classList.remove("lang-busy"),950);
+  setTimeout(()=>{fx.classList.remove("run");LBUSY=false},1550)}
+document.querySelectorAll(".lang-switch span").forEach(s=>s.classList.toggle("on",s.dataset.l===LANG));
+document.addEventListener("DOMContentLoaded",()=>{trTree(document.body);lObserve()});
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<div id="kicked" class="hidden" style="position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:rgba(2,4,10,.92);backdrop-filter:blur(8px);padding:16px"><div class="card" style="max-width:440px;text-align:center"><div style="font-size:44px;margin-bottom:8px">⛔</div><h3 style="margin:0 0 10px">تم تعطيلك عن أداء المهام</h3><p style="color:var(--muted);line-height:1.9;margin:0 0 18px">يرجى مراجعة الإدارة.</p><button class="btn primary" onclick="location.reload()">العودة لصفحة الدخول</button></div></div>
+<div id="live" style="position:fixed;bottom:14px;left:14px;z-index:40;font-size:12px;padding:6px 12px;border-radius:999px;background:var(--bg-2);border:1px solid var(--line-strong);color:var(--muted)" class="en">● Connecting…</div>
+<script>
+/* ===== PLANS — pulled from fasttechnoagency website ===== */
+const PLANS = {
+  items: [
+    {name:"ORBIT",icon:"🪐",desc:"Your first step toward a professional digital presence.",price:"150 JOD",period:"/ month",badge:"Best to start",publicPdf:"https://drive.google.com/file/d/1nCxPZbdB51tQUChxj-vyJTEWTXU4CIqf/view?usp=sharing",features:["8 professional posts", "1 carousel post", "1 AI-generated video", "1 professional reel", "8 stories per month (2 per week)", "2,000 likes & 2,000 shares", "Facebook & Instagram setup and account management", "One targeted Meta campaign setup", "Monthly performance report", "Market and audience analysis (SWOT, segmentation, targeting & positioning)", "Weekly performance monitoring & month-end report", "Advertising budget is not included; agreed separately and paid directly to the platforms."]},
+    {name:"NOVA",icon:"💫",desc:"A bright launch for your brand on social media.",price:"250 JOD",period:"/ month",badge:"Highly requested",publicPdf:"https://drive.google.com/file/d/1CK7NcF2o-fRae-5xRuCKB1t6gSPYLutN/view?usp=sharing",features:["8 professional posts", "2 professional reels", "1 AI-generated video", "12 stories per month (3 per week)", "5,000 likes & 5,000 shares", "Facebook & Instagram account management", "One paid targeted campaign", "Monthly performance report", "Market and audience analysis (SWOT, segmentation, targeting & positioning)", "Weekly performance monitoring & month-end report", "Advertising budget is not included; agreed separately and paid directly to the platforms."]},
+    {name:"GALAXY",icon:"🌌",desc:"A powerful start for your brand — at the smartest price.",price:"350 JOD",period:"/ month",featured:true,badge:"Most popular",publicPdf:"https://drive.google.com/file/d/1TCc6UmW6e3SRiNCVnBhuQlKsAZUpzy1i/view?usp=sharing",features:["10 professional posts", "4 professional reels", "2 AI-generated videos", "Daily stories (30 per month)", "10,000 likes & 10,000 shares", "Facebook, Instagram & TikTok management", "Paid ads & targeting", "Monthly content plan & performance report", "Market and audience analysis (SWOT, segmentation, targeting & positioning)", "Weekly performance monitoring & month-end report", "Advertising budget is not included; agreed separately and paid directly to the platforms."]},
+    {name:"COSMOS",icon:"🌌",desc:"Your brand’s full presence — without limits.",price:"450 JOD",period:"/ month",badge:"All-inclusive",publicPdf:"https://drive.google.com/file/d/1JBODeMX7j6bK3TmKuORBZFDF0bKaFfgo/view?usp=sharing",features:["5 AI-generated videos", "6 professional reels", "4 carousel posts", "12 posts (3 per week)", "Daily stories (30 per month)", "20,000 likes & 20,000 shares", "Management of 5 accounts: Facebook, Instagram, TikTok, Snapchat & LinkedIn", "Paid ads management with A/B testing & daily follow-up", "Market and audience analysis (SWOT, segmentation, targeting & positioning)", "Weekly performance monitoring & month-end report", "Advertising budget is not included; agreed separately and paid directly to the platforms."]},
+    {name:"INFINITY",icon:"∞",desc:"Presence without limits — Social media, Google & Artificial Intelligence.",price:"650 JOD",period:"/ month",badge:"Signature · Premium",publicPdf:"https://drive.google.com/file/d/1jO86BarYAwK__86HU0VRB_KsqH2Pe7Ih/view?usp=sharing",features:["12 professional posts (3 per week)", "4 carousel posts", "5 AI-generated videos", "6 professional reels", "Daily stories (30 per month)", "20,000 likes & 20,000 shares", "Management of 5 accounts: Facebook, Instagram, TikTok, Snapchat & LinkedIn", "Paid ads management with A/B testing & daily follow-up", "Post boosting for top-performing content", "Precise targeting, lookalike audiences & retargeting", "Branding & unified visual identity", "Monthly marketing strategy & plan", "Professional website", "SEO — Google search optimisation", "GEO — visibility in AI search engines", "Market and audience analysis (SWOT, segmentation, targeting & positioning)", "Weekly performance monitoring & month-end report", "Short brand identity guide: colors, fonts, templates and brand voice; monthly marketing plan and content calendar.", "Website design/development: mobile-responsive, fast-loading, search-friendly, with WhatsApp, contact-form/social links and Google measurement tools.", "SEO: keyword research, technical/page-content optimization, Google Business Profile optimization and monthly keyword-ranking follow-up.", "GEO: structured Q&A content, Schema data, authoritative brand mentions and monitoring brand visibility in AI answers.", "Advertising budget is not included; agreed separately and paid directly to the platforms."]}
+  ]};
+
+/* default monthly targets per plan (editable per project) */
+const PLAN_TARGETS={
+ ORBIT:{stories:8,posts:9,reels:1,design:1,ads:1},
+ NOVA:{stories:12,posts:8,reels:2,design:1,ads:1},
+ GALAXY:{stories:30,posts:10,reels:4,design:2,ads:4},
+ COSMOS:{stories:30,posts:16,reels:6,design:5,ads:4},
+ INFINITY:{stories:30,posts:16,reels:6,design:5,ads:4}
+};
+const TASKS=[["stories","Stories","ستوري"],["posts","Posts","بوست"],["reels","Reels","ريلز"],["design","Design","تصميم"],["ads","Ads","إعلان"]];
+const STATUS={active:["نشط","b-ok"],paused:["متوقف","b-warn"],completed:["مكتمل","b-mut"]};
+
+/* ===== Storage ===== */
+(function(root){
+  const roles={admin:'المدير العام',supervisor:'المسؤول',it_lead:'مسؤول IT',marketing_lead:'مسؤول Digital Marketing',photography_lead:'مسؤول التصوير',employee:'موظف'};
+  const departments={management:'الإدارة',it:'IT',marketing:'Digital Marketing',design:'Design',photography:'التصوير',legal:'المحاماة'};
+  function canManage(actor,target){
+    if(!actor||!target)return false;
+    if(actor.role==='admin')return true;
+    if(actor.id===target.id||['admin','supervisor','it_lead'].includes(target.role)||target.department==='legal')return false;
+    if(actor.role==='supervisor')return target.department!=='it'&&['employee','marketing_lead','photography_lead'].includes(target.role);
+    if(target.role!=='employee'||target.manager_id!==actor.id)return false;
+    return actor.role==='it_lead'?target.department==='it':actor.role==='marketing_lead'?['marketing','design'].includes(target.department):actor.role==='photography_lead'&&target.department==='photography';
+  }
+  function canManageTeam(actor){return Boolean(actor&&['admin','supervisor','it_lead','marketing_lead','photography_lead'].includes(actor.role))}
+  function validAssignment(user,users){
+    if(!Object.hasOwn(roles,user.role)||!Object.hasOwn(departments,user.department))return false;
+    const fixed={admin:'management',supervisor:'management',it_lead:'it',marketing_lead:'marketing',photography_lead:'photography'};
+    if(user.role!=='employee')return user.department===fixed[user.role]&&!user.manager_id;
+    if(user.department==='management')return false;
+    if(user.department==='legal')return !user.manager_id;
+    const lead=users.find(x=>x.id===user.manager_id),required=user.department==='it'?'it_lead':user.department==='photography'?'photography_lead':'marketing_lead';
+    return Boolean(lead&&lead.id!==user.id&&lead.role===required);
+  }
+  root.FTHierarchy={roles,departments,canManage,canManageTeam,validAssignment};
+})(typeof window==='undefined'?globalThis:window);
+const KEY="ft_dm_system_v1";
+async function sha(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}
+const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36).slice(-4);
+let DB;
+const SB=supabase.createClient("https://lsuxtbimioljbdpfswbm.supabase.co","sb_publishable_sI9JJuvg0DbfZixDmjtpMA_1R55fy1X",{auth:{persistSession:false}});
+let TOK=sessionStorage.getItem("ft_tok"),VER=0,PENDING=false;
+function setLive(ok){const l=$("#live");l.textContent=ok?"● Live":"● Offline";l.style.color=ok?"#3ddc97":"#ff6b6b"}
+async function rpc(fn,args){const {data,error}=await SB.rpc(fn,args);if(error){setLive(false);throw error}return data}
+function kicked(){TOK=null;sessionStorage.removeItem("ft_tok");sessionStorage.removeItem("ft_sess");closeModal();$("#kicked").classList.remove("hidden");$("#app").classList.add("hidden")}
+function apply(r){if(r.disabled){kicked();return false}if(r.error){toast(USER_ERRORS[r.error]||"تعذّر الحفظ");return false}DB=r.data;VER=r.version||VER;sessionStorage.setItem("ft_sess",r.me);ME=DB.users.find(u=>u.id===r.me);return true}
+async function save(scope={meta:true}){if(!TOK)return;try{const r=await rpc("ft_save",{p_token:TOK,p_data:DB,p_scope:scope});if(apply(r)&&scope.meta)rerender()}catch(e){toast("تعذّر الاتصال، لم يتم الحفظ");refresh(true)}}
+async function load(){}
+function busy(){const a=document.activeElement;return $("#modalRoot").innerHTML!==""||(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)&&!a.closest("#login"))}
+function rerender(){if(!ME)return;const y=window.scrollY;$("#meName").textContent=ME.name;$("#meRole").textContent=FTHierarchy.roles[ME.role]||ME.title;buildNav();const h=location.hash.slice(1)||"dashboard";const [pg,arg]=h.split("/");if(!FTHierarchy.canManageTeam(ME)&&pg==="team")return go("dashboard");document.querySelectorAll("#nav a").forEach(x=>x.classList.toggle("active",x.dataset.k===pg));(VIEWS[pg]||VIEWS.dashboard)(arg);window.scrollTo(0,y)}
+async function refresh(force){if(!TOK)return;let r;try{r=await rpc("ft_get",{p_token:TOK});setLive(true)}catch(e){return}if(r.disabled)return kicked();if(!force&&r.version===VER)return;const wasRole=ME&&ME.role;apply(r);if(!ME)return kicked();if(wasRole&&wasRole!==ME.role){closeModal();toast("تم تحديث صلاحياتك")}if(busy()){PENDING=true;return}rerender()}
+SB.channel("ft-sync").on("broadcast",{event:"changed"},m=>{if(m.payload?.v!==VER)refresh()}).on("broadcast",{event:"inbox"},m=>{const u=m.payload?.u;if(ME&&(!u||u.includes(ME.id)))loadInbox(true)}).subscribe(st=>{setLive(st==="SUBSCRIBED");if(st==="SUBSCRIBED")refresh()});
+setInterval(()=>{refresh();loadInbox()},30000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)refresh()});
+document.addEventListener("focusout",()=>setTimeout(()=>{if(PENDING&&!busy()){PENDING=false;rerender()}},300));
+let ME=null;
+const isAdmin=()=>ME&&ME.role==="admin";
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt=d=>d?new Date(d+"T00:00:00").toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}):"—";
+const today=()=>new Date().toISOString().slice(0,10);
+const daysLeft=d=>Math.ceil((new Date(d+"T00:00:00")-new Date(today()+"T00:00:00"))/864e5);
+function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2300)}
+const planOf=n=>PLANS.items.find(p=>p.name===n);
+function stars(v,pid){let h="";for(let i=1;i<=5;i++)h+=`<span class="${i<=v?"":"off"}" ${pid&&isAdmin()?`onclick="setRating('${pid}',${i})"`:""}>★</span>`;return `<span class="stars">${h}</span>`}
+function visibleProjects(){return isAdmin()?DB.projects:DB.projects.filter(p=>p.members.includes(ME.id))}
+function dateRange(a,b){const r=[];if(!a||!b)return r;let d=new Date(a+"T00:00:00"),e=new Date(b+"T00:00:00");while(d<=e&&r.length<400){r.push(d.toISOString().slice(0,10));d.setDate(d.getDate()+1)}return r}
+function progress(p){const t=DB.tracker[p.id]||{};let done=0,tgt=0;TASKS.forEach(([k])=>{tgt+=+(p.targets?.[k]||0);done+=Math.min(countDone(t,k),+(p.targets?.[k]||0))});return tgt?Math.round(done/tgt*100):0}
+function countDone(t,k){return Object.values(t).filter(r=>r&&r[k]).length}
+function deadlineBadge(p){if(p.status==="completed")return `<span class="badge b-mut">مكتمل</span>`;if(!p.deadline)return "—";const n=daysLeft(p.deadline);return n<0?`<span class="badge b-bad">متأخر ${-n} يوم</span>`:n<=5?`<span class="badge b-warn">${n} يوم متبقي</span>`:`<span class="badge b-ok">${n} يوم متبقي</span>`}
+
+/* ===== Auth ===== */
+$("#loginForm").onsubmit=async e=>{e.preventDefault();$("#lerr").textContent="";const u=$("#lu").value.trim().toLowerCase(),h=await sha($("#lp").value);let r;try{r=await rpc("ft_login",{p_username:u,p_hash:h})}catch(x){$("#lerr").textContent="تعذّر الاتصال بالخادم، تحقق من الإنترنت";return}if(r.error){$("#lerr").textContent="اسم المستخدم أو كلمة المرور غير صحيحة";return}TOK=r.token;sessionStorage.setItem("ft_tok",TOK);apply(r);await refresh(true);start()};
+$("#logout").onclick=async()=>{try{await rpc("ft_logout",{p_token:TOK})}catch(e){}sessionStorage.removeItem("ft_sess");sessionStorage.removeItem("ft_tok");location.reload()};
+function start(){if(!DB)return;ME=DB.users.find(u=>u.id===sessionStorage.getItem("ft_sess"));if(!ME)return;$("#login").classList.add("hidden");$("#loginPrefs").classList.add("hidden");$("#app").classList.remove("hidden");$("#meName").textContent=ME.name;$("#meRole").textContent=FTHierarchy.roles[ME.role]||ME.title;$("#meAv").textContent=ME.name.trim()[0]||"؟";buildNav();go(location.hash.slice(1)||"dashboard");loadInbox()}
+
+/* ===== Nav ===== */
+function buildNav(){const items=[["dashboard","◈","لوحة التحكم"],["projects","▤","المشاريع"],["plans","✦","الباقات"]];if(isAdmin())items.push(["team","◉","الموظفون"],["ratings","★","التقييم"],["notes","✉","الملاحظات"],["settings","⚙","الإعدادات"]);else items.push(["ratings","★","تقييمي"],["notes","✉","ملاحظاتي"],["settings","⚙","حسابي"]);if(!isAdmin()&&FTHierarchy.canManageTeam(ME))items.splice(3,0,["team","◉","الموظفون"]);$("#nav").innerHTML=items.map(([k,i,t])=>`<a data-k="${k}" onclick="go('${k}')"><span>${i}</span>${t}</a>`).join("")}
+function go(v){if(location.hash.slice(1)!==v){location.hash=v;$("#side").classList.remove("open");return}const [page,arg]=v.split("/");document.querySelectorAll("#nav a").forEach(a=>a.classList.toggle("active",a.dataset.k===page));$("#side").classList.remove("open");(VIEWS[page]||VIEWS.dashboard)(arg);window.scrollTo(0,0)}
+const header=(t,s,btns="")=>`<div class="top"><div style="display:flex;gap:10px;align-items:center"><button class="btn sm menu-btn" onclick="$('#side').classList.toggle('open')">☰</button><div><h2>${t}</h2><p>${s}</p></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${btns}<span class="prefs">${PREFS_HTML()}</span><button class="btn sm bell" title="الإشعارات" onclick="togglePanel(event)">🔔<i class="nbadge" style="${UNREAD()?"":"display:none"}">${UNREAD()}</i></button></div></div>`;
+
+/* ===== Views ===== */
+const VIEWS={
+dashboard(){
+  const ps=visibleProjects(),act=ps.filter(p=>p.status==="active"),late=ps.filter(p=>p.status!=="completed"&&p.deadline&&daysLeft(p.deadline)<0),soon=ps.filter(p=>p.status!=="completed"&&p.deadline&&daysLeft(p.deadline)>=0&&daysLeft(p.deadline)<=5);
+  const rated=ps.filter(p=>p.rating),avg=rated.length?(rated.reduce((a,p)=>a+p.rating,0)/rated.length).toFixed(1):"—";
+  const revenue=act.reduce((a,p)=>a+parseInt(planOf(p.plan)?.price||0),0);
+  const t=today();let todayDone=0;ps.forEach(p=>{const r=(DB.tracker[p.id]||{})[t];if(r)TASKS.forEach(([k])=>r[k]&&todayDone++)});
+  const byPlan=PLANS.items.map(pl=>[pl.name,ps.filter(p=>p.plan===pl.name).length]);
+  $("#main").innerHTML=header(`أهلاً، ${esc(ME.name)} 👋`,new Date().toLocaleDateString(LANG==="en"?"en-GB":"ar",{weekday:"long",day:"numeric",month:"long",year:"numeric"}),isAdmin()?`<button class="btn primary" onclick="projectModal()">＋ مشروع جديد</button>`:"")+
+  `<div class="grid stats">
+   <div class="card stat"><div class="n grad-text">${ps.length}</div><div class="l">${isAdmin()?"إجمالي المشاريع":"مشاريعي"}</div></div>
+   <div class="card stat"><div class="n" style="color:var(--ok)">${act.length}</div><div class="l">مشاريع نشطة</div></div>
+   <div class="card stat"><div class="n" style="color:var(--bad)">${late.length}</div><div class="l">تجاوزت الـ Deadline</div></div>
+   <div class="card stat"><div class="n" style="color:var(--warn)">${soon.length}</div><div class="l">Deadline خلال 5 أيام</div></div>
+   <div class="card stat"><div class="n">${todayDone}</div><div class="l">مهام منجزة اليوم</div></div>
+   <div class="card stat"><div class="n" style="color:#ffc94a">${avg} ★</div><div class="l">متوسط التقييم</div></div>
+   ${isAdmin()?`<div class="card stat"><div class="n en">${revenue} <small style="font-size:14px">JOD</small></div><div class="l">الإيراد الشهري (النشطة)</div></div>`:""}
+  </div>
+  <div class="grid" style="grid-template-columns:2fr 1fr;margin-top:16px">
+   <div class="card"><h3 style="margin:0 0 10px">تقدم المشاريع</h3><div class="tbl">${projTable(ps.slice().sort((a,b)=>(a.deadline||"").localeCompare(b.deadline||"")).slice(0,8),true)}</div></div>
+   <div class="card"><h3 style="margin:0 0 14px">توزيع الباقات</h3>${byPlan.map(([n,c])=>`<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:13px"><span class="en">${planOf(n).icon} ${n}</span><b>${c}</b></div><div class="bar"><i style="width:${ps.length?c/ps.length*100:0}%"></i></div></div>`).join("")}</div>
+  </div>`;
+},
+projects(id){
+  if(id)return trackerView(id);
+  const members=DB.users.filter(u=>u.role!=="admin");
+  $("#main").innerHTML=header("المشاريع","جميع مشاريع العملاء لدى Fast Techno",isAdmin()?`<button class="btn primary" onclick="projectModal()">＋ مشروع جديد</button>`:"")+
+  `<div class="card"><div class="toolbar"><input id="fq" placeholder="🔍 بحث باسم العميل..."><select id="fp"><option value="">كل الباقات</option>${PLANS.items.map(p=>`<option>${p.name}</option>`).join("")}</select><select id="fs"><option value="">كل الحالات</option>${Object.entries(STATUS).map(([k,v])=>`<option value="${k}">${v[0]}</option>`).join("")}</select>${isAdmin()?`<select id="fm"><option value="">كل الموظفين</option>${members.map(u=>`<option value="${u.id}">${esc(u.name)}</option>`).join("")}</select>`:""}</div><div class="tbl" id="ptbl"></div></div>`;
+  const f=()=>{const q=$("#fq").value.toLowerCase(),p=$("#fp").value,s=$("#fs").value,m=$("#fm")?.value;$("#ptbl").innerHTML=projTable(visibleProjects().filter(x=>x.client.toLowerCase().includes(q)&&(!p||x.plan===p)&&(!s||x.status===s)&&(!m||x.members.includes(m))))};
+  ["#fq","#fp","#fs","#fm"].forEach(s=>$(s)&&($(s).oninput=f));f();
+},
+plans(){
+  $("#main").innerHTML=header("باقات Fast Techno","الباقات المعتمدة من موقع fasttechnoagency.com")+`<div class="grid plans">${PLANS.items.map(p=>`<div class="card plan ${p.featured?"featured":""}"><span class="badge b-plan tag">${esc(p.badge)}</span><div class="ic">${p.icon}</div><h3>${p.name}</h3><div style="color:var(--muted);font-size:13px">${esc(p.desc)}</div><div class="pr en">${p.price} <small>${p.period}</small></div><div style="font-size:12px;color:var(--muted)">${DB.projects.filter(x=>x.plan===p.name).length} مشروع على هذه الباقة</div><ul>${p.features.map(f=>`<li>${esc(f)}</li>`).join("")}</ul><div style="margin-top:auto;display:flex;gap:8px">${p.publicPdf?`<a class="btn sm" href="${p.publicPdf}" target="_blank">📄 PDF</a>`:""}${isAdmin()?`<button class="btn sm primary" onclick="projectModal(null,'${p.name}')">＋ مشروع بهذه الباقة</button>`:""}</div></div>`).join("")}</div>`;
+},
+team(uid){
+  if(!FTHierarchy.canManageTeam(ME))return go("dashboard");
+  if(uid)return empView(uid);
+  const list=DB.users.filter(u=>isAdmin()||u.id===ME.id||FTHierarchy.canManage(ME,u));
+  $("#main").innerHTML=header("الموظفون","Fast Techno",`<button class="btn primary" onclick="userModal()">＋ موظف جديد</button>`)+
+  `<div class="toolbar"><select id="deptFilter" aria-label="القسم"><option value="">كل الأقسام</option>${Object.entries(FTHierarchy.departments).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select></div><div class="tbl"><table><thead><tr><th>الاسم</th><th>Username</th><th>الصلاحية</th><th>القسم</th><th>المسؤول المباشر</th><th>المسمى الوظيفي</th><th></th></tr></thead><tbody id="teamRows"></tbody></table></div>`;
+  const paint=()=>{$("#teamRows").innerHTML=list.filter(u=>!$("#deptFilter").value||u.department===$("#deptFilter").value).map(u=>`<tr><td><b>${esc(u.name)}</b></td><td class="en">${esc(u.username)}</td><td><span class="badge b-plan">${esc(FTHierarchy.roles[u.role]||u.role)}</span></td><td>${esc(FTHierarchy.departments[u.department]||"Digital Marketing")}</td><td>${esc(DB.users.find(x=>x.id===u.manager_id)?.name||"—")}</td><td>${esc(u.title||"—")}</td><td>${FTHierarchy.canManage(ME,u)?`<button class="btn sm" onclick="userModal('${u.id}')">تعديل</button> ${u.id!==ME.id?`<button class="btn sm danger" onclick="delUser('${u.id}')">حذف</button>`:""}`:""}</td></tr>`).join("")||'<tr><td colspan="7">لا يوجد موظفون</td></tr>'};$("#deptFilter").onchange=paint;paint();
+},
+ratings(){return ratingsView()},
+settings(){
+  $("#main").innerHTML=header(isAdmin()?"الإعدادات":"حسابي",isAdmin()?"تغيير اسم المستخدم وكلمة المرور والنسخ الاحتياطي":"تغيير كلمة المرور")+
+  `<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr))">${isAdmin()?`<div class="card"><h3 style="margin-top:0">تغيير اسم المستخدم</h3><form id="unf" class="grid" style="gap:12px"><div><label>اسم المستخدم الحالي</label><input class="en" dir="ltr" value="${esc(ME.username)}" disabled></div><div><label>اسم المستخدم الجديد</label><input id="nu" class="en" dir="ltr" required></div><div><label>كلمة المرور الحالية (للتأكيد)</label><input type="password" id="nupw" required></div><button class="btn primary">حفظ</button></form></div>`:""}<div class="card"><h3 style="margin-top:0">تغيير كلمة المرور</h3><form id="pwf" class="grid" style="gap:12px"><div><label>كلمة المرور الحالية</label><input type="password" id="pw0" required></div><div><label>كلمة المرور الجديدة</label><input type="password" id="pw1" minlength="6" required></div><button class="btn primary">حفظ</button></form></div>
+  ${isAdmin()?`<div class="card"><h3 style="margin-top:0">النسخ الاحتياطي</h3><p style="color:var(--muted);font-size:13px;line-height:1.8">البيانات محفوظة في قاعدة بيانات مشتركة وتتحدّث مباشرة لدى جميع المستخدمين. يمكنك تصدير نسخة احتياطية، أو استيراد نسخة سابقة لاستبدال البيانات الحالية لدى الجميع.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn primary" onclick="exportData()">⬇ تصدير JSON</button><label class="btn" style="margin:0;color:var(--white)">⬆ استيراد<input type="file" accept=".json" class="hidden" onchange="importData(this)"></label><button class="btn" onclick="exportCSV()">⬇ تصدير المشاريع CSV</button></div></div>`:""}</div>`;
+  if($("#unf"))$("#unf").onsubmit=async e=>{e.preventDefault();const un=$("#nu").value.trim().toLowerCase();if(!/^[a-z0-9._-]{3,}$/.test(un))return toast("Username: أحرف إنجليزية وأرقام فقط (3 أحرف على الأقل)");if(DB.users.some(x=>x.username.toLowerCase()===un&&x.id!==ME.id))return toast("Username مستخدم مسبقاً");if(await sha($("#nupw").value)!==ME.pass)return toast("كلمة المرور الحالية غير صحيحة");const u=DB.users.find(x=>x.id===ME.id);u.username=un;ME=u;save();toast("تم تغيير اسم المستخدم ✓");VIEWS.settings()};
+  $("#pwf").onsubmit=async e=>{e.preventDefault();if(await sha($("#pw0").value)!==ME.pass)return toast("كلمة المرور الحالية غير صحيحة");ME.pass=await sha($("#pw1").value);DB.users.find(u=>u.id===ME.id).pass=ME.pass;await save({pass:ME.pass});e.target.reset();toast("تم تغيير كلمة المرور ✓")};
+}};
+
+/* ===== Employee follow-up & task ratings ===== */
+const TNAME=k=>(TASKS.find(t=>t[0]===k)||[])[1]||k;
+function doneTasks(uid){const out=[];visibleProjects().forEach(p=>{const t=DB.tracker[p.id]||{};Object.entries(t).forEach(([d,r])=>{if(!r)return;TASKS.forEach(([k])=>{if(r[k]&&r.by?.[k]&&(!uid||r.by[k]===uid)){const rt=(p.taskRatings||{})[d+"|"+k]||{};out.push({p,d,k,by:r.by[k],at:r.at?.[k],s:rt.s||0,c:rt.c||"",note:r.note||""})}})})});return out.sort((a,b)=>(b.d+(b.at||"")).localeCompare(a.d+(a.at||"")))}
+function avgOf(l){const r=l.filter(x=>x.s);return r.length?(r.reduce((a,x)=>a+x.s,0)/r.length).toFixed(1):"—"}
+function tStars(x,edit){let h="";for(let i=1;i<=5;i++)h+=`<span class="${i<=x.s?"":"off"}" ${edit?`onclick="rateTask('${x.p.id}','${x.d}','${x.k}',${i})" title="${i}"`:""}>★</span>`;return `<span class="stars">${h}</span>`}
+function rateTask(pid,d,k,v){if(!isAdmin())return;const p=DB.projects.find(x=>x.id===pid);p.taskRatings=p.taskRatings||{};const key=d+"|"+k,o=p.taskRatings[key]||{};if(o.s===v)delete o.s;else{o.s=v;o.by=ME.id;o.at=new Date().toISOString()}if(!o.s&&!o.c)delete p.taskRatings[key];else p.taskRatings[key]=o;save();toast("تم حفظ التقييم ✓");const who=DB.tracker[pid]?.[d]?.by?.[k];if(who&&o.s){const tn=TASKS.find(x=>x[0]===k);notify([who],"rate","⭐ تم تقييم مهمتك "+o.s+"/5","مهمة "+tn[2]+" في مشروع "+p.client+" — يوم "+d,"ratings")}}
+function commentTask(pid,d,k){if(!isAdmin())return;const p=DB.projects.find(x=>x.id===pid);p.taskRatings=p.taskRatings||{};const key=d+"|"+k,o=p.taskRatings[key]||{};const c=prompt("ملاحظة المدير على هذه المهمة:",o.c||"");if(c===null)return;o.c=c.trim();if(!o.s&&!o.c)delete p.taskRatings[key];else p.taskRatings[key]=o;save();toast("تم حفظ الملاحظة ✓");const who=DB.tracker[pid]?.[d]?.by?.[k];if(who&&o.c){const tn=TASKS.find(x=>x[0]===k);notify([who],"rate","💬 ملاحظة المدير على مهمتك",tn[2]+" — "+p.client+": "+o.c,"ratings")}}
+function uName(id){return DB.users.find(u=>u.id===id)?.name||"(محذوف)"}
+function fmtAt(a){return a?new Date(a).toLocaleString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"}):"—"}
+function taskTable(l,showEmp){if(!l.length)return `<div class="empty">لا توجد مهام منجزة بعد</div>`;const ed=isAdmin();return `<table><thead><tr><th>التاريخ</th><th>المشروع</th><th>المهمة</th>${showEmp?"<th>الموظف</th>":""}<th>الحالة</th><th>وقت الإنجاز</th><th>التقييم</th><th>ملاحظة المدير</th></tr></thead><tbody>${l.map(x=>`<tr><td class="en">${fmt(x.d)}</td><td><a style="color:var(--white);font-weight:700;cursor:pointer" onclick="go('projects/${x.p.id}')">${esc(x.p.client)}</a></td><td><span class="badge b-plan en">${TNAME(x.k)}</span></td>${showEmp?`<td>${ed?`<a style="cursor:pointer;color:var(--white)" onclick="go('team/${x.by}')">${esc(uName(x.by))}</a>`:esc(uName(x.by))}</td>`:""}<td><span class="badge b-ok">✓ مكتملة</span></td><td class="en" style="font-size:12px">${fmtAt(x.at)}</td><td style="white-space:nowrap">${tStars(x,ed)} ${x.s?"":`<small style="color:var(--warn)">${ed?"بانتظار تقييمك":"لم تُقيَّم بعد"}</small>`}</td><td style="font-size:12px;max-width:220px">${esc(x.c)||"—"} ${ed?`<button class="btn sm" onclick="commentTask('${x.p.id}','${x.d}','${x.k}')">✎</button>`:""}</td></tr>`).join("")}</tbody></table>`}
+function statCards(l,extra=""){const rated=l.filter(x=>x.s);return `<div class="grid stats"><div class="card stat"><div class="n grad-text">${l.length}</div><div class="l">مهام مكتملة</div></div><div class="card stat"><div class="n" style="color:#ffc94a">${avgOf(l)} ★</div><div class="l">متوسط التقييم</div></div><div class="card stat"><div class="n" style="color:var(--ok)">${rated.length}</div><div class="l">مهام مُقيَّمة</div></div><div class="card stat"><div class="n" style="color:var(--warn)">${l.length-rated.length}</div><div class="l">بانتظار التقييم</div></div>${extra}</div>`}
+function filterBar(id,emp){return `<div class="toolbar">${emp?`<select id="${id}e"><option value="">كل الموظفين</option>${DB.users.filter(u=>u.role!=="admin").map(u=>`<option value="${u.id}">${esc(u.name)}</option>`).join("")}</select>`:""}<select id="${id}p"><option value="">كل المشاريع</option>${visibleProjects().map(p=>`<option value="${p.id}">${esc(p.client)}</option>`).join("")}</select><select id="${id}k"><option value="">كل المهام</option>${TASKS.map(([k,e])=>`<option value="${k}">${e}</option>`).join("")}</select><select id="${id}s"><option value="">الكل</option><option value="no">بانتظار التقييم</option><option value="yes">مُقيَّمة</option></select></div>`}
+function bindFilter(id,base,showEmp){const f=()=>{const e=$("#"+id+"e")?.value,p=$("#"+id+"p").value,k=$("#"+id+"k").value,s=$("#"+id+"s").value;$("#"+id+"t").innerHTML=taskTable(base.filter(x=>(!e||x.by===e)&&(!p||x.p.id===p)&&(!k||x.k===k)&&(!s||(s==="no"?!x.s:x.s))),showEmp)};["e","p","k","s"].forEach(c=>{const el=$("#"+id+c);if(el)el.onchange=f});f()}
+function ratingsView(){
+  const ad=isAdmin(),l=doneTasks(ad?null:ME.id);
+  if(ad){
+    const emps=DB.users.filter(u=>u.role!=="admin");
+    $("#main").innerHTML=header("التقييم","قيّم كل مهمة أنجزها الموظفون")+statCards(l)+
+    `<div class="card tbl" style="margin-top:16px"><h3 style="margin:0 0 10px">ترتيب الموظفين</h3><table><thead><tr><th>الموظف</th><th>مهام مكتملة</th><th>مُقيَّمة</th><th>بانتظار التقييم</th><th>متوسط التقييم</th><th></th></tr></thead><tbody>${emps.map(u=>{const m=l.filter(x=>x.by===u.id);return {u,m,a:avgOf(m)}}).sort((a,b)=>(parseFloat(b.a)||0)-(parseFloat(a.a)||0)).map(({u,m,a})=>`<tr><td><b>${esc(u.name)}</b></td><td>${m.length}</td><td>${m.filter(x=>x.s).length}</td><td style="color:var(--warn)">${m.filter(x=>!x.s).length}</td><td style="color:#ffc94a">${a} ★</td><td><button class="btn sm primary" onclick="go('team/${u.id}')">التفاصيل</button></td></tr>`).join("")||`<tr><td colspan="6"><div class="empty">لا يوجد موظفون</div></td></tr>`}</tbody></table></div>
+    <div class="card" style="margin-top:16px"><h3 style="margin:0 0 10px">كل المهام المنجزة</h3>${filterBar("rf",true)}<div class="tbl" id="rft"></div></div>`;
+    bindFilter("rf",l,true);
+  }else{
+    $("#main").innerHTML=header("تقييمي","تقييم المدير لكل مهمة أنجزتها")+statCards(l)+
+    `<div class="card" style="margin-top:16px"><h3 style="margin:0 0 10px">مهامي المنجزة وتقييمها</h3>${filterBar("rf",false)}<div class="tbl" id="rft"></div></div>`;
+    bindFilter("rf",l,false);
+  }
+}
+function empView(uid){
+  const u=DB.users.find(x=>x.id===uid);if(!u||!FTHierarchy.canManage(ME,u))return go("team");
+  const ps=DB.projects.filter(p=>p.members.includes(uid)),l=doneTasks(uid),t=today();
+  const todayN=l.filter(x=>x.d===t).length,wk=l.filter(x=>daysLeft(x.d)>-7&&x.d<=t).length;
+  $("#main").innerHTML=header(esc(u.name),`${esc(u.title||"Employee")} · <span class="en">@${esc(u.username)}</span>`,`<button class="btn" onclick="go('team')">→ رجوع</button><button class="btn" onclick="userModal('${u.id}')">تعديل الحساب</button>`)+
+  statCards(l,`<div class="card stat"><div class="n">${ps.length}</div><div class="l">المشاريع المسندة</div></div><div class="card stat"><div class="n">${todayN}</div><div class="l">أنجز اليوم</div></div><div class="card stat"><div class="n">${wk}</div><div class="l">آخر 7 أيام</div></div>`)+
+  `<div class="card tbl" style="margin-top:16px"><h3 style="margin:0 0 10px">إنجازه في كل مشروع</h3>${ps.length?`<table><thead><tr><th>المشروع</th><th>الباقة</th><th>Deadline</th>${TASKS.map(([k,e])=>`<th>${e}</th>`).join("")}<th>إجمالي إنجازه</th><th>متوسط تقييمه</th><th>تقدم المشروع</th></tr></thead><tbody>${ps.map(p=>{const m=l.filter(x=>x.p.id===p.id);const pr=progress(p);return `<tr><td><a style="color:var(--white);font-weight:700;cursor:pointer" onclick="go('projects/${p.id}')">${esc(p.client)}</a></td><td><span class="badge b-plan">${p.plan}</span></td><td>${deadlineBadge(p)}</td>${TASKS.map(([k])=>`<td class="en">${m.filter(x=>x.k===k).length} <small style="color:var(--muted)">/ ${p.targets?.[k]||0}</small></td>`).join("")}<td><b>${m.length}</b></td><td style="color:#ffc94a">${avgOf(m)} ★</td><td><div style="display:flex;gap:8px;align-items:center;min-width:110px"><div class="bar" style="flex:1"><i style="width:${pr}%"></i></div><small class="en">${pr}%</small></div></td></tr>`}).join("")}</tbody></table>`:`<div class="empty">لا توجد مشاريع مسندة لهذا الموظف</div>`}</div>
+  <div class="card" style="margin-top:16px"><h3 style="margin:0 0 10px">سجل المهام المنجزة والتقييم</h3>${filterBar("ef",false)}<div class="tbl" id="eft"></div></div>`;
+  bindFilter("ef",l,false);
+}
+
+function projTable(ps,compact){
+  if(!ps.length)return `<div class="empty">لا توجد مشاريع${isAdmin()?"":" مسندة إليك بعد"}</div>`;
+  return `<table><thead><tr><th>#</th><th>العميل</th><th>الباقة</th>${compact?"":"<th>البداية</th><th>النهاية</th>"}<th>Deadline</th>${compact?"":"<th>الفريق</th>"}<th>الإنجاز</th><th>التقييم</th>${compact?"":"<th>الحالة</th><th></th>"}</tr></thead><tbody>${ps.map((p,i)=>{const pr=progress(p);return `<tr><td class="en" style="color:var(--muted)">${String(i+1).padStart(2,"0")}</td><td><a style="color:var(--white);font-weight:700;cursor:pointer;text-decoration:none" onclick="go('projects/${p.id}')">${esc(p.client)}</a></td><td><span class="badge b-plan">${p.plan}</span></td>${compact?"":`<td class="en">${fmt(p.start)}</td><td class="en">${fmt(p.end)}</td>`}<td>${deadlineBadge(p)}</td>${compact?"":`<td style="font-size:12px">${p.members.map(m=>esc(DB.users.find(u=>u.id===m)?.name||"")).filter(Boolean).join("، ")||"—"}</td>`}<td><div style="display:flex;gap:8px;align-items:center"><div class="bar" style="flex:1"><i style="width:${pr}%"></i></div><small class="en">${pr}%</small></div></td><td>${stars(p.rating,compact?null:p.id)}</td>${compact?"":`<td><span class="badge ${STATUS[p.status][1]}">${STATUS[p.status][0]}</span></td><td style="white-space:nowrap"><button class="btn sm" onclick="go('projects/${p.id}')">المتابعة</button> ${isAdmin()?`<button class="btn sm" onclick="projectModal('${p.id}')">تعديل</button> <button class="btn sm danger" onclick="delProject('${p.id}')">حذف</button>`:""}</td>`}</tr>`}).join("")}</tbody></table>`;
+}
+function setRating(id,v){if(!isAdmin())return;const p=DB.projects.find(x=>x.id===id);p.rating=p.rating===v?0:v;save();go(location.hash.slice(1));toast("تم حفظ التقييم")}
+
+/* ===== Tracker (daily) ===== */
+function trackerView(id){
+  const p=DB.projects.find(x=>x.id===id);if(!p||(!isAdmin()&&!p.members.includes(ME.id)))return go("projects");
+  const t=DB.tracker[p.id]||(DB.tracker[p.id]={});const days=dateRange(p.start,p.end);const pl=planOf(p.plan);
+  const dn=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+  $("#main").innerHTML=header(esc(p.client),"المتابعة اليومية للمهام",`<button class="btn" onclick="go('projects')">→ رجوع</button><button class="btn" onclick="window.print()">🖨 طباعة</button>${isAdmin()?`<button class="btn primary" onclick="projectModal('${p.id}')">تعديل المشروع</button>`:""}`)+
+  `<div class="card" style="margin-bottom:16px"><div class="ph"><div><h3>${esc(p.client)} <span class="badge b-plan" style="vertical-align:middle">${pl?.icon||""} ${p.plan}</span></h3><div class="meta"><span>البداية: <b class="en">${fmt(p.start)}</b></span><span>النهاية: <b class="en">${fmt(p.end)}</b></span><span>Deadline: <b class="en">${fmt(p.deadline)}</b> ${deadlineBadge(p)}</span><span>الباقة: <b class="en">${pl?.price||""}</b></span><span>الحالة: <span class="badge ${STATUS[p.status][1]}">${STATUS[p.status][0]}</span></span></div><div class="meta"><span>الفريق: <b>${p.members.map(m=>esc(DB.users.find(u=>u.id===m)?.name||"")).filter(Boolean).join("، ")||"—"}</b></span><span>التقييم: ${stars(p.rating,p.id)}</span></div>${p.notes?`<p style="color:var(--feat);font-size:13px;margin:10px 0 0">📝 ${esc(p.notes)}</p>`:""}</div><div style="min-width:200px"><div style="font-size:13px;color:var(--muted)">الإنجاز الكلي</div><div style="font-size:34px;font-weight:800" class="grad-text en">${progress(p)}%</div><div class="bar"><i style="width:${progress(p)}%"></i></div></div></div></div>
+  <div class="card tbl"><table class="trk"><thead><tr><th style="text-align:start">التاريخ</th><th>اليوم</th>${TASKS.map(([k,e])=>`<th>${e}</th>`).join("")}<th style="text-align:start">ملاحظات</th></tr></thead><tbody>
+   <tr class="target"><td class="d">Monthly target</td><td></td>${TASKS.map(([k])=>`<td>${isAdmin()?`<input class="num" type="number" min="0" value="${p.targets?.[k]||0}" onchange="setTarget('${p.id}','${k}',this.value)">`:(p.targets?.[k]||0)}</td>`).join("")}<td style="text-align:start;font-size:12px;color:var(--muted)">حسب باقة ${p.plan}</td></tr>
+   ${days.map(d=>{const dt=new Date(d+"T00:00:00"),r=t[d]||{},fut=d>today();return `<tr class="${dt.getDay()===5?"fri":""}"><td class="d">${dt.toLocaleDateString("en-GB",{day:"2-digit",month:"short"})}</td><td class="en" style="color:var(--muted)">${dn[dt.getDay()]}</td>${TASKS.map(([k])=>`<td><span class="cb ${r[k]?"on":""}" title="${r.by?.[k]?esc(DB.users.find(u=>u.id===r.by[k])?.name||""):""}" onclick="tick('${p.id}','${d}','${k}',this)"></span></td>`).join("")}<td><input class="note" value="${esc(r.note||"")}" placeholder="${fut?"":"—"}" onchange="setNote('${p.id}','${d}',this.value)"></td></tr>`}).join("")}
+   <tr class="done"><td class="d">Done</td><td></td>${TASKS.map(([k])=>{const c=countDone(t,k),g=+(p.targets?.[k]||0);return `<td id="dn-${k}" style="color:${c>=g&&g?"var(--ok)":"inherit"}">${c} / ${g}</td>`}).join("")}<td></td></tr>
+  </tbody></table>${!days.length?`<div class="empty">حدد تاريخ البدء والانتهاء للمشروع لعرض جدول المتابعة</div>`:""}</div>`;
+}
+function tick(pid,d,k,el){const t=DB.tracker[pid]||(DB.tracker[pid]={});const r=t[d]||(t[d]={});r[k]=!r[k];r.by=r.by||{};r.at=r.at||{};if(r[k]){r.by[k]=ME.id;r.at[k]=new Date().toISOString()}else{delete r.by[k];delete r.at[k]}save({tracker:[pid]});{const pp=DB.projects.find(x=>x.id===pid),tn=TASKS.find(x=>x[0]===k);notify(null,r[k]?"done":"undo",(r[k]?"✅ أنجز ":"↩ ألغى إنجاز ")+ME.name+" مهمة "+tn[2]+" ("+tn[1]+")","المشروع: "+(pp?.client||"")+" — يوم "+d,"projects/"+pid)}el.classList.toggle("on",r[k]);const p=DB.projects.find(x=>x.id===pid);const c=countDone(t,k),g=+(p.targets?.[k]||0);const td=document.getElementById("dn-"+k);td.textContent=`${c} / ${g}`;td.style.color=c>=g&&g?"var(--ok)":"inherit"}
+function setNote(pid,d,v){const t=DB.tracker[pid]||(DB.tracker[pid]={});(t[d]||(t[d]={})).note=v;save({tracker:[pid]});{const pp=DB.projects.find(x=>x.id===pid);notify(null,"edit","📝 "+ME.name+" أضاف ملاحظة يومية","المشروع: "+(pp?.client||"")+" — "+d+": "+v,"projects/"+pid)}toast("تم حفظ الملاحظة")}
+function setTarget(pid,k,v){const p=DB.projects.find(x=>x.id===pid);p.targets[k]=Math.max(0,+v||0);save();go("projects/"+pid)}
+
+/* ===== Notifications & Notes ===== */
+let INBOX={notifs:[],notes:[]};
+const UNREAD=()=>INBOX.notifs.filter(n=>!n.is_read).length;
+const ago=t=>{const s=(Date.now()-new Date(t))/1e3;return s<60?"الآن":s<3600?`قبل ${Math.floor(s/60)} د`:s<86400?`قبل ${Math.floor(s/3600)} س`:new Date(t).toLocaleString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})};
+const NIC={done:"✅",undo:"↩",edit:"📝",rate:"⭐",task:"📌",note:"✉",read:"👁",info:"🔔"};
+async function notify(to,kind,title,body,link){if(!TOK)return;try{await rpc("ft_notify",{p_token:TOK,p_to:to,p_kind:kind,p_title:title,p_body:body||"",p_link:link||""})}catch(e){}}
+async function loadInbox(live){if(!TOK)return;let r;try{r=await rpc("ft_inbox",{p_token:TOK})}catch(e){return}if(r.disabled)return kicked();const before=new Set(INBOX.notifs.map(n=>n.id)),fresh=r.notifs.filter(n=>!n.is_read&&!before.has(n.id));const first=!INBOX._l;INBOX=r;INBOX._l=1;paintBell();if(live&&!first&&fresh.length){toast("🔔 "+fresh[0].title);try{new AudioContext().resume()}catch(e){}}if(!$("#npanel").classList.contains("hidden"))renderPanel();if(location.hash.slice(1).split("/")[0]==="notes"&&!busy())VIEWS.notes()}
+function paintBell(){const n=UNREAD();document.querySelectorAll(".nbadge").forEach(b=>{b.textContent=n>99?"99+":n;b.style.display=n?"":"none"});document.title=(n?`(${n}) `:"")+"Fast Techno · DM System"}
+function togglePanel(e){e&&e.stopPropagation();const p=$("#npanel");p.classList.toggle("hidden");if(!p.classList.contains("hidden"))renderPanel()}
+document.addEventListener("click",e=>{const p=$("#npanel");if(p&&!p.classList.contains("hidden")&&!p.contains(e.target)&&!e.target.closest(".bell"))p.classList.add("hidden")});
+function renderPanel(){const L=INBOX.notifs;$("#npanel").innerHTML=`<div class="nh"><b>الإشعارات ${UNREAD()?`<span class="badge b-warn">${UNREAD()} جديد</span>`:""}</b><div style="display:flex;gap:6px"><button class="btn sm" onclick="readAll()">تعليم الكل كمقروء</button><button class="btn sm" onclick="clearN()" title="مسح الكل">🗑</button></div></div>`+(L.length?L.map(n=>`<div class="ni ${n.is_read?"":"un"}" onclick="openN(${n.id})"><div class="ic">${NIC[n.kind]||"🔔"}</div><div style="flex:1;min-width:0"><b style="font-size:13.5px">${esc(n.title)}</b>${n.body?`<p>${esc(n.body)}</p>`:""}<small class="en">${ago(n.created_at)}</small></div></div>`).join(""):`<p style="text-align:center;color:var(--muted);padding:30px">لا توجد إشعارات</p>`)}
+async function openN(id){const n=INBOX.notifs.find(x=>x.id===id);if(!n)return;if(!n.is_read){n.is_read=true;paintBell();renderPanel();rpc("ft_read",{p_token:TOK,p_ids:[id],p_note:null}).catch(()=>{})}if(n.link){$("#npanel").classList.add("hidden");go(n.link)}}
+async function readAll(){INBOX.notifs.forEach(n=>n.is_read=true);paintBell();renderPanel();try{await rpc("ft_read",{p_token:TOK,p_ids:null,p_note:null})}catch(e){}}
+async function clearN(){if(!confirm("مسح كل الإشعارات؟"))return;INBOX.notifs=[];paintBell();renderPanel();try{await rpc("ft_notif_clear",{p_token:TOK})}catch(e){}}
+const uname=id=>DB.users.find(u=>u.id===id)?.name||"(محذوف)";
+VIEWS.notes=function(){const adm=isAdmin(),N=INBOX.notes;
+ const list=N.length?N.map(n=>{const rd=n.read_by||[],un=!adm&&!rd.includes(ME.id);return `<div class="card note ${un?"un":""}" style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><b style="font-size:15px">${esc(n.title)}</b> ${un?'<span class="badge b-warn">جديدة</span>':""}<div style="color:var(--muted);font-size:12px;margin-top:4px">${adm?"إلى: "+n.to_ids.map(i=>`<span class="badge ${rd.includes(i)?"b-ok":"b-mut"}" title="${rd.includes(i)?"قرأها":"لم يقرأها بعد"}">${rd.includes(i)?"✓ ":""}${esc(uname(i))}</span>`).join(" "):"من: "+esc(uname(n.from_id))} · <span class="en">${ago(n.created_at)}</span></div></div><div style="display:flex;gap:6px">${un?`<button class="btn sm primary" onclick="readNote(${n.id})">تم الاطلاع ✓</button>`:""}${adm?`<button class="btn sm" onclick="delNote(${n.id})">حذف</button>`:""}</div></div><p style="white-space:pre-wrap;line-height:1.9;margin:12px 0 0">${esc(n.body)}</p></div>`}).join(""):`<div class="card" style="text-align:center;color:var(--muted)">لا توجد ملاحظات بعد</div>`;
+ $("#main").innerHTML=header(adm?"الملاحظات":"ملاحظاتي",adm?"أرسل ملاحظات للموظفين وتابع من قرأها":"الملاحظات المرسلة إليك من الإدارة",adm?`<button class="btn primary" onclick="noteModal()">＋ ملاحظة جديدة</button>`:"")+list};
+function noteModal(){const emps=DB.users.filter(u=>u.id!==ME.id);modal(`<h3 style="margin-top:0">إرسال ملاحظة</h3><div class="full" style="margin-bottom:12px"><label>إلى الموظفين</label><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px" id="nto"><span class="chip" onclick="document.querySelectorAll('#nto .chip[data-id]').forEach(c=>c.classList.add('on'))">الكل</span>${emps.map(u=>`<span class="chip" data-id="${u.id}" onclick="this.classList.toggle('on')">${esc(u.name)}</span>`).join("")}</div></div><label>العنوان</label><input id="ntt" maxlength="150" style="width:100%;margin:6px 0 12px"><label>نص الملاحظة</label><textarea id="ntb" rows="6" style="width:100%;margin-top:6px"></textarea><p id="nerr" style="color:#ff6b6b;min-height:18px"></p><div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="closeModal()">إلغاء</button><button class="btn primary" onclick="sendNote()">إرسال</button></div>`)}
+async function sendNote(){const to=[...document.querySelectorAll("#nto .chip.on[data-id]")].map(c=>c.dataset.id),t=$("#ntt").value.trim(),b=$("#ntb").value.trim();if(!to.length)return $("#nerr").textContent="اختر موظفاً واحداً على الأقل";if(!t||!b)return $("#nerr").textContent="يرجى كتابة العنوان ونص الملاحظة";try{const r=await rpc("ft_note_send",{p_token:TOK,p_to:to,p_title:t,p_body:b});if(r.error)throw 0;closeModal();toast("تم إرسال الملاحظة ✓");loadInbox()}catch(e){$("#nerr").textContent="تعذّر الإرسال"}}
+async function delNote(id){if(!confirm("حذف هذه الملاحظة؟"))return;try{await rpc("ft_note_del",{p_token:TOK,p_id:id})}catch(e){}loadInbox()}
+async function readNote(id){const n=INBOX.notes.find(x=>x.id===id);try{await rpc("ft_read",{p_token:TOK,p_ids:null,p_note:id})}catch(e){}notify(null,"read","👁 "+ME.name+" اطّلع على الملاحظة",n?.title||"","notes");loadInbox()}
+
+/* ===== Modals ===== */
+function modal(html){$("#modalRoot").innerHTML=`<div class="modal" onclick="if(event.target===this)closeModal()"><div class="card">${html}</div></div>`}
+function closeModal(){$("#modalRoot").innerHTML="";if(PENDING){PENDING=false;setTimeout(rerender,0)}}
+function projectModal(id,planName){
+  if(!isAdmin())return;
+  const p=id?DB.projects.find(x=>x.id===id):{client:"",plan:planName||"ORBIT",start:"",end:"",deadline:"",rating:0,status:"active",members:[],notes:""};
+  const emps=DB.users.filter(u=>u.role!=="admin");
+  modal(`<h3>${id?"تعديل المشروع":"مشروع جديد"}</h3><form id="pf" class="form">
+   <div class="full"><label>اسم العميل / المشروع</label><input id="pc" value="${esc(p.client)}" required></div>
+   <div class="full"><label>الباقة المعتمدة (من موقع Fast Techno)</label><select id="pp">${PLANS.items.map(x=>`<option value="${x.name}" ${x.name===p.plan?"selected":""}>${x.icon} ${x.name} — ${x.price}</option>`).join("")}</select></div>
+   <div><label>تاريخ البدء <span class="lock">🔒 المسؤول فقط</span></label><input type="date" id="ps" value="${p.start}" required></div>
+   <div><label>تاريخ الانتهاء <span class="lock">🔒 المسؤول فقط</span></label><input type="date" id="pe" value="${p.end}" required></div>
+   <div><label>Deadline</label><input type="date" id="pd" value="${p.deadline}" required></div>
+   <div><label>الحالة</label><select id="pst">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${k===p.status?"selected":""}>${v[0]}</option>`).join("")}</select></div>
+   <div class="full"><label>التقييم</label><div id="prt" style="font-size:24px"></div></div>
+   <div class="full"><label>الموظفون المسؤولون عن المشروع</label><div class="chips" id="pm">${emps.length?emps.map(u=>`<span class="chip ${p.members.includes(u.id)?"on":""}" data-id="${u.id}" onclick="this.classList.toggle('on')">${esc(u.name)}</span>`).join(""):`<span style="color:var(--muted);font-size:13px">لا يوجد موظفون — أضفهم من صفحة الموظفين</span>`}</div></div>
+   <div class="full"><label>ملاحظات</label><textarea id="pn" rows="3">${esc(p.notes)}</textarea></div>
+   <div class="full err" id="perr"></div>
+  </form><div class="actions"><button class="btn" onclick="closeModal()">إلغاء</button><button class="btn primary" onclick="saveProject('${id||""}')">حفظ</button></div>`);
+  let rv=p.rating;const rr=()=>{$("#prt").innerHTML=[1,2,3,4,5].map(i=>`<span style="cursor:pointer;color:${i<=rv?"#ffc94a":"var(--star-off)"}" data-v="${i}">★</span>`).join("");$("#prt").querySelectorAll("span").forEach(s=>s.onclick=()=>{rv=+s.dataset.v===rv?0:+s.dataset.v;rr()})};rr();
+  window._rv=()=>rv;
+}
+function saveProject(id){
+  const v={client:$("#pc").value.trim(),plan:$("#pp").value,start:$("#ps").value,end:$("#pe").value,deadline:$("#pd").value,status:$("#pst").value,rating:window._rv(),members:[...document.querySelectorAll("#pm .chip.on")].map(c=>c.dataset.id),notes:$("#pn").value.trim()};
+  if(!v.client||!v.start||!v.end||!v.deadline)return $("#perr").textContent="يرجى تعبئة اسم العميل والتواريخ";
+  if(v.end<v.start)return $("#perr").textContent="تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء";
+  const oldM=id?(DB.projects.find(x=>x.id===id).members||[]):[],newM=v.members.filter(m=>!oldM.includes(m));if(newM.length)notify(newM,"task","📌 تم إسنادك لمشروع جديد: "+v.client,"الباقة "+v.plan+" — Deadline: "+v.deadline,"projects");else if(id&&oldM.length)notify(v.members,"task","🔄 تم تحديث مشروع "+v.client,"Deadline: "+v.deadline,"projects");
+  if(id){const p=DB.projects.find(x=>x.id===id);if(p.plan!==v.plan)p.targets={...PLAN_TARGETS[v.plan]};Object.assign(p,v)}else DB.projects.push({id:uid(),...v,targets:{...PLAN_TARGETS[v.plan]},created:Date.now()});
+  save();closeModal();toast("تم حفظ المشروع ✓");go(location.hash.slice(1));
+}
+function delProject(id){if(!confirm("حذف هذا المشروع وكل بيانات المتابعة الخاصة به؟"))return;DB.projects=DB.projects.filter(p=>p.id!==id);delete DB.tracker[id];save();go("projects")}
+function userModal(id){
+  const u=id?DB.users.find(x=>x.id===id):{id:"",name:"",username:"",title:"",role:"employee",department:ME.role==="it_lead"?"it":ME.role==="photography_lead"?"photography":"marketing",manager_id:ME.role.endsWith("_lead")?ME.id:""};
+  if(!u||!FTHierarchy.canManageTeam(ME)||id&&!FTHierarchy.canManage(ME,u))return toast("غير مسموح");
+  modal(`<h3>${id?"تعديل حساب":"موظف جديد"}</h3><form class="form" onsubmit="return false">
+  <div><label for="un">الاسم الكامل</label><input id="un" maxlength="100" value="${esc(u.name)}"></div>
+  <div><label for="ut">المسمى الوظيفي</label><input id="ut" maxlength="100" value="${esc(u.title)}"></div>
+  <div><label for="uu">Username</label><input id="uu" maxlength="50" value="${esc(u.username)}" dir="ltr"></div>
+  <div><label for="upw">Password ${id?"(اتركه فارغاً لعدم التغيير)":""}</label><input id="upw" type="password" maxlength="200" autocomplete="new-password" dir="ltr"></div>
+  <div><label for="ur">الصلاحية</label><select id="ur" onchange="syncUserForm()">${Object.entries(FTHierarchy.roles).filter(([r])=>isAdmin()||ME.role==="supervisor"&&["employee","marketing_lead","photography_lead"].includes(r)||ME.role.endsWith("_lead")&&r==="employee").map(([r,label])=>`<option value="${r}" ${r===u.role?"selected":""}>${label}</option>`).join("")}</select></div>
+  <div><label for="ud">القسم</label><select id="ud" onchange="syncUserForm()">${Object.entries(FTHierarchy.departments).filter(([d])=>isAdmin()||ME.role==="supervisor"&&["marketing","design","photography"].includes(d)||ME.role==="it_lead"&&d==="it"||ME.role==="marketing_lead"&&["marketing","design"].includes(d)||ME.role==="photography_lead"&&d==="photography").map(([d,label])=>`<option value="${d}" ${d===u.department?"selected":""}>${label}</option>`).join("")}</select></div>
+  <div class="full"><label for="um">المسؤول المباشر</label><select id="um" data-current="${esc(u.manager_id||"")}"></select></div>
+  <div class="full err" id="uerr"></div></form><div class="actions"><button class="btn" onclick="closeModal()">إلغاء</button><button id="userSave" class="btn primary" onclick="saveUser('${id||""}')">حفظ</button></div>`);syncUserForm();
+}
+function syncUserForm(){
+ const r=$("#ur").value,d=$("#ud"),m=$("#um");const fixed={admin:"management",supervisor:"management",it_lead:"it",marketing_lead:"marketing",photography_lead:"photography"};
+ d.disabled=r!=="employee";if(fixed[r])d.value=fixed[r];else if(d.value==="management")d.value="marketing";
+ const current=m.value||m.dataset.current||"";m.dataset.current="";
+ const expected=d.value==="it"?"it_lead":d.value==="photography"?"photography_lead":"marketing_lead";
+ m.disabled=r!=="employee"||d.value==="legal";
+ const leads=m.disabled?[]:DB.users.filter(x=>x.role===expected&&(!ME.role.endsWith("_lead")||x.id===ME.id));
+ m.innerHTML='<option value="">—</option>'+leads.map(x=>`<option value="${esc(x.id)}">${esc(x.name)}</option>`).join("");m.value=leads.some(x=>x.id===current)?current:leads.length===1?leads[0].id:"";
+ if(d.value==="it"&&r==="employee")$("#ut").value="Developer";
+}
+const USER_ERRORS={forbidden:"غير مسموح لك بإدارة هذا الحساب",invalid_assignment:"اختر القسم والمسؤول المباشر الصحيحين",duplicate:"اسم المستخدم مستخدم مسبقاً",no_admin:"يجب أن يبقى مدير عام واحد على الأقل",has_reports:"انقل الموظفين التابعين أولاً قبل حذف مسؤولهم أو تغيير صلاحيته",use_employee_actions:"استخدم صفحة الموظفين لتغيير الحسابات",not_found:"الحساب غير موجود"};
+async function saveUser(id){
+ const pw=$("#upw").value;const u={id:id||uid(),name:$("#un").value.trim(),username:$("#uu").value.trim().toLowerCase(),title:$("#ut").value.trim(),role:$("#ur").value,department:$("#ud").value,manager_id:$("#um").disabled?null:$("#um").value||null};
+ if(!u.name||u.name.length>100||u.title.length>100||!/^[a-z0-9._-]{3,50}$/.test(u.username))return $("#uerr").textContent="الاسم و Username مطلوبان (3–50 حرفاً إنجليزياً)";
+ if((!id||pw)&&pw.length<6)return $("#uerr").textContent="كلمة المرور 6 أحرف على الأقل";
+ if(!FTHierarchy.canManage(ME,u)||!FTHierarchy.validAssignment(u,DB.users))return $("#uerr").textContent="اختر القسم والمسؤول المباشر الصحيحين";
+ if(u.department==="it"&&u.role==="employee")u.title="Developer";
+ const btn=$("#userSave");btn.disabled=true;
+ try{u.pass=pw?await sha(pw):"";const r=await rpc("ft_user_save",{p_token:TOK,p_user:u,p_new:!id});if(r.error){$("#uerr").textContent=USER_ERRORS[r.error]||"تعذّر الحفظ";return}if(!apply(r))return;closeModal();rerender();toast("تم حفظ الحساب ✓")}catch(e){if($("#uerr"))$("#uerr").textContent="تعذّر الحفظ؛ تأكد من تطبيق ملف تحديث الصلاحيات واتصال الإنترنت"}finally{btn.disabled=false}
+}
+async function delUser(id){
+ const u=DB.users.find(x=>x.id===id);if(!u||!FTHierarchy.canManage(ME,u)||id===ME.id)return toast("غير مسموح");
+ if(!confirm("حذف هذا الحساب؟"))return;
+ try{const r=await rpc("ft_user_delete",{p_token:TOK,p_id:id});if(r.error)return toast(USER_ERRORS[r.error]||"تعذّر الحذف");if(apply(r)){rerender();toast("تم حذف الحساب")}}catch(e){toast("تعذّر الحذف؛ لم تتغير البيانات")}
+}
+function dl(name,data,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;a.click()}
+function exportData(){dl(`fasttechno-backup-${today()}.json`,JSON.stringify(DB,null,2),"application/json")}
+function importData(inp){const f=inp.files[0];if(!f)return;f.text().then(s=>{try{const d=JSON.parse(s);if(!d.users||!d.projects)throw 0;if(!confirm("سيتم استبدال جميع البيانات الحالية. متابعة؟"))return;DB=d;save({meta:true,tracker:"all"}).then(()=>{toast("تم الاستيراد ✓");start()})}catch(e){toast("ملف غير صالح")}})}
+function exportCSV(){const rows=[["Client","Plan","Price","Start","End","Deadline","Status","Rating","Progress %","Team"]];DB.projects.forEach(p=>rows.push([p.client,p.plan,planOf(p.plan)?.price,p.start,p.end,p.deadline,p.status,p.rating,progress(p),p.members.map(m=>DB.users.find(u=>u.id===m)?.name).join(" | ")]));dl(`fasttechno-projects-${today()}.csv`,"\ufeff"+rows.map(r=>r.map(c=>`"${String(c??"").replace(/"/g,'""')}"`).join(",")).join("\n"),"text/csv")}
+window.addEventListener("hashchange",()=>{if(ME){const h=location.hash.slice(1);const [pg]=h.split("/");document.querySelectorAll("#nav a").forEach(a=>a.classList.toggle("active",a.dataset.k===pg));(VIEWS[pg]||VIEWS.dashboard)(h.split("/")[1])}});
+if(TOK)refresh(true).then(()=>{if(TOK&&ME)start()});
+</script>
+</body>
+<script>
+/* Shared enhancement for initial and dynamically rendered password fields. */
+(function () {
+  const eye = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>';
+  const eyeOff = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 3 18 18M10.6 5.1 12 5c6.5 0 10 7 10 7a19 19 0 0 1-3 3.7M6.3 6.3A20 20 0 0 0 2 12s3.5 7 10 7a13 13 0 0 0 5.7-1.3M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>';
+  function update(input, button) {
+    const shown = input.type === 'text';
+    const english = document.documentElement.lang === 'en';
+    const label = english ? (shown ? 'Hide password' : 'Show password') : (shown ? 'إخفاء كلمة المرور' : 'إظهار كلمة المرور');
+    button.setAttribute('aria-label', label);
+    button.setAttribute('title', label);
+    button.setAttribute('aria-pressed', String(shown));
+    button.innerHTML = shown ? eyeOff : eye;
+  }
+  let counter = 0;
+  function enhance() {
+    document.querySelectorAll('input[type="password"]').forEach(input => {
+      if (input.closest('.password-field')) return;
+      const wrapper = document.createElement('div');
+      wrapper.className = 'password-field';
+      input.before(wrapper);
+      wrapper.append(input);
+      if (!input.id) input.id = 'password-field-' + (++counter);
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'btn password-toggle';
+      button.setAttribute('aria-controls', input.id);
+      button.addEventListener('click', () => {
+        input.type = input.type === 'password' ? 'text' : 'password';
+        update(input, button);
+      });
+      wrapper.append(button);
+      update(input, button);
+    });
+  }
+  enhance();
+  new MutationObserver(enhance).observe(document.body, { childList: true, subtree: true });
+  new MutationObserver(() => {
+    document.querySelectorAll('.password-field').forEach(wrapper => {
+      const input = wrapper.querySelector('input');
+      const button = wrapper.querySelector('.password-toggle');
+      if (input && button) update(input, button);
+    });
+  }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+})();
+</script>
+</html>
