@@ -344,6 +344,7 @@ setInterval(()=>{refresh();loadInbox()},30000);document.addEventListener("visibi
 document.addEventListener("focusout",()=>setTimeout(()=>{if(PENDING&&!busy()){PENDING=false;rerender()}},300));
 let ME=null;
 const isAdmin=()=>ME&&ME.role==="admin";
+const canPublish=()=>ME&&(ME.role==="admin"||ME.role==="marketing_lead");
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt=d=>d?new Date(d+"T00:00:00").toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}):"—";
@@ -352,7 +353,7 @@ const daysLeft=d=>Math.ceil((new Date(d+"T00:00:00")-new Date(today()+"T00:00:00
 function toast(m){const t=document.createElement("div");t.className="toast";t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2300)}
 const planOf=n=>PLANS.items.find(p=>p.name===n);
 function stars(v,pid){let h="";for(let i=1;i<=5;i++)h+=`<span class="${i<=v?"":"off"}" ${pid&&isAdmin()?`onclick="setRating('${pid}',${i})"`:""}>★</span>`;return `<span class="stars">${h}</span>`}
-function visibleProjects(){return isAdmin()?DB.projects:DB.projects.filter(p=>p.members.includes(ME.id))}
+function visibleProjects(){return isAdmin()?DB.projects:DB.projects.filter(p=>p.members.includes(ME.id)||(canPublish()&&p.createdBy===ME.id))}
 function dateRange(a,b){const r=[];if(!a||!b)return r;let d=new Date(a+"T00:00:00"),e=new Date(b+"T00:00:00");while(d<=e&&r.length<400){r.push(d.toISOString().slice(0,10));d.setDate(d.getDate()+1)}return r}
 function progress(p){const t=DB.tracker[p.id]||{};let done=0,tgt=0;TASKS.forEach(([k])=>{tgt+=+(p.targets?.[k]||0);done+=Math.min(countDone(t,k),+(p.targets?.[k]||0))});return tgt?Math.round(done/tgt*100):0}
 function countDone(t,k){return Object.values(t).filter(r=>r&&r[k]).length}
@@ -376,7 +377,7 @@ dashboard(){
   const revenue=act.reduce((a,p)=>a+parseInt(planOf(p.plan)?.price||0),0);
   const t=today();let todayDone=0;ps.forEach(p=>{const r=(DB.tracker[p.id]||{})[t];if(r)TASKS.forEach(([k])=>r[k]&&todayDone++)});
   const byPlan=PLANS.items.map(pl=>[pl.name,ps.filter(p=>p.plan===pl.name).length]);
-  $("#main").innerHTML=header(`أهلاً، ${esc(ME.name)} 👋`,new Date().toLocaleDateString(LANG==="en"?"en-GB":"ar",{weekday:"long",day:"numeric",month:"long",year:"numeric"}),isAdmin()?`<button class="btn primary" onclick="projectModal()">＋ مشروع جديد</button>`:"")+
+  $("#main").innerHTML=header(`أهلاً، ${esc(ME.name)} 👋`,new Date().toLocaleDateString(LANG==="en"?"en-GB":"ar",{weekday:"long",day:"numeric",month:"long",year:"numeric"}),canPublish()?`<button class="btn primary" onclick="projectModal()">＋ مشروع جديد</button>`:"")+
   `<div class="grid stats">
    <div class="card stat"><div class="n grad-text">${ps.length}</div><div class="l">${isAdmin()?"إجمالي المشاريع":"مشاريعي"}</div></div>
    <div class="card stat"><div class="n" style="color:var(--ok)">${act.length}</div><div class="l">مشاريع نشطة</div></div>
@@ -394,13 +395,13 @@ dashboard(){
 projects(id){
   if(id)return trackerView(id);
   const members=DB.users.filter(u=>u.role!=="admin");
-  $("#main").innerHTML=header("المشاريع","جميع مشاريع العملاء لدى Fast Techno",isAdmin()?`<button class="btn primary" onclick="projectModal()">＋ مشروع جديد</button>`:"")+
+  $("#main").innerHTML=header("المشاريع","جميع مشاريع العملاء لدى Fast Techno",canPublish()?`<button class="btn primary" onclick="projectModal()">＋ مشروع جديد</button>`:"")+
   `<div class="card"><div class="toolbar"><input id="fq" placeholder="🔍 بحث باسم العميل..."><select id="fp"><option value="">كل الباقات</option>${PLANS.items.map(p=>`<option>${p.name}</option>`).join("")}</select><select id="fs"><option value="">كل الحالات</option>${Object.entries(STATUS).map(([k,v])=>`<option value="${k}">${v[0]}</option>`).join("")}</select>${isAdmin()?`<select id="fm"><option value="">كل الموظفين</option>${members.map(u=>`<option value="${u.id}">${esc(u.name)}</option>`).join("")}</select>`:""}</div><div class="tbl" id="ptbl"></div></div>`;
   const f=()=>{const q=$("#fq").value.toLowerCase(),p=$("#fp").value,s=$("#fs").value,m=$("#fm")?.value;$("#ptbl").innerHTML=projTable(visibleProjects().filter(x=>x.client.toLowerCase().includes(q)&&(!p||x.plan===p)&&(!s||x.status===s)&&(!m||x.members.includes(m))))};
   ["#fq","#fp","#fs","#fm"].forEach(s=>$(s)&&($(s).oninput=f));f();
 },
 plans(){
-  $("#main").innerHTML=header("باقات Fast Techno","الباقات المعتمدة من موقع fasttechnoagency.com")+`<div class="grid plans">${PLANS.items.map(p=>`<div class="card plan ${p.featured?"featured":""}"><span class="badge b-plan tag">${esc(p.badge)}</span><div class="ic">${p.icon}</div><h3>${p.name}</h3><div style="color:var(--muted);font-size:13px">${esc(p.desc)}</div><div class="pr en">${p.price} <small>${p.period}</small></div><div style="font-size:12px;color:var(--muted)">${DB.projects.filter(x=>x.plan===p.name).length} مشروع على هذه الباقة</div><ul>${p.features.map(f=>`<li>${esc(f)}</li>`).join("")}</ul><div style="margin-top:auto;display:flex;gap:8px">${p.publicPdf?`<a class="btn sm" href="${p.publicPdf}" target="_blank">📄 PDF</a>`:""}${isAdmin()?`<button class="btn sm primary" onclick="projectModal(null,'${p.name}')">＋ مشروع بهذه الباقة</button>`:""}</div></div>`).join("")}</div>`;
+  $("#main").innerHTML=header("باقات Fast Techno","الباقات المعتمدة من موقع fasttechnoagency.com")+`<div class="grid plans">${PLANS.items.map(p=>`<div class="card plan ${p.featured?"featured":""}"><span class="badge b-plan tag">${esc(p.badge)}</span><div class="ic">${p.icon}</div><h3>${p.name}</h3><div style="color:var(--muted);font-size:13px">${esc(p.desc)}</div><div class="pr en">${p.price} <small>${p.period}</small></div><div style="font-size:12px;color:var(--muted)">${DB.projects.filter(x=>x.plan===p.name).length} مشروع على هذه الباقة</div><ul>${p.features.map(f=>`<li>${esc(f)}</li>`).join("")}</ul><div style="margin-top:auto;display:flex;gap:8px">${p.publicPdf?`<a class="btn sm" href="${p.publicPdf}" target="_blank">📄 PDF</a>`:""}${canPublish()?`<button class="btn sm primary" onclick="projectModal(null,'${p.name}')">＋ مشروع بهذه الباقة</button>`:""}</div></div>`).join("")}</div>`;
 },
 team(uid){
   if(!FTHierarchy.canManageTeam(ME))return go("dashboard");
@@ -557,7 +558,7 @@ async function readNote(id){const n=INBOX.notes.find(x=>x.id===id);try{await rpc
 function modal(html){$("#modalRoot").innerHTML=`<div class="modal" onclick="if(event.target===this)closeModal()"><div class="card">${html}</div></div>`}
 function closeModal(){$("#modalRoot").innerHTML="";if(PENDING){PENDING=false;setTimeout(rerender,0)}}
 function projectModal(id,planName){
-  if(!isAdmin())return;
+  if(id?!isAdmin():!canPublish())return;
   const p=id?DB.projects.find(x=>x.id===id):{client:"",plan:planName||"ORBIT",start:"",end:"",deadline:"",rating:0,status:"active",members:[],notes:""};
   const emps=DB.users.filter(u=>u.role!=="admin");
   modal(`<h3>${id?"تعديل المشروع":"مشروع جديد"}</h3><form id="pf" class="form">
@@ -567,7 +568,7 @@ function projectModal(id,planName){
    <div><label>تاريخ الانتهاء <span class="lock">🔒 المسؤول فقط</span></label><input type="date" id="pe" value="${p.end}" required></div>
    <div><label>Deadline</label><input type="date" id="pd" value="${p.deadline}" required></div>
    <div><label>الحالة</label><select id="pst">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${k===p.status?"selected":""}>${v[0]}</option>`).join("")}</select></div>
-   <div class="full"><label>التقييم</label><div id="prt" style="font-size:24px"></div></div>
+   <div class="full" ${isAdmin()?"":'style="display:none"'}><label>التقييم</label><div id="prt" style="font-size:24px"></div></div>
    <div class="full"><label>الموظفون المسؤولون عن المشروع</label><div class="chips" id="pm">${emps.length?emps.map(u=>`<span class="chip ${p.members.includes(u.id)?"on":""}" data-id="${u.id}" onclick="this.classList.toggle('on')">${esc(u.name)}</span>`).join(""):`<span style="color:var(--muted);font-size:13px">لا يوجد موظفون — أضفهم من صفحة الموظفين</span>`}</div></div>
    <div class="full"><label>ملاحظات</label><textarea id="pn" rows="3">${esc(p.notes)}</textarea></div>
    <div class="full err" id="perr"></div>
@@ -576,14 +577,15 @@ function projectModal(id,planName){
   window._rv=()=>rv;
 }
 function saveProject(id){
+  if(id?!isAdmin():!canPublish())return;
   const v={client:$("#pc").value.trim(),plan:$("#pp").value,start:$("#ps").value,end:$("#pe").value,deadline:$("#pd").value,status:$("#pst").value,rating:window._rv(),members:[...document.querySelectorAll("#pm .chip.on")].map(c=>c.dataset.id),notes:$("#pn").value.trim()};
   if(!v.client||!v.start||!v.end||!v.deadline)return $("#perr").textContent="يرجى تعبئة اسم العميل والتواريخ";
   if(v.end<v.start)return $("#perr").textContent="تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء";
   const oldM=id?(DB.projects.find(x=>x.id===id).members||[]):[],newM=v.members.filter(m=>!oldM.includes(m));if(newM.length)notify(newM,"task","📌 تم إسنادك لمشروع جديد: "+v.client,"الباقة "+v.plan+" — Deadline: "+v.deadline,"projects");else if(id&&oldM.length)notify(v.members,"task","🔄 تم تحديث مشروع "+v.client,"Deadline: "+v.deadline,"projects");
-  if(id){const p=DB.projects.find(x=>x.id===id);if(p.plan!==v.plan)p.targets={...PLAN_TARGETS[v.plan]};Object.assign(p,v)}else DB.projects.push({id:uid(),...v,targets:{...PLAN_TARGETS[v.plan]},created:Date.now()});
+  if(id){const p=DB.projects.find(x=>x.id===id);if(p.plan!==v.plan)p.targets={...PLAN_TARGETS[v.plan]};Object.assign(p,v)}else DB.projects.push({id:uid(),...v,rating:isAdmin()?v.rating:0,targets:{...PLAN_TARGETS[v.plan]},created:Date.now(),createdBy:ME.id});
   save();closeModal();toast("تم حفظ المشروع ✓");go(location.hash.slice(1));
 }
-function delProject(id){if(!confirm("حذف هذا المشروع وكل بيانات المتابعة الخاصة به؟"))return;DB.projects=DB.projects.filter(p=>p.id!==id);delete DB.tracker[id];save();go("projects")}
+function delProject(id){if(!isAdmin())return;if(!confirm("حذف هذا المشروع وكل بيانات المتابعة الخاصة به؟"))return;DB.projects=DB.projects.filter(p=>p.id!==id);delete DB.tracker[id];save();go("projects")}
 function userModal(id){
   const u=id?DB.users.find(x=>x.id===id):{id:"",name:"",username:"",title:"",role:"employee",department:ME.role==="it_lead"?"it":ME.role==="photography_lead"?"photography":"marketing",manager_id:ME.role.endsWith("_lead")?ME.id:""};
   if(!u||!FTHierarchy.canManageTeam(ME)||id&&!FTHierarchy.canManage(ME,u))return toast("غير مسموح");
@@ -674,6 +676,182 @@ if(TOK)refresh(true).then(()=>{if(TOK&&ME)start()});
       if (input && button) update(input, button);
     });
   }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+})();
+</script>
+<script>
+/* ===== FS v8 extension: workflow approvals, proofs, work hours, % ratings, employee ranking ===== */
+(function(){
+const ROLE=()=>ME&&ME.role;
+const isSup=()=>ROLE()==="supervisor";
+const isMgr=()=>isAdmin()||isSup();
+const isLead=u=>u&&/_lead$/.test(u.role);
+const ids=f=>DB.users.filter(f).map(u=>u.id);
+const admins=()=>ids(u=>u.role==="admin"),sups=()=>ids(u=>u.role==="supervisor");
+const leadOf=uid=>{const u=DB.users.find(x=>x.id===uid),l=u&&DB.users.find(x=>x.id===u.manager_id);return l&&isLead(l)&&l.id!==uid?l:null};
+const nowISO=()=>new Date().toISOString();
+const STG={lead:["بانتظار مسؤول الفريق","b-warn"],sup:["بانتظار المسؤول","b-warn"],adm:["بانتظار المدير العام","b-warn"],approved:["معتمدة ✓","b-ok"],rejected:["مرفوضة — أعدها للموظف","b-bad"],lead_fix:["مُعادة لمسؤول الفريق","b-bad"],sup_fix:["مُعادة للمسؤول","b-bad"]};
+const ACT={submit:"رفع المهمة",approve:"موافقة",reject:"رفض",forward:"إعادة توجيه"};
+function rec(pid,d){const t=DB.tracker[pid]||(DB.tracker[pid]={});return t[d]||(t[d]={})}
+function subOf(pid,d,k){return DB.tracker[pid]?.[d]?.sub?.[k]}
+function allSubs(){const out=[];(DB.projects||[]).forEach(p=>{Object.entries(DB.tracker[p.id]||{}).forEach(([d,r])=>{Object.entries(r?.sub||{}).forEach(([k,s])=>out.push({p,d,k,s}))})});return out}
+function score(s){const a=[s?.scores?.sup,s?.scores?.adm].filter(v=>v!=null&&v!=="");return a.length?Math.round(a.reduce((x,y)=>x+ +y,0)/a.length):null}
+window.FTWF={score,allSubs,subOf};
+async function freshSave(pid){const latest=await rpc("ft_get",{p_token:TOK});if(!apply(latest))throw new Error("session");return latest}
+async function commit(pid){const r=await rpc("ft_save",{p_token:TOK,p_data:DB,p_scope:{tracker:[pid]}});if(!apply(r))throw new Error("save")}
+
+/* ---------- Proof upload ---------- */
+async function uploadFile(f,pid){
+  const path=`${pid}/${Date.now()}-${Math.random().toString(36).slice(2,7)}-${f.name.replace(/[^\w.\-]/g,"_")}`;
+  try{const {error}=await SB.storage.from("task-proofs").upload(path,f,{contentType:f.type||"application/octet-stream"});if(error)throw error;
+    return {name:f.name,type:f.type,url:SB.storage.from("task-proofs").getPublicUrl(path).data.publicUrl}}
+  catch(e){if(f.size>2.5e6)throw new Error("big");const url=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f)});return {name:f.name,type:f.type,url}}
+}
+function filesHtml(files){return (files||[]).map(f=>/^image\//.test(f.type)?`<a href="${esc(f.url)}" target="_blank"><img src="${esc(f.url)}" class="pf-img"></a>`:/^video\//.test(f.type)?`<video src="${esc(f.url)}" controls class="pf-img"></video>`:`<a class="btn sm" href="${esc(f.url)}" target="_blank" download="${esc(f.name)}">📎 ${esc(f.name)}</a>`).join("")||'<span style="color:var(--muted)">—</span>'}
+function histHtml(s){return `<div class="wf-hist">${(s.history||[]).map(h=>`<div class="wf-h ${h.act}"><b>${esc(uName(h.who))}</b> <span class="badge b-plan">${esc(FTHierarchy.roles[h.role]||h.role)}</span> — ${ACT[h.act]||h.act} <small>${fmtAt(h.at)}</small>${h.note?`<div>📝 ${esc(h.note)}</div>`:""}${h.score!=null?`<div>التقييم: <b>${h.score}%</b></div>`:""}</div>`).join("")}</div>`}
+
+function attachModal(pid,d,k){
+  const s=subOf(pid,d,k),p=DB.projects.find(x=>x.id===pid);
+  if(s&&s.by!==ME.id&&!["rejected"].includes(s.stage))return reviewModal(pid,d,k);
+  if(s&&!["rejected"].includes(s.stage))return reviewModal(pid,d,k);
+  modal(`<h3 style="margin-top:0">📎 إرفاق إثبات الإنجاز</h3><p style="color:var(--muted);font-size:13px">${esc(p?.client||"")} — ${esc(TNAME(k))} — ${d}<br>لن يُحتسب الـ Check إلا بعد إرفاق ملف (صورة / فيديو / PDF / نص) واعتماده من مسؤول الفريق ثم المسؤول ثم المدير العام.</p>
+  ${s?.stage==="rejected"?`<div class="wf-rej">❌ مرفوضة: ${esc((s.history||[]).slice(-1)[0]?.note||"")}</div>`:""}
+  <input type="file" id="pfFiles" multiple accept="image/*,video/*,application/pdf,text/plain,.txt,.pdf"><label style="margin-top:10px">وصف ما تم إنجازه</label><textarea id="pfNote" rows="3" placeholder="مثال: تم تنزيل ستوري عرض الخصم...">${esc(s?.note||"")}</textarea>
+  <div id="pfErr" style="color:var(--bad);font-size:13px;margin-top:6px"></div><div style="display:flex;gap:8px;margin-top:14px"><button class="btn primary" id="pfGo">رفع للمراجعة</button><button class="btn" onclick="closeModal()">إلغاء</button></div>`);
+  $("#pfGo").onclick=async()=>{
+    const fl=[...$("#pfFiles").files];if(!fl.length)return $("#pfErr").textContent="يجب إرفاق ملف واحد على الأقل";
+    $("#pfGo").disabled=true;$("#pfGo").textContent="جارٍ الرفع…";
+    try{const files=[];for(const f of fl)files.push(await uploadFile(f,pid));
+      await freshSave(pid);const r=rec(pid,d);r.sub=r.sub||{};const lead=leadOf(ME.id);const old=r.sub[k];
+      const stage=isAdmin()?"approved":isSup()?"adm":isLead(ME)?"sup":lead?"lead":"sup";
+      r.sub[k]={by:ME.id,at:nowISO(),files,note:$("#pfNote").value.trim(),stage,leadId:lead?.id||null,history:[...(old?.history||[]),{who:ME.id,role:ME.role,act:"submit",at:nowISO()}],scores:{}};
+      if(stage==="approved")finalize(r,k);else{r[k]=false}
+      await commit(pid);closeModal();toast("تم الرفع، بانتظار الموافقة");
+      const to=stage==="lead"?[lead.id]:stage==="sup"?sups():stage==="adm"?admins():null;
+      notify(to,"task","📌 مهمة بانتظار مراجعتك: "+TNAME(k),ME.name+" — "+(p?.client||"")+" — "+d,"approvals");rerender();
+    }catch(e){$("#pfGo").disabled=false;$("#pfGo").textContent="رفع للمراجعة";$("#pfErr").textContent=e.message==="big"?"الملف كبير (الحد 2.5MB بدون مساحة تخزين)":"تعذّر الرفع، حاول مجدداً"}
+  };
+}
+function finalize(r,k){const s=r.sub[k];s.stage="approved";r[k]=true;r.by=r.by||{};r.at=r.at||{};r.by[k]=s.by;r.at[k]=s.at}
+function canAct(s){if(!s||!ME)return false;
+  return (s.stage==="lead"&&(s.leadId===ME.id||isAdmin()))||(s.stage==="sup"&&isSup())||(s.stage==="adm"&&isAdmin())||(s.stage==="lead_fix"&&(s.leadId===ME.id||(!s.leadId&&isSup())))||(s.stage==="sup_fix"&&isSup())}
+function reviewModal(pid,d,k){
+  const s=subOf(pid,d,k),p=DB.projects.find(x=>x.id===pid);if(!s)return;const act=canAct(s),fix=/_fix$/.test(s.stage),scoring=act&&(s.stage==="sup"||s.stage==="adm");
+  modal(`<h3 style="margin-top:0">${esc(TNAME(k))} — ${esc(p?.client||"")}</h3><div class="meta" style="margin-bottom:10px"><span>الموظف: <b>${esc(uName(s.by))}</b></span><span>التاريخ: <b class="en">${d}</b></span><span class="badge ${STG[s.stage][1]}">${STG[s.stage][0]}</span>${score(s)!=null?`<span>التقييم: <b>${score(s)}%</b></span>`:""}</div>
+  ${s.note?`<p>📝 ${esc(s.note)}</p>`:""}<div class="pf-files">${filesHtml(s.files)}</div><h4>سجل الموافقات</h4>${histHtml(s)}
+  ${act?`<label>${fix?"التعديلات المطلوبة / الملاحظات للمرحلة السابقة":"ملاحظاتك (إلزامية عند الرفض)"}</label><textarea id="rvNote" rows="3"></textarea>${scoring?`<label>تقييم المهمة %</label><input id="rvScore" type="number" min="0" max="100" value="${s.scores?.[s.stage]??""}">`:""}
+  <div id="rvErr" style="color:var(--bad);font-size:13px"></div><div style="display:flex;gap:8px;margin-top:12px">${fix?`<button class="btn primary" onclick="FTWF.act('${pid}','${d}','${k}','forward')">↩ إعادة توجيه</button>`:`<button class="btn primary" onclick="FTWF.act('${pid}','${d}','${k}','approve')">✓ Approve</button><button class="btn" style="color:var(--bad)" onclick="FTWF.act('${pid}','${d}','${k}','reject')">✕ Reject</button>`}<button class="btn" onclick="closeModal()">إغلاق</button></div>`:`<div style="margin-top:12px"><button class="btn" onclick="closeModal()">إغلاق</button></div>`}`);
+}
+async function act(pid,d,k,a){
+  const note=$("#rvNote")?.value.trim()||"",sc=$("#rvScore")?.value;
+  if((a==="reject"||a==="forward")&&!note)return $("#rvErr").textContent="اكتب سبب الرفض والتعديلات المطلوبة";
+  if(sc!==undefined&&sc!==""&&(+sc<0||+sc>100))return $("#rvErr").textContent="التقييم بين 0 و 100";
+  try{await freshSave(pid);const r=rec(pid,d),s=r.sub?.[k];if(!s||!canAct(s))throw new Error("x");const p=DB.projects.find(x=>x.id===pid),info=TNAME(k)+" — "+(p?.client||"")+" — "+d;
+    const st=s.stage;s.history=s.history||[];const h={who:ME.id,role:ME.role,act:a,note,at:nowISO()};
+    if(sc!==undefined&&sc!==""&&(st==="sup"||st==="adm")){s.scores=s.scores||{};s.scores[st]=+sc;h.score=+sc}
+    s.history.push(h);let to=null,title="";
+    if(a==="approve"){
+      if(st==="lead"){s.stage="sup";s.leadApprover=ME.id;to=sups();title="📌 مهمة اعتمدها مسؤول الفريق بانتظارك"}
+      else if(st==="sup"){s.stage="adm";to=admins();title="📌 مهمة اعتمدها المسؤول بانتظارك"}
+      else if(st==="adm"){finalize(r,k);to=[...new Set([s.by,s.leadId,...sups(),...admins()].filter(Boolean))];title="✅ تم اعتماد المهمة نهائياً"}
+    }else if(a==="reject"){
+      r[k]=false;
+      if(st==="lead"){s.stage="rejected";to=[s.by];title="❌ رفض مسؤول الفريق مهمتك"}
+      else if(st==="sup"){s.stage=s.leadId?"lead_fix":"rejected";to=[...(s.leadId?[s.leadId]:[s.by]),...admins()];title="❌ رفض المسؤول مهمة"}
+      else if(st==="adm"){s.stage="sup_fix";to=sups();title="❌ رفض المدير العام مهمة — مطلوب تعديل"}
+    }else if(a==="forward"){
+      if(st==="sup_fix"){s.stage=s.leadId?"lead_fix":"rejected";to=[s.leadId||s.by];title="↩ مهمة مُعادة مع تعديلات مطلوبة"}
+      else if(st==="lead_fix"){s.stage="rejected";to=[s.by];title="↩ مهمتك مُعادة مع تعديلات مطلوبة"}
+    }
+    await commit(pid);closeModal();toast("تم ✓");notify(to,a==="approve"?"done":"note",title,info+(note?" — "+note:""),"approvals");rerender();
+  }catch(e){toast("تعذّر الحفظ");refresh(true)}
+}
+FTWF.act=act;FTWF.review=reviewModal;FTWF.attach=attachModal;
+
+/* ---------- Override check behaviour ---------- */
+window.tick=function(pid,d,k){if(d>today())return toast("لا يمكن إنجاز مهمة مستقبلية");attachModal(pid,d,k)};
+window.calendarTick=function(pid,d,k){if(d>today())return;attachModal(pid,d,k);setTimeout(()=>{if(!$("#modalRoot").innerHTML)VIEWS.calendar()},50)};
+const _cal=VIEWS.calendar;VIEWS.calendar=function(a){_cal(a);document.querySelectorAll('.daily-task input[type=checkbox]').forEach(cb=>{const m=(cb.getAttribute("onchange")||"").match(/'([^']+)','([^']+)','([^']+)'/);if(!m)return;const s=subOf(m[1],m[2],m[3]);if(s&&s.stage!=="approved"){cb.checked=false;cb.closest(".daily-task").insertAdjacentHTML("beforeend",`<span class="badge ${STG[s.stage][1]}" style="cursor:pointer" onclick="FTWF.review('${m[1]}','${m[2]}','${m[3]}')">${STG[s.stage][0]}</span>`)}cb.onclick=e=>{e.preventDefault();calendarTick(m[1],m[2],m[3])};cb.onchange=null})};
+
+/* ---------- Detailed progress ---------- */
+const _tv=window.trackerView;window.trackerView=function(id){_tv(id);const p=DB.projects.find(x=>x.id===id);if(!p)return;
+  document.querySelectorAll(".trk .cb").forEach(el=>{const m=(el.getAttribute("onclick")||"").match(/'([^']+)','([^']+)','([^']+)'/);if(!m)return;const s=subOf(m[1],m[2],m[3]);if(s&&s.stage!=="approved"){el.classList.add(s.stage==="rejected"||/_fix/.test(s.stage)?"cb-rej":"cb-pend");el.title=STG[s.stage][0]+" — "+uName(s.by)}});
+  const subs=allSubs().filter(x=>x.p.id===id);
+  const rows=TASKS.map(([k,e,a])=>{const g=+(p.targets?.[k]||0),ap=countDone(DB.tracker[id]||{},k),pe=subs.filter(x=>x.k===k&&!["approved","rejected"].includes(x.s.stage)).length,rj=subs.filter(x=>x.k===k&&x.s.stage==="rejected").length,pc=g?Math.min(100,Math.round(ap/g*100)):0;
+    return `<div class="pg-row"><div class="pg-h"><b>${e} <small>${a}</small></b><span class="en">${ap}/${g} · ${pc}%</span></div><div class="bar pg-bar"><i style="width:${pc}%"></i><em style="width:${g?Math.min(100-pc,pe/g*100):0}%"></em></div><small>✓ معتمدة ${ap} · ⏳ قيد المراجعة ${pe} · ✕ مرفوضة ${rj} · المتبقي ${Math.max(0,g-ap)}</small></div>`}).join("");
+  const sc=subs.map(x=>score(x.s)).filter(v=>v!=null);
+  document.querySelector("#main .card").insertAdjacentHTML("afterend",`<div class="card" style="margin-bottom:16px"><h3 style="margin:0 0 12px">📊 تفاصيل التقدم</h3><div class="pg-grid">${rows}</div><div class="meta" style="margin-top:10px"><span>متوسط تقييم المهام: <b>${sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length)+"%":"—"}</b></span><span>تقييم المشروع العام: <b>${projPct(p)}</b></span></div></div>`)};
+function projPct(p){return p.ratingPct!=null?p.ratingPct+"%":p.rating?p.rating*20+"%":"—"}
+window.stars=function(v,pid){const p=pid&&DB.projects.find(x=>x.id===pid);const val=p?projPct(p):(v?v*20+"%":"—");return `<span class="pct-badge" ${pid&&isAdmin()?`onclick="FTWF.rateProject('${pid}')" style="cursor:pointer" title="تعديل"`:""}>${val}</span>`};
+FTWF.rateProject=function(pid){const p=DB.projects.find(x=>x.id===pid);const v=prompt("التقييم العام للمشروع (0-100%)",p.ratingPct??"");if(v===null)return;const n=Math.max(0,Math.min(100,+v||0));p.ratingPct=n;p.rating=Math.max(1,Math.round(n/20));save()};
+window.tStars=function(x){const s=subOf(x.p.id,x.d,x.k),v=score(s);return `<span class="pct-badge" style="cursor:pointer" onclick="FTWF.review('${x.p.id}','${x.d}','${x.k}')">${v!=null?v+"%":"—"}</span>`};
+
+/* ---------- Work hours ---------- */
+const WK="_work";
+function work(){return DB.tracker[WK]||(DB.tracker[WK]={})}
+async function beat(){if(!ME||!TOK||isAdmin()||isSup())return;try{await freshSave(WK);const w=work(),d=today(),o=(w[d]=w[d]||{})[ME.id]||(w[d][ME.id]={start:nowISO(),sessions:[]});const now=Date.now();
+  if(!o.last||now-new Date(o.last)>15*60e3)o.sessions.push({from:nowISO(),to:nowISO()});o.last=nowISO();o.sessions[o.sessions.length-1].to=o.last;
+  o.alerted=o.alerted||{};const hs=slots(ME.id,d).filter(h=>h.full&&!h.items.length&&!o.alerted[h.i]);hs.forEach(h=>o.alerted[h.i]=1);
+  Object.keys(w).filter(x=>x<d.slice(0,8)+"01"&&x<d).forEach(x=>{if(Object.keys(w).length>62)delete w[x]});
+  await rpc("ft_save",{p_token:TOK,p_data:DB,p_scope:{tracker:[WK]}}).then(apply);
+  hs.forEach(h=>notify([...admins(),...sups()],"info","⚠️ ساعة عمل فارغة: "+ME.name,`الساعة ${h.label} يوم ${d} مرّت بدون أي مهمة منجزة`,"hours"));
+}catch(e){}}
+function slots(uid,d){const o=DB.tracker[WK]?.[d]?.[uid];if(!o)return [];const st=new Date(o.start).getTime(),en=new Date(o.last).getTime(),live=Date.now()-en<15*60e3,end=live?Date.now():en;
+  const subs=allSubs().filter(x=>x.s.by===uid),out=[];for(let i=0,t=st;t<end&&i<24;i++,t+=36e5){const t2=t+36e5,items=subs.filter(x=>{const a=new Date(x.s.history?.find(h=>h.act==="submit")?.at||x.s.at).getTime();return a>=t&&a<t2});
+    out.push({i,from:t,to:Math.min(t2,end),full:t2<=end,live:live&&t2>end,items,label:new Date(t).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})+" - "+new Date(t2).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})})}return out}
+const dur=ms=>{const m=Math.floor(ms/6e4);return `${Math.floor(m/60)}س ${m%60}د`};
+function periodStats(uid){const t=today(),d=new Date(t+"T12:00:00Z"),wk=new Date(d-((d.getUTCDay()+1)%7)*864e5).toISOString().slice(0,10),mo=t.slice(0,8)+"01";const s=allSubs().filter(x=>x.s.by===uid);
+  const c=f=>{const l=s.filter(f);return {ap:l.filter(x=>x.s.stage==="approved").length,pe:l.filter(x=>!["approved","rejected"].includes(x.s.stage)).length,rj:l.filter(x=>x.s.stage==="rejected").length}};
+  return {Daily:c(x=>x.d===t),Weekly:c(x=>x.d>=wk&&x.d<=t),Monthly:c(x=>x.d>=mo&&x.d<=t),Total:c(()=>true),list:s}}
+let HDAY=null;
+VIEWS.hours=function(){if(!isMgr())return go("dashboard");const d=HDAY||today(),emps=DB.users.filter(u=>u.role!=="admin"&&u.role!=="supervisor");
+  $("#main").innerHTML=header("ساعات العمل والإنجاز","متابعة مباشرة لساعات عمل الموظفين وإنجازهم",`<input type="date" value="${d}" onchange="FTWF.hday(this.value)">`)+
+  emps.map(u=>{const o=DB.tracker[WK]?.[d]?.[u.id],sl=slots(u.id,d),live=o&&Date.now()-new Date(o.last)<15*60e3,tot=(o?.sessions||[]).reduce((a,s)=>a+(new Date(live&&s===o.sessions.at(-1)?Date.now():s.to)-new Date(s.from)),0),ps=periodStats(u.id);
+    return `<div class="card wh-emp"><div class="ph"><div><h3 style="margin:0">${esc(u.name)} ${live?'<span class="badge b-ok wh-live">● متصل الآن</span>':o?'<span class="badge b-mut">غير متصل</span>':'<span class="badge b-bad">لم يسجّل دخول</span>'}</h3><small style="color:var(--muted)">${esc(FTHierarchy.roles[u.role]||"")} ${o?"· أول دخول "+fmtAt(o.start)+" · مدة العمل "+dur(tot):""}</small></div>
+    <div class="wh-per">${["Daily","Weekly","Monthly","Total"].map(k=>`<div><b class="en">${k}</b><span>✓${ps[k].ap} ⏳${ps[k].pe} ✕${ps[k].rj}</span></div>`).join("")}</div></div>
+    <div class="wh-grid">${sl.map(h=>`<div class="wh-card ${h.items.length?"ok":h.full?"empty-h":"live"}"><div class="en"><b>${h.label}</b></div><div>${h.items.length?`✅ ${h.items.length} مهمة`:h.full?"⚠️ ساعة فارغة":"⏱ جارية"}</div>${h.items.map(x=>`<a onclick="FTWF.review('${x.p.id}','${x.d}','${x.k}')">• ${esc(TNAME(x.k))} — ${esc(x.p.client)} <span class="badge ${STG[x.s.stage][1]}">${STG[x.s.stage][0]}</span></a>`).join("")}</div>`).join("")||'<div class="empty">لا توجد ساعات عمل لهذا اليوم</div>'}</div></div>`}).join("")};
+FTWF.hday=v=>{HDAY=v;VIEWS.hours()};
+
+/* ---------- Approvals ---------- */
+VIEWS.approvals=function(){const mine=allSubs().filter(x=>canAct(x.s)),own=allSubs().filter(x=>x.s.by===ME.id),all=isMgr()?allSubs():[];
+  const row=x=>`<tr onclick="FTWF.review('${x.p.id}','${x.d}','${x.k}')" style="cursor:pointer"><td class="en">${x.d}</td><td>${esc(x.p.client)}</td><td>${esc(TNAME(x.k))}</td><td>${esc(uName(x.s.by))}</td><td><span class="badge ${STG[x.s.stage][1]}">${STG[x.s.stage][0]}</span></td><td>${score(x.s)!=null?score(x.s)+"%":"—"}</td></tr>`;
+  const tbl=(l,e)=>l.length?`<div class="tbl"><table><thead><tr><th>التاريخ</th><th>المشروع</th><th>المهمة</th><th>الموظف</th><th>الحالة</th><th>التقييم</th></tr></thead><tbody>${l.sort((a,b)=>(b.s.at||"").localeCompare(a.s.at||"")).map(row).join("")}</tbody></table></div>`:`<div class="empty">${e}</div>`;
+  const rejSup=all.filter(x=>(x.s.history||[]).some(h=>h.act==="reject"&&h.role==="supervisor")&&x.s.stage!=="approved");
+  $("#main").innerHTML=header("الموافقات","مسار اعتماد المهام: الموظف ← مسؤول الفريق ← المسؤول ← المدير العام")+
+  `<div class="card"><h3 style="margin-top:0">⏳ بانتظار إجرائك (${mine.length})</h3>${tbl(mine,"لا يوجد شيء بانتظارك")}</div>`+
+  (isAdmin()?`<div class="card" style="margin-top:16px"><h3 style="margin-top:0">❌ مهام رفضها المسؤول (${rejSup.length})</h3>${tbl(rejSup,"لا يوجد")}</div>`:"")+
+  `<div class="card" style="margin-top:16px"><h3 style="margin-top:0">📁 مهامي المرفوعة</h3>${tbl(own,"لم ترفع أي مهمة بعد")}</div>`+
+  (isMgr()?`<div class="card" style="margin-top:16px"><h3 style="margin-top:0">كل المهام</h3>${tbl(all,"لا يوجد")}</div>`:"")};
+
+/* ---------- Employee evaluation ---------- */
+let EVD=null,EVM=null;
+VIEWS.evaluation=function(){if(!isMgr())return go("dashboard");const m=EVM||today().slice(0,7),d=EVD;const emps=DB.users.filter(u=>u.role!=="admin"&&u.role!=="supervisor");
+  const rank=f=>emps.map(u=>{const l=allSubs().filter(x=>x.s.by===u.id&&x.s.stage==="approved"&&f(x.d)),sc=l.map(x=>score(x.s)).filter(v=>v!=null);return {u,n:l.length,avg:sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length):0,rated:sc.length}}).sort((a,b)=>b.avg-a.avg||b.n-a.n);
+  const mr=rank(x=>x.startsWith(m)),star=mr.find(x=>x.rated),dr=d?rank(x=>x===d):mr;
+  $("#main").innerHTML=header("تقييم الموظفين","ترتيب الموظفين حسب تقييم مهامهم المعتمدة",`<input type="month" value="${m}" onchange="FTWF.evm(this.value)"><input type="date" value="${d||""}" onchange="FTWF.evd(this.value)" title="يوم محدد">${d?`<button class="btn sm" onclick="FTWF.evd('')">كل الشهر</button>`:""}`)+
+  (star?`<div class="eom"><div class="eom-glow"></div><div class="eom-crown">👑</div><div class="eom-t">موظف الشهر · <span class="en">${m}</span></div><div class="eom-n">${esc(star.u.name)}</div><div class="eom-s"><b>${star.avg}%</b> متوسط التقييم · ${star.n} مهمة معتمدة</div></div>`:"")+
+  `<div class="card tbl" style="margin-top:16px"><h3 style="margin:0 0 10px">الترتيب ${d?"ليوم "+d:"لشهر "+m}</h3><table><thead><tr><th>#</th><th>الموظف</th><th>مهام معتمدة</th><th>مقيّمة</th><th>التقييم</th></tr></thead><tbody>${dr.map((x,i)=>`<tr class="${star&&x.u.id===star.u.id&&!d?"eom-row":""}"><td>${i+1}</td><td><b>${esc(x.u.name)}</b></td><td>${x.n}</td><td>${x.rated}</td><td><div class="bar" style="min-width:120px"><i style="width:${x.avg}%"></i></div><b>${x.avg}%</b></td></tr>`).join("")}</tbody></table></div>`};
+FTWF.evm=v=>{EVM=v;EVD=null;VIEWS.evaluation()};FTWF.evd=v=>{EVD=v||null;if(v)EVM=v.slice(0,7);VIEWS.evaluation()};
+
+/* ---------- Nav ---------- */
+const _bn=window.buildNav;window.buildNav=function(){_bn();const add=(k,i,t)=>$("#nav").insertAdjacentHTML("beforeend",`<a data-k="${k}" onclick="go('${k}')"><span>${i}</span>${t}</a>`);
+  const pend=allSubs().filter(x=>canAct(x.s)).length;add("approvals","✔",`الموافقات${pend?` <b class="nbadge-s">${pend}</b>`:""}`);if(isMgr()){add("hours","⏱","ساعات العمل والإنجاز");add("evaluation","🏆","تقييم الموظفين")}};
+const _start=window.start;window.start=function(){_start();beat()};setInterval(beat,5*60e3);
+const css=document.createElement("style");css.textContent=`
+.pf-files{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.pf-img{max-width:160px;max-height:160px;border-radius:10px;border:1px solid var(--line,#333)}
+.wf-hist{display:grid;gap:6px;margin-bottom:10px}.wf-h{padding:8px 10px;border-radius:10px;background:rgba(127,127,127,.08);font-size:13px;border-inline-start:3px solid #888}.wf-h.approve{border-color:#3ddc97}.wf-h.reject{border-color:#ff6b6b}.wf-h.forward{border-color:#ffb547}
+.wf-rej{background:rgba(255,107,107,.12);color:#ff6b6b;padding:8px;border-radius:8px;margin-bottom:8px}
+.cb.cb-pend{background:repeating-linear-gradient(45deg,#ffb547 0 4px,transparent 4px 8px)!important;border-color:#ffb547!important}.cb.cb-rej{border-color:#ff6b6b!important;background:rgba(255,107,107,.3)!important}
+.pg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}.pg-h{display:flex;justify-content:space-between;font-size:13px}.pg-bar{position:relative;display:flex}.pg-bar em{display:block;height:100%;background:#ffb547;opacity:.6}.pg-row small{color:var(--muted);font-size:11px}
+.pct-badge{display:inline-block;padding:2px 8px;border-radius:999px;background:linear-gradient(90deg,#1fa2ff33,#3ddc9733);font-weight:700;font-size:12px}
+.wh-emp{margin-bottom:14px}.wh-per{display:flex;gap:8px;flex-wrap:wrap}.wh-per div{background:rgba(127,127,127,.08);padding:6px 10px;border-radius:10px;font-size:12px;display:grid}
+.wh-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-top:12px}.wh-card{padding:10px;border-radius:12px;font-size:13px;display:grid;gap:4px;border:1px solid rgba(127,127,127,.2)}.wh-card a{cursor:pointer;font-size:12px}
+.wh-card.ok{background:rgba(61,220,151,.1);border-color:#3ddc97}.wh-card.empty-h{background:rgba(255,107,107,.1);border-color:#ff6b6b}.wh-card.live{border-style:dashed;border-color:#1fa2ff}.wh-live{animation:whp 1.4s infinite}@keyframes whp{50%{opacity:.4}}
+.eom{position:relative;overflow:hidden;text-align:center;padding:30px 20px;border-radius:20px;background:linear-gradient(135deg,#7a5200,#f5c542 40%,#fff1b8 50%,#f5c542 60%,#7a5200);background-size:300% 300%;animation:eomBg 6s ease infinite;color:#2b1d00;box-shadow:0 0 40px #f5c54266;animation:eomBg 6s ease infinite,eomIn .8s cubic-bezier(.2,1.4,.4,1)}
+.eom-glow{position:absolute;inset:-50%;background:conic-gradient(from 0deg,transparent,#fff8 10%,transparent 20%);animation:eomSpin 5s linear infinite}.eom>*:not(.eom-glow){position:relative}
+.eom-crown{font-size:46px;animation:eomBob 2s ease-in-out infinite}.eom-t{font-weight:700;opacity:.8}.eom-n{font-size:32px;font-weight:900;margin:6px 0}.eom-s b{font-size:22px}
+.eom-row{background:linear-gradient(90deg,#f5c54233,transparent)}.nbadge-s{background:#ff6b6b;color:#fff;border-radius:999px;padding:0 6px;font-size:11px}
+@keyframes eomBg{50%{background-position:100% 100%}}@keyframes eomSpin{to{transform:rotate(360deg)}}@keyframes eomBob{50%{transform:translateY(-6px) rotate(-6deg)}}@keyframes eomIn{from{transform:scale(.7);opacity:0}}`;
+document.head.appendChild(css);
 })();
 </script>
 </html>
