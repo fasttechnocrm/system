@@ -510,11 +510,43 @@ function setTarget(pid,k,v){const p=DB.projects.find(x=>x.id===pid);p.targets[k]
 
 /* ===== Notifications & Notes ===== */
 let INBOX={notifs:[],notes:[]};
+/* Original soft two-note chime; no external audio files required. */
+const FTChime=(()=>{
+  let ctx=null,last=-Infinity;
+  function unlock(){
+    try{
+      const AudioCtx=window.AudioContext||window.webkitAudioContext;
+      if(!AudioCtx)return;
+      if(!ctx||ctx.state==='closed')ctx=new AudioCtx();
+      if(ctx.state==='suspended')ctx.resume().catch(()=>{});
+    }catch(e){}
+  }
+  function play(){
+    if(!ctx||ctx.state!=='running'||performance.now()-last<1500)return;
+    last=performance.now();
+    try{
+      const start=ctx.currentTime;
+      [[659.25,0],[880,0.16]].forEach(([frequency,offset])=>{
+        const oscillator=ctx.createOscillator(),gain=ctx.createGain();
+        oscillator.type='sine';oscillator.frequency.value=frequency;
+        gain.gain.setValueAtTime(0,start+offset);
+        gain.gain.linearRampToValueAtTime(0.12,start+offset+0.018);
+        gain.gain.exponentialRampToValueAtTime(0.0001,start+offset+0.65);
+        oscillator.connect(gain);gain.connect(ctx.destination);
+        oscillator.start(start+offset);oscillator.stop(start+offset+0.7);
+        oscillator.onended=()=>{oscillator.disconnect();gain.disconnect()};
+      });
+    }catch(e){}
+  }
+  document.addEventListener('pointerdown',unlock,{passive:true});
+  document.addEventListener('keydown',unlock);
+  return {play};
+})();
 const UNREAD=()=>INBOX.notifs.filter(n=>!n.is_read).length;
 const ago=t=>{const s=(Date.now()-new Date(t))/1e3;return s<60?"الآن":s<3600?`قبل ${Math.floor(s/60)} د`:s<86400?`قبل ${Math.floor(s/3600)} س`:new Date(t).toLocaleString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})};
 const NIC={done:"✅",undo:"↩",edit:"📝",rate:"⭐",task:"📌",note:"✉",read:"👁",info:"🔔"};
 async function notify(to,kind,title,body,link){if(!TOK)return;try{await rpc("ft_notify",{p_token:TOK,p_to:to,p_kind:kind,p_title:title,p_body:body||"",p_link:link||""})}catch(e){}}
-async function loadInbox(live){if(!TOK)return;let r;try{r=await rpc("ft_inbox",{p_token:TOK})}catch(e){return}if(r.disabled)return kicked();const before=new Set(INBOX.notifs.map(n=>n.id)),fresh=r.notifs.filter(n=>!n.is_read&&!before.has(n.id));const first=!INBOX._l;INBOX=r;INBOX._l=1;paintBell();if(live&&!first&&fresh.length){toast("🔔 "+fresh[0].title);try{new AudioContext().resume()}catch(e){}}if(!$("#npanel").classList.contains("hidden"))renderPanel();{const pg=location.hash.slice(1).split("/")[0];if((pg==="notes"||pg==="mynotes"||pg==="community")&&!busy())VIEWS[pg]();if(pg==="hub"&&!busy())VIEWS.hub();if(pg==="calendar"&&!busy()&&!CALBUSY)VIEWS.calendar()}}
+async function loadInbox(live){if(!TOK)return;let r;try{r=await rpc("ft_inbox",{p_token:TOK})}catch(e){return}if(r.disabled)return kicked();const before=new Set(INBOX.notifs.map(n=>n.id)),fresh=r.notifs.filter(n=>!n.is_read&&!before.has(n.id));const first=!INBOX._l;INBOX=r;INBOX._l=1;paintBell();if(!first&&fresh.length){FTChime.play();if(live)toast("🔔 "+fresh[0].title)}if(!$("#npanel").classList.contains("hidden"))renderPanel();{const pg=location.hash.slice(1).split("/")[0];if((pg==="notes"||pg==="mynotes"||pg==="community")&&!busy())VIEWS[pg]();if(pg==="hub"&&!busy())VIEWS.hub();if(pg==="calendar"&&!busy()&&!CALBUSY)VIEWS.calendar()}}
 function paintBell(){const n=UNREAD();document.querySelectorAll(".nbadge").forEach(b=>{b.textContent=n>99?"99+":n;b.style.display=n?"":"none"});document.title=(n?`(${n}) `:"")+"Fast Techno · DM System"}
 function togglePanel(e){e&&e.stopPropagation();const p=$("#npanel");p.classList.toggle("hidden");if(!p.classList.contains("hidden"))renderPanel()}
 document.addEventListener("click",e=>{const p=$("#npanel");if(p&&!p.classList.contains("hidden")&&!p.contains(e.target)&&!e.target.closest(".bell"))p.classList.add("hidden")});
