@@ -365,7 +365,7 @@ $("#logout").onclick=async()=>{try{await rpc("ft_logout",{p_token:TOK})}catch(e)
 function start(){if(!DB)return;ME=DB.users.find(u=>u.id===sessionStorage.getItem("ft_sess"));if(!ME)return;$("#login").classList.add("hidden");$("#loginPrefs").classList.add("hidden");$("#app").classList.remove("hidden");$("#meName").textContent=ME.name;$("#meRole").textContent=FTHierarchy.roles[ME.role]||ME.title;$("#meAv").textContent=ME.name.trim()[0]||"؟";buildNav();go(location.hash.slice(1)||"dashboard");loadInbox()}
 
 /* ===== Nav ===== */
-function buildNav(){const items=[["dashboard","◈","لوحة التحكم"],["calendar","▦","تقويم المهام"],["projects","▤","المشاريع"],["plans","✦","الباقات"]];if(isAdmin())items.push(["team","◉","الموظفون"],["ratings","★","التقييم"],["notes","✉","الملاحظات"],["settings","⚙","الإعدادات"]);else items.push(["ratings","★","تقييمي"],["notes","✉","ملاحظاتي"],["settings","⚙","حسابي"]);if(!isAdmin()&&FTHierarchy.canManageTeam(ME)){items.splice(3,0,["team","◉","الموظفون"]);const n=items.find(i=>i[0]==="notes");if(n)n[2]="ملاحظات الفريق";items.splice(items.findIndex(i=>i[0]==="notes")+1,0,["mynotes","✉","ملاحظاتي"])}if(FTHierarchy.canManageTeam(ME))items.splice(1,0,["hub","◎","مركز الفريق"]);$("#nav").innerHTML=items.map(([k,i,t])=>`<a data-k="${k}" onclick="go('${k}')"><span>${i}</span>${t}</a>`).join("")}
+function buildNav(){const items=[["dashboard","◈","لوحة التحكم"],["calendar","▦","تقويم المهام"],["projects","▤","المشاريع"],["plans","✦","الباقات"]];if(isAdmin())items.push(["team","◉","الموظفون"],["ratings","★","التقييم"],["notes","✉","الملاحظات"],["community","◎","اشعارات العمل"],["settings","⚙","الإعدادات"]);else items.push(["ratings","★","تقييمي"],["notes","✉","ملاحظاتي"],["settings","⚙","حسابي"]);items.splice(items.findIndex(i=>i[0]==="notes")+1,0,["community","◎","اشعارات العمل"]);if(!isAdmin()&&FTHierarchy.canManageTeam(ME)){items.splice(3,0,["team","◉","الموظفون"]);const n=items.find(i=>i[0]==="notes");if(n)n[2]="ملاحظات الفريق";items.splice(items.findIndex(i=>i[0]==="notes")+1,0,["mynotes","✉","ملاحظاتي"])}if(FTHierarchy.canManageTeam(ME))items.splice(1,0,["hub","◎","مركز الفريق"]);$("#nav").innerHTML=items.map(([k,i,t])=>`<a data-k="${k}" onclick="go('${k}')"><span>${i}</span>${t}</a>`).join("")}
 function go(v){if(location.hash.slice(1)!==v){location.hash=v;$("#side").classList.remove("open");return}const [page,arg]=v.split("/");document.querySelectorAll("#nav a").forEach(a=>a.classList.toggle("active",a.dataset.k===page));$("#side").classList.remove("open");(VIEWS[page]||VIEWS.dashboard)(arg);window.scrollTo(0,0)}
 const header=(t,s,btns="")=>`<div class="top"><div style="display:flex;gap:10px;align-items:center"><button class="btn sm menu-btn" onclick="$('#side').classList.toggle('open')">☰</button><div><h2>${t}</h2><p>${s}</p></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${btns}<span class="prefs">${PREFS_HTML()}</span><button class="btn sm bell" title="الإشعارات" onclick="togglePanel(event)">🔔<i class="nbadge" style="${UNREAD()?"":"display:none"}">${UNREAD()}</i></button></div></div>`;
 
@@ -514,7 +514,7 @@ const UNREAD=()=>INBOX.notifs.filter(n=>!n.is_read).length;
 const ago=t=>{const s=(Date.now()-new Date(t))/1e3;return s<60?"الآن":s<3600?`قبل ${Math.floor(s/60)} د`:s<86400?`قبل ${Math.floor(s/3600)} س`:new Date(t).toLocaleString("en-GB",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})};
 const NIC={done:"✅",undo:"↩",edit:"📝",rate:"⭐",task:"📌",note:"✉",read:"👁",info:"🔔"};
 async function notify(to,kind,title,body,link){if(!TOK)return;try{await rpc("ft_notify",{p_token:TOK,p_to:to,p_kind:kind,p_title:title,p_body:body||"",p_link:link||""})}catch(e){}}
-async function loadInbox(live){if(!TOK)return;let r;try{r=await rpc("ft_inbox",{p_token:TOK})}catch(e){return}if(r.disabled)return kicked();const before=new Set(INBOX.notifs.map(n=>n.id)),fresh=r.notifs.filter(n=>!n.is_read&&!before.has(n.id));const first=!INBOX._l;INBOX=r;INBOX._l=1;paintBell();if(live&&!first&&fresh.length){toast("🔔 "+fresh[0].title);try{new AudioContext().resume()}catch(e){}}if(!$("#npanel").classList.contains("hidden"))renderPanel();{const pg=location.hash.slice(1).split("/")[0];if((pg==="notes"||pg==="mynotes")&&!busy())VIEWS[pg]();if(pg==="hub"&&!busy())VIEWS.hub();if(pg==="calendar"&&!busy()&&!CALBUSY)VIEWS.calendar()}}
+async function loadInbox(live){if(!TOK)return;let r;try{r=await rpc("ft_inbox",{p_token:TOK})}catch(e){return}if(r.disabled)return kicked();const before=new Set(INBOX.notifs.map(n=>n.id)),fresh=r.notifs.filter(n=>!n.is_read&&!before.has(n.id));const first=!INBOX._l;INBOX=r;INBOX._l=1;paintBell();if(live&&!first&&fresh.length){toast("🔔 "+fresh[0].title);try{new AudioContext().resume()}catch(e){}}if(!$("#npanel").classList.contains("hidden"))renderPanel();{const pg=location.hash.slice(1).split("/")[0];if((pg==="notes"||pg==="mynotes"||pg==="community")&&!busy())VIEWS[pg]();if(pg==="hub"&&!busy())VIEWS.hub();if(pg==="calendar"&&!busy()&&!CALBUSY)VIEWS.calendar()}}
 function paintBell(){const n=UNREAD();document.querySelectorAll(".nbadge").forEach(b=>{b.textContent=n>99?"99+":n;b.style.display=n?"":"none"});document.title=(n?`(${n}) `:"")+"Fast Techno · DM System"}
 function togglePanel(e){e&&e.stopPropagation();const p=$("#npanel");p.classList.toggle("hidden");if(!p.classList.contains("hidden"))renderPanel()}
 document.addEventListener("click",e=>{const p=$("#npanel");if(p&&!p.classList.contains("hidden")&&!p.contains(e.target)&&!e.target.closest(".bell"))p.classList.add("hidden")});
@@ -524,6 +524,7 @@ async function readAll(){INBOX.notifs.forEach(n=>n.is_read=true);paintBell();ren
 async function clearN(){if(!confirm("مسح كل الإشعارات؟"))return;INBOX.notifs=[];paintBell();renderPanel();try{await rpc("ft_notif_clear",{p_token:TOK})}catch(e){}}
 const uname=id=>DB.users.find(u=>u.id===id)?.name||"(محذوف)";
 const NKIND={guide:["🧭","توجيه"],alert:["⚠️","تنبيه"],praise:["🏆","إشادة"],task:["📌","تكليف"]},NPRI={normal:["","عادية"],high:["b-warn","مهمة"],urgent:["b-bad","عاجلة"]};
+VIEWS.community=function(){const N=INBOX.notes||[];const list=N.length?N.map(n=>{const k=NKIND[n.kind]||NKIND.guide,pr=NPRI[n.priority]||NPRI.normal,me=n.to_ids.includes(ME.id);return `<div class="card note pr-${esc(n.priority||"normal")}" style="margin-bottom:12px"><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><span class="badge">${k[0]} ${k[1]}</span>${n.priority&&n.priority!=="normal"?`<span class="badge ${pr[0]}">${pr[1]}</span>`:""}<b style="font-size:15px">${esc(n.title)}</b>${me?'<span class="badge b-warn">موجّهة لك</span>':""}</div><div style="color:var(--muted);font-size:12px;margin-top:6px">من: <b>${esc(uname(n.from_id))}</b> ← إلى: ${n.to_ids.map(i=>`<span class="badge b-mut">${esc(uname(i))}</span>`).join(" ")} · <span class="en">${ago(n.created_at)}</span></div><p style="white-space:pre-wrap;line-height:1.9;margin:12px 0 0">${esc(n.body)}</p></div>`}).join(""):`<div class="card" style="text-align:center;color:var(--muted)">لا توجد ملاحظات بعد</div>`;$("#main").innerHTML=header("اشعارات العمل","مجتمع الشركة: كل الملاحظات والتوجيهات المرسلة من الإدارة ومسؤولي الفرق يراها الجميع","")+list};
 VIEWS.mynotes=function(){return VIEWS.notes("received")};
 VIEWS.notes=function(mode){const received=mode==="received"||!FTHierarchy.canManageTeam(ME),lead=!received&&FTHierarchy.canManageTeam(ME),N=received?INBOX.notes.filter(n=>n.to_ids.includes(ME.id)):isAdmin()?INBOX.notes:INBOX.notes.filter(n=>n.from_id===ME.id);
  const list=N.length?N.map(n=>{const rd=n.read_by||[],mine=n.from_id===ME.id,seeAll=mine||isAdmin(),un=n.to_ids.includes(ME.id)&&!rd.includes(ME.id),k=NKIND[n.kind]||NKIND.guide,pr=NPRI[n.priority]||NPRI.normal,rr=n.to_ids.length?Math.round(n.to_ids.filter(i=>rd.includes(i)).length/n.to_ids.length*100):0;return `<div class="card note pr-${esc(n.priority||"normal")} ${un?"un":""}" style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div><span class="badge">${k[0]} ${k[1]}</span> ${n.priority&&n.priority!=="normal"?`<span class="badge ${pr[0]}">${pr[1]}</span>`:""} <b style="font-size:15px">${esc(n.title)}</b> ${un?'<span class="badge b-warn">جديدة</span>':""}<div style="color:var(--muted);font-size:12px;margin-top:6px">${seeAll?`${mine?"":"من: "+esc(uname(n.from_id))+" · "}إلى: `+n.to_ids.map(i=>`<span class="badge ${rd.includes(i)?"b-ok":"b-mut"}" title="${rd.includes(i)?"قرأها":"لم يقرأها بعد"}">${rd.includes(i)?"✓ ":""}${esc(uname(i))}</span>`).join(" "):"من: "+esc(uname(n.from_id))} · <span class="en">${ago(n.created_at)}</span></div>${seeAll?`<div style="display:flex;gap:8px;align-items:center;margin-top:8px;font-size:12px;color:var(--muted)">نسبة الاطلاع <div class="bar" style="width:140px"><i style="width:${rr}%"></i></div> <b class="en">${rr}%</b></div>`:""}</div><div style="display:flex;gap:6px">${un?`<button class="btn sm primary" onclick="readNote(${n.id})">تم الاطلاع ✓</button>`:""}${mine||isAdmin()?`<button class="btn sm" onclick="delNote(${n.id})">حذف</button>`:""}</div></div><p style="white-space:pre-wrap;line-height:1.9;margin:12px 0 0">${esc(n.body)}</p></div>`}).join(""):`<div class="card" style="text-align:center;color:var(--muted)">لا توجد ملاحظات بعد</div>`;
@@ -689,94 +690,65 @@ const ids=f=>DB.users.filter(f).map(u=>u.id);
 const admins=()=>ids(u=>u.role==="admin"),sups=()=>ids(u=>u.role==="supervisor");
 const leadOf=uid=>{const u=DB.users.find(x=>x.id===uid),l=u&&DB.users.find(x=>x.id===u.manager_id);return l&&isLead(l)&&l.id!==uid?l:null};
 const nowISO=()=>new Date().toISOString();
-const STG={lead:["بانتظار مسؤول الفريق","b-warn"],sup:["بانتظار المسؤول","b-warn"],adm:["بانتظار المدير العام","b-warn"],approved:["معتمدة ✓","b-ok"],rejected:["مرفوضة — أعدها للموظف","b-bad"],lead_fix:["مُعادة لمسؤول الفريق","b-bad"],sup_fix:["مُعادة للمسؤول","b-bad"]};
-const ACT={submit:"رفع المهمة",approve:"موافقة",reject:"رفض",forward:"إعادة توجيه"};
-function rec(pid,d){const t=DB.tracker[pid]||(DB.tracker[pid]={});return t[d]||(t[d]={})}
-function subOf(pid,d,k){return DB.tracker[pid]?.[d]?.sub?.[k]}
-function allSubs(){const out=[];(DB.projects||[]).forEach(p=>{Object.entries(DB.tracker[p.id]||{}).forEach(([d,r])=>{Object.entries(r?.sub||{}).forEach(([k,s])=>out.push({p,d,k,s}))})});return out}
-function score(s){const a=[s?.scores?.sup,s?.scores?.adm].filter(v=>v!=null&&v!=="");return a.length?Math.round(a.reduce((x,y)=>x+ +y,0)/a.length):null}
+const STG={lead:["بانتظار مسؤول الفريق","b-warn"],sup:["بانتظار المسؤول","b-warn"],admin:["بانتظار المدير العام","b-warn"],approved:["معتمدة ✓","b-ok"],rej_emp:["مرفوضة — أعد الرفع","b-bad"],ret_lead:["مُعادة لمسؤول الفريق","b-bad"],ret_sup:["مُعادة للمسؤول","b-bad"]};
+const ACT={submit:"رفع المهمة",resubmit:"إعادة رفع",approve:"موافقة",reject:"رفض",forward:"إعادة توجيه",cancel:"إلغاء"};
+let SUBS=[],WORK={sessions:[],now:null};
+const SBH=()=>supabase.createClient("https://lsuxtbimioljbdpfswbm.supabase.co","sb_publishable_sI9JJuvg0DbfZixDmjtpMA_1R55fy1X",{auth:{persistSession:false},global:{headers:{"x-ft-token":TOK}}});
+async function loadSubs(){if(!TOK)return;try{const r=await rpc("ft_subs_get",{p_token:TOK,p_from:null,p_to:null});SUBS=r.subs||[]}catch(e){}}
+function wrap(x){const p=DB.projects.find(q=>q.id===x.project_id);return p?{p,d:x.day,k:x.task_key,s:x}:null}
+function allSubs(){return SUBS.map(wrap).filter(Boolean)}
+function subOf(pid,d,k){return SUBS.find(x=>x.project_id===pid&&x.day===d&&x.task_key===k)}
+function score(s){const a=[s?.sup_pct,s?.adm_pct].filter(v=>v!=null);return a.length?Math.round(a.reduce((x,y)=>x+ +y,0)/a.length):null}
+const subAt=s=>(s.history||[]).filter(h=>/submit/.test(h.act)).slice(-1)[0]?.at||s.created_at;
 window.FTWF={score,allSubs,subOf};
-async function freshSave(pid){const latest=await rpc("ft_get",{p_token:TOK});if(!apply(latest))throw new Error("session");return latest}
-async function commit(pid){const r=await rpc("ft_save",{p_token:TOK,p_data:DB,p_scope:{tracker:[pid]}});if(!apply(r))throw new Error("save")}
-
-/* ---------- Proof upload ---------- */
-async function uploadFile(f,pid){
-  const path=`${pid}/${Date.now()}-${Math.random().toString(36).slice(2,7)}-${f.name.replace(/[^\w.\-]/g,"_")}`;
-  try{const {error}=await SB.storage.from("task-proofs").upload(path,f,{contentType:f.type||"application/octet-stream"});if(error)throw error;
-    return {name:f.name,type:f.type,url:SB.storage.from("task-proofs").getPublicUrl(path).data.publicUrl}}
-  catch(e){if(f.size>2.5e6)throw new Error("big");const url=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(f)});return {name:f.name,type:f.type,url}}
-}
-function filesHtml(files){return (files||[]).map(f=>/^image\//.test(f.type)?`<a href="${esc(f.url)}" target="_blank"><img src="${esc(f.url)}" class="pf-img"></a>`:/^video\//.test(f.type)?`<video src="${esc(f.url)}" controls class="pf-img"></video>`:`<a class="btn sm" href="${esc(f.url)}" target="_blank" download="${esc(f.name)}">📎 ${esc(f.name)}</a>`).join("")||'<span style="color:var(--muted)">—</span>'}
-function histHtml(s){return `<div class="wf-hist">${(s.history||[]).map(h=>`<div class="wf-h ${h.act}"><b>${esc(uName(h.who))}</b> <span class="badge b-plan">${esc(FTHierarchy.roles[h.role]||h.role)}</span> — ${ACT[h.act]||h.act} <small>${fmtAt(h.at)}</small>${h.note?`<div>📝 ${esc(h.note)}</div>`:""}${h.score!=null?`<div>التقييم: <b>${h.score}%</b></div>`:""}</div>`).join("")}</div>`}
-
+const ERR={need_file:"يجب إرفاق ملف",exists:"تم رفع هذه المهمة مسبقاً",not_assigned:"هذه المهمة مسندة لموظف آخر",forbidden:"غير مسموح",invalid:"بيانات غير صالحة",need_note:"اكتب سبب الرفض",closed:"تم إغلاق هذه المهمة"};
+async function filesHtml(files,el){const c=SBH();const out=[];for(const f of files||[]){const {data}=await c.storage.from("ft-proofs").createSignedUrl(f.path,3600);const u=esc(data?.signedUrl||"#");
+  out.push(/^image\//.test(f.type)?`<a href="${u}" target="_blank"><img src="${u}" class="pf-img"></a>`:/^video\//.test(f.type)?`<video src="${u}" controls class="pf-img"></video>`:`<a class="btn sm" href="${u}" target="_blank">📎 ${esc(f.name)}</a>`)}
+  if(el)el.innerHTML=out.join("")||"—"}
+function histHtml(s){return `<div class="wf-hist">${(s.history||[]).map(h=>`<div class="wf-h ${h.act}"><b>${esc(uName(h.by))}</b> ${h.role?`<span class="badge b-plan">${esc(FTHierarchy.roles[h.role]||h.role)}</span>`:""} — ${ACT[h.act]||h.act} <small>${fmtAt(h.at)}</small>${h.note?`<div>📝 ${esc(h.note)}</div>`:""}</div>`).join("")}${s.sup_pct!=null?`<div class="wf-h">تقييم المسؤول: <b>${s.sup_pct}%</b> ${esc(s.sup_note||"")}</div>`:""}${s.adm_pct!=null?`<div class="wf-h">تقييم المدير العام: <b>${s.adm_pct}%</b> ${esc(s.adm_note||"")}</div>`:""}</div>`}
 function attachModal(pid,d,k){
   const s=subOf(pid,d,k),p=DB.projects.find(x=>x.id===pid);
-  if(s&&s.by!==ME.id&&!["rejected"].includes(s.stage))return reviewModal(pid,d,k);
-  if(s&&!["rejected"].includes(s.stage))return reviewModal(pid,d,k);
-  modal(`<h3 style="margin-top:0">📎 إرفاق إثبات الإنجاز</h3><p style="color:var(--muted);font-size:13px">${esc(p?.client||"")} — ${esc(TNAME(k))} — ${d}<br>لن يُحتسب الـ Check إلا بعد إرفاق ملف (صورة / فيديو / PDF / نص) واعتماده من مسؤول الفريق ثم المسؤول ثم المدير العام.</p>
-  ${s?.stage==="rejected"?`<div class="wf-rej">❌ مرفوضة: ${esc((s.history||[]).slice(-1)[0]?.note||"")}</div>`:""}
-  <input type="file" id="pfFiles" multiple accept="image/*,video/*,application/pdf,text/plain,.txt,.pdf"><label style="margin-top:10px">وصف ما تم إنجازه</label><textarea id="pfNote" rows="3" placeholder="مثال: تم تنزيل ستوري عرض الخصم...">${esc(s?.note||"")}</textarea>
+  if(s&&!(s.status==="rej_emp"&&s.user_id===ME.id))return reviewModal(pid,d,k);
+  modal(`<h3 style="margin-top:0">📎 إرفاق إثبات الإنجاز</h3><p style="color:var(--muted);font-size:13px">${esc(p?.client||"")} — ${esc(TNAME(k))} — ${d}<br>لن يُحتسب الـ Check إلا بعد إرفاق ملف واعتماده من مسؤول الفريق ثم المسؤول ثم المدير العام.</p>
+  ${s?`<div class="wf-rej">❌ مرفوضة: ${esc((s.history||[]).slice(-1)[0]?.note||"")}</div>`:""}
+  <input type="file" id="pfFiles" multiple accept="image/*,video/*,application/pdf,text/plain,.txt,.pdf"><label style="margin-top:10px">وصف ما تم إنجازه</label><textarea id="pfNote" rows="3" placeholder="مثال: تم تنزيل ستوري عرض الخصم..."></textarea>
   <div id="pfErr" style="color:var(--bad);font-size:13px;margin-top:6px"></div><div style="display:flex;gap:8px;margin-top:14px"><button class="btn primary" id="pfGo">رفع للمراجعة</button><button class="btn" onclick="closeModal()">إلغاء</button></div>`);
   $("#pfGo").onclick=async()=>{
-    const fl=[...$("#pfFiles").files];if(!fl.length)return $("#pfErr").textContent="يجب إرفاق ملف واحد على الأقل";
+    const fl=[...$("#pfFiles").files];if(!fl.length)return $("#pfErr").textContent="يجب إرفاق ملف واحد على الأقل";if(fl.length>10)return $("#pfErr").textContent="الحد 10 ملفات";
     $("#pfGo").disabled=true;$("#pfGo").textContent="جارٍ الرفع…";
-    try{const files=[];for(const f of fl)files.push(await uploadFile(f,pid));
-      await freshSave(pid);const r=rec(pid,d);r.sub=r.sub||{};const lead=leadOf(ME.id);const old=r.sub[k];
-      const stage=isAdmin()?"approved":isSup()?"adm":isLead(ME)?"sup":lead?"lead":"sup";
-      r.sub[k]={by:ME.id,at:nowISO(),files,note:$("#pfNote").value.trim(),stage,leadId:lead?.id||null,history:[...(old?.history||[]),{who:ME.id,role:ME.role,act:"submit",at:nowISO()}],scores:{}};
-      if(stage==="approved")finalize(r,k);else{r[k]=false}
-      await commit(pid);closeModal();toast("تم الرفع، بانتظار الموافقة");
-      const to=stage==="lead"?[lead.id]:stage==="sup"?sups():stage==="adm"?admins():null;
-      notify(to,"task","📌 مهمة بانتظار مراجعتك: "+TNAME(k),ME.name+" — "+(p?.client||"")+" — "+d,"approvals");rerender();
-    }catch(e){$("#pfGo").disabled=false;$("#pfGo").textContent="رفع للمراجعة";$("#pfErr").textContent=e.message==="big"?"الملف كبير (الحد 2.5MB بدون مساحة تخزين)":"تعذّر الرفع، حاول مجدداً"}
+    try{const c=SBH(),files=[];for(const f of fl){const path=`${ME.id}/${pid}/${Date.now()}-${Math.random().toString(36).slice(2,6)}-${f.name.replace(/[^\w.\-]/g,"_")}`;const {error}=await c.storage.from("ft-proofs").upload(path,f,{contentType:f.type||"application/octet-stream"});if(error)throw new Error("up");files.push({path,name:f.name,type:f.type})}
+      const r=await rpc("ft_sub_create",{p_token:TOK,p_project:pid,p_day:d,p_key:k,p_files:files,p_note:$("#pfNote").value.trim()});if(r.error)throw new Error(r.error);
+      closeModal();toast(r.status==="approved"?"تم الاعتماد ✓":"تم الرفع، بانتظار الموافقة");await loadSubs();await refresh(true);rerender();
+    }catch(e){$("#pfGo").disabled=false;$("#pfGo").textContent="رفع للمراجعة";$("#pfErr").textContent=ERR[e.message]||(e.message==="up"?"تعذّر رفع الملف":"تعذّر الحفظ")}
   };
 }
-function finalize(r,k){const s=r.sub[k];s.stage="approved";r[k]=true;r.by=r.by||{};r.at=r.at||{};r.by[k]=s.by;r.at[k]=s.at}
-function canAct(s){if(!s||!ME)return false;
-  return (s.stage==="lead"&&(s.leadId===ME.id||isAdmin()))||(s.stage==="sup"&&isSup())||(s.stage==="adm"&&isAdmin())||(s.stage==="lead_fix"&&(s.leadId===ME.id||(!s.leadId&&isSup())))||(s.stage==="sup_fix"&&isSup())}
+function canAct(s){if(!s||!ME)return false;const lead=DB.users.find(u=>u.id===s.user_id)?.manager_id;
+  return (["lead","ret_lead"].includes(s.status)&&(lead===ME.id||isAdmin()))||(["sup","ret_sup"].includes(s.status)&&isMgr())||(s.status==="admin"&&isAdmin())}
 function reviewModal(pid,d,k){
-  const s=subOf(pid,d,k),p=DB.projects.find(x=>x.id===pid);if(!s)return;const act=canAct(s),fix=/_fix$/.test(s.stage),scoring=act&&(s.stage==="sup"||s.stage==="adm");
-  modal(`<h3 style="margin-top:0">${esc(TNAME(k))} — ${esc(p?.client||"")}</h3><div class="meta" style="margin-bottom:10px"><span>الموظف: <b>${esc(uName(s.by))}</b></span><span>التاريخ: <b class="en">${d}</b></span><span class="badge ${STG[s.stage][1]}">${STG[s.stage][0]}</span>${score(s)!=null?`<span>التقييم: <b>${score(s)}%</b></span>`:""}</div>
-  ${s.note?`<p>📝 ${esc(s.note)}</p>`:""}<div class="pf-files">${filesHtml(s.files)}</div><h4>سجل الموافقات</h4>${histHtml(s)}
-  ${act?`<label>${fix?"التعديلات المطلوبة / الملاحظات للمرحلة السابقة":"ملاحظاتك (إلزامية عند الرفض)"}</label><textarea id="rvNote" rows="3"></textarea>${scoring?`<label>تقييم المهمة %</label><input id="rvScore" type="number" min="0" max="100" value="${s.scores?.[s.stage]??""}">`:""}
-  <div id="rvErr" style="color:var(--bad);font-size:13px"></div><div style="display:flex;gap:8px;margin-top:12px">${fix?`<button class="btn primary" onclick="FTWF.act('${pid}','${d}','${k}','forward')">↩ إعادة توجيه</button>`:`<button class="btn primary" onclick="FTWF.act('${pid}','${d}','${k}','approve')">✓ Approve</button><button class="btn" style="color:var(--bad)" onclick="FTWF.act('${pid}','${d}','${k}','reject')">✕ Reject</button>`}<button class="btn" onclick="closeModal()">إغلاق</button></div>`:`<div style="margin-top:12px"><button class="btn" onclick="closeModal()">إغلاق</button></div>`}`);
+  const s=subOf(pid,d,k),p=DB.projects.find(x=>x.id===pid);if(!s)return;const act=canAct(s),fix=/^ret_/.test(s.status);
+  modal(`<h3 style="margin-top:0">${esc(TNAME(k))} — ${esc(p?.client||"")}</h3><div class="meta" style="margin-bottom:10px"><span>الموظف: <b>${esc(uName(s.user_id))}</b></span><span>التاريخ: <b class="en">${d}</b></span><span class="badge ${STG[s.status]?.[1]}">${STG[s.status]?.[0]||s.status}</span>${score(s)!=null?`<span>التقييم: <b>${score(s)}%</b></span>`:""}</div>
+  ${s.note?`<p>📝 ${esc(s.note)}</p>`:""}<div class="pf-files" id="pfShow">جارٍ تحميل الملفات…</div><h4>سجل الموافقات</h4>${histHtml(s)}
+  ${act?`<label>${fix?"التعديلات المطلوبة للمرحلة السابقة":"ملاحظاتك (إلزامية عند الرفض)"}</label><textarea id="rvNote" rows="3"></textarea>`:""}
+  ${isMgr()?`<label>تقييمك للمهمة %</label><div style="display:flex;gap:8px"><input id="rvScore" type="number" min="0" max="100" value="${(isAdmin()?s.adm_pct:s.sup_pct)??""}"><button class="btn" onclick="FTWF.rate(${s.id})">حفظ التقييم</button></div>`:""}
+  <div id="rvErr" style="color:var(--bad);font-size:13px"></div><div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap">${act?(fix?`<button class="btn primary" onclick="FTWF.act(${s.id},'forward')">↩ إعادة توجيه</button>`:`<button class="btn primary" onclick="FTWF.act(${s.id},'approve')">✓ Approve</button><button class="btn" style="color:var(--bad)" onclick="FTWF.act(${s.id},'reject')">✕ Reject</button>`):""}${s.status==="rej_emp"&&s.user_id===ME.id?`<button class="btn primary" onclick="closeModal();FTWF.attach('${pid}','${d}','${k}')">إعادة الرفع</button>`:""}${isAdmin()?`<button class="btn" onclick="FTWF.cancel(${s.id})">إلغاء المهمة</button>`:""}<button class="btn" onclick="closeModal()">إغلاق</button></div>`);
+  filesHtml(s.files,$("#pfShow"));
 }
-async function act(pid,d,k,a){
-  const note=$("#rvNote")?.value.trim()||"",sc=$("#rvScore")?.value;
-  if((a==="reject"||a==="forward")&&!note)return $("#rvErr").textContent="اكتب سبب الرفض والتعديلات المطلوبة";
-  if(sc!==undefined&&sc!==""&&(+sc<0||+sc>100))return $("#rvErr").textContent="التقييم بين 0 و 100";
-  try{await freshSave(pid);const r=rec(pid,d),s=r.sub?.[k];if(!s||!canAct(s))throw new Error("x");const p=DB.projects.find(x=>x.id===pid),info=TNAME(k)+" — "+(p?.client||"")+" — "+d;
-    const st=s.stage;s.history=s.history||[];const h={who:ME.id,role:ME.role,act:a,note,at:nowISO()};
-    if(sc!==undefined&&sc!==""&&(st==="sup"||st==="adm")){s.scores=s.scores||{};s.scores[st]=+sc;h.score=+sc}
-    s.history.push(h);let to=null,title="";
-    if(a==="approve"){
-      if(st==="lead"){s.stage="sup";s.leadApprover=ME.id;to=sups();title="📌 مهمة اعتمدها مسؤول الفريق بانتظارك"}
-      else if(st==="sup"){s.stage="adm";to=admins();title="📌 مهمة اعتمدها المسؤول بانتظارك"}
-      else if(st==="adm"){finalize(r,k);to=[...new Set([s.by,s.leadId,...sups(),...admins()].filter(Boolean))];title="✅ تم اعتماد المهمة نهائياً"}
-    }else if(a==="reject"){
-      r[k]=false;
-      if(st==="lead"){s.stage="rejected";to=[s.by];title="❌ رفض مسؤول الفريق مهمتك"}
-      else if(st==="sup"){s.stage=s.leadId?"lead_fix":"rejected";to=[...(s.leadId?[s.leadId]:[s.by]),...admins()];title="❌ رفض المسؤول مهمة"}
-      else if(st==="adm"){s.stage="sup_fix";to=sups();title="❌ رفض المدير العام مهمة — مطلوب تعديل"}
-    }else if(a==="forward"){
-      if(st==="sup_fix"){s.stage=s.leadId?"lead_fix":"rejected";to=[s.leadId||s.by];title="↩ مهمة مُعادة مع تعديلات مطلوبة"}
-      else if(st==="lead_fix"){s.stage="rejected";to=[s.by];title="↩ مهمتك مُعادة مع تعديلات مطلوبة"}
-    }
-    await commit(pid);closeModal();toast("تم ✓");notify(to,a==="approve"?"done":"note",title,info+(note?" — "+note:""),"approvals");rerender();
-  }catch(e){toast("تعذّر الحفظ");refresh(true)}
-}
+async function act(id,a){const note=$("#rvNote")?.value.trim()||"";if(a!=="approve"&&!note)return $("#rvErr").textContent="اكتب سبب الرفض والتعديلات المطلوبة";
+  try{const r=await rpc("ft_sub_act",{p_token:TOK,p_id:id,p_act:a,p_note:note});if(r.error)return $("#rvErr").textContent=ERR[r.error]||"تعذّر";const sc=$("#rvScore")?.value;if(sc!==undefined&&sc!=="")await rpc("ft_sub_rate",{p_token:TOK,p_id:id,p_pct:+sc,p_note:note});closeModal();toast("تم ✓");await loadSubs();await refresh(true);rerender()}catch(e){toast("تعذّر الحفظ")}}
+FTWF.rate=async id=>{const v=$("#rvScore").value;if(v===""||+v<0||+v>100)return $("#rvErr").textContent="التقييم بين 0 و 100";const r=await rpc("ft_sub_rate",{p_token:TOK,p_id:id,p_pct:+v,p_note:$("#rvNote")?.value||""});if(r.error)return $("#rvErr").textContent=ERR[r.error]||"تعذّر";toast("تم حفظ التقييم");await loadSubs();closeModal();rerender()};
+FTWF.cancel=async id=>{if(!confirm("إلغاء هذه المهمة؟"))return;await rpc("ft_sub_cancel",{p_token:TOK,p_id:id});closeModal();await loadSubs();await refresh(true);rerender()};
 FTWF.act=act;FTWF.review=reviewModal;FTWF.attach=attachModal;
 
 /* ---------- Override check behaviour ---------- */
 window.tick=function(pid,d,k){if(d>today())return toast("لا يمكن إنجاز مهمة مستقبلية");attachModal(pid,d,k)};
 window.calendarTick=function(pid,d,k){if(d>today())return;attachModal(pid,d,k);setTimeout(()=>{if(!$("#modalRoot").innerHTML)VIEWS.calendar()},50)};
-const _cal=VIEWS.calendar;VIEWS.calendar=function(a){_cal(a);document.querySelectorAll('.daily-task input[type=checkbox]').forEach(cb=>{const m=(cb.getAttribute("onchange")||"").match(/'([^']+)','([^']+)','([^']+)'/);if(!m)return;const s=subOf(m[1],m[2],m[3]);if(s&&s.stage!=="approved"){cb.checked=false;cb.closest(".daily-task").insertAdjacentHTML("beforeend",`<span class="badge ${STG[s.stage][1]}" style="cursor:pointer" onclick="FTWF.review('${m[1]}','${m[2]}','${m[3]}')">${STG[s.stage][0]}</span>`)}cb.onclick=e=>{e.preventDefault();calendarTick(m[1],m[2],m[3])};cb.onchange=null})};
+const _cal=VIEWS.calendar;VIEWS.calendar=function(a){_cal(a);document.querySelectorAll('.daily-task input[type=checkbox]').forEach(cb=>{const m=(cb.getAttribute("onchange")||"").match(/'([^']+)','([^']+)','([^']+)'/);if(!m)return;const s=subOf(m[1],m[2],m[3]);if(s&&s.status!=="approved"){cb.checked=false;cb.closest(".daily-task").insertAdjacentHTML("beforeend",`<span class="badge ${STG[s.status][1]}" style="cursor:pointer" onclick="FTWF.review('${m[1]}','${m[2]}','${m[3]}')">${STG[s.status][0]}</span>`)}cb.onclick=e=>{e.preventDefault();calendarTick(m[1],m[2],m[3])};cb.onchange=null})};
 
 /* ---------- Detailed progress ---------- */
 const _tv=window.trackerView;window.trackerView=function(id){_tv(id);const p=DB.projects.find(x=>x.id===id);if(!p)return;
-  document.querySelectorAll(".trk .cb").forEach(el=>{const m=(el.getAttribute("onclick")||"").match(/'([^']+)','([^']+)','([^']+)'/);if(!m)return;const s=subOf(m[1],m[2],m[3]);if(s&&s.stage!=="approved"){el.classList.add(s.stage==="rejected"||/_fix/.test(s.stage)?"cb-rej":"cb-pend");el.title=STG[s.stage][0]+" — "+uName(s.by)}});
+  document.querySelectorAll(".trk .cb").forEach(el=>{const m=(el.getAttribute("onclick")||"").match(/'([^']+)','([^']+)','([^']+)'/);if(!m)return;const s=subOf(m[1],m[2],m[3]);if(s&&s.status!=="approved"){el.classList.add(/^(rej|ret)/.test(s.status)?"cb-rej":"cb-pend");el.title=STG[s.status][0]+" — "+uName(s.user_id)}});
   const subs=allSubs().filter(x=>x.p.id===id);
-  const rows=TASKS.map(([k,e,a])=>{const g=+(p.targets?.[k]||0),ap=countDone(DB.tracker[id]||{},k),pe=subs.filter(x=>x.k===k&&!["approved","rejected"].includes(x.s.stage)).length,rj=subs.filter(x=>x.k===k&&x.s.stage==="rejected").length,pc=g?Math.min(100,Math.round(ap/g*100)):0;
+  const rows=TASKS.map(([k,e,a])=>{const g=+(p.targets?.[k]||0),ap=countDone(DB.tracker[id]||{},k),pe=subs.filter(x=>x.k===k&&!["approved","rej_emp"].includes(x.s.status)).length,rj=subs.filter(x=>x.k===k&&x.s.status==="rej_emp").length,pc=g?Math.min(100,Math.round(ap/g*100)):0;
     return `<div class="pg-row"><div class="pg-h"><b>${e} <small>${a}</small></b><span class="en">${ap}/${g} · ${pc}%</span></div><div class="bar pg-bar"><i style="width:${pc}%"></i><em style="width:${g?Math.min(100-pc,pe/g*100):0}%"></em></div><small>✓ معتمدة ${ap} · ⏳ قيد المراجعة ${pe} · ✕ مرفوضة ${rj} · المتبقي ${Math.max(0,g-ap)}</small></div>`}).join("");
   const sc=subs.map(x=>score(x.s)).filter(v=>v!=null);
   document.querySelector("#main .card").insertAdjacentHTML("afterend",`<div class="card" style="margin-bottom:16px"><h3 style="margin:0 0 12px">📊 تفاصيل التقدم</h3><div class="pg-grid">${rows}</div><div class="meta" style="margin-top:10px"><span>متوسط تقييم المهام: <b>${sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length)+"%":"—"}</b></span><span>تقييم المشروع العام: <b>${projPct(p)}</b></span></div></div>`)};
@@ -785,37 +757,30 @@ window.stars=function(v,pid){const p=pid&&DB.projects.find(x=>x.id===pid);const 
 FTWF.rateProject=function(pid){const p=DB.projects.find(x=>x.id===pid);const v=prompt("التقييم العام للمشروع (0-100%)",p.ratingPct??"");if(v===null)return;const n=Math.max(0,Math.min(100,+v||0));p.ratingPct=n;p.rating=Math.max(1,Math.round(n/20));save()};
 window.tStars=function(x){const s=subOf(x.p.id,x.d,x.k),v=score(s);return `<span class="pct-badge" style="cursor:pointer" onclick="FTWF.review('${x.p.id}','${x.d}','${x.k}')">${v!=null?v+"%":"—"}</span>`};
 
-/* ---------- Work hours ---------- */
-const WK="_work";
-function work(){return DB.tracker[WK]||(DB.tracker[WK]={})}
-async function beat(){if(!ME||!TOK||isAdmin()||isSup())return;try{await freshSave(WK);const w=work(),d=today(),o=(w[d]=w[d]||{})[ME.id]||(w[d][ME.id]={start:nowISO(),sessions:[]});const now=Date.now();
-  if(!o.last||now-new Date(o.last)>15*60e3)o.sessions.push({from:nowISO(),to:nowISO()});o.last=nowISO();o.sessions[o.sessions.length-1].to=o.last;
-  o.alerted=o.alerted||{};const hs=slots(ME.id,d).filter(h=>h.full&&!h.items.length&&!o.alerted[h.i]);hs.forEach(h=>o.alerted[h.i]=1);
-  Object.keys(w).filter(x=>x<d.slice(0,8)+"01"&&x<d).forEach(x=>{if(Object.keys(w).length>62)delete w[x]});
-  await rpc("ft_save",{p_token:TOK,p_data:DB,p_scope:{tracker:[WK]}}).then(apply);
-  hs.forEach(h=>notify([...admins(),...sups()],"info","⚠️ ساعة عمل فارغة: "+ME.name,`الساعة ${h.label} يوم ${d} مرّت بدون أي مهمة منجزة`,"hours"));
-}catch(e){}}
-function slots(uid,d){const o=DB.tracker[WK]?.[d]?.[uid];if(!o)return [];const st=new Date(o.start).getTime(),en=new Date(o.last).getTime(),live=Date.now()-en<15*60e3,end=live?Date.now():en;
-  const subs=allSubs().filter(x=>x.s.by===uid),out=[];for(let i=0,t=st;t<end&&i<24;i++,t+=36e5){const t2=t+36e5,items=subs.filter(x=>{const a=new Date(x.s.history?.find(h=>h.act==="submit")?.at||x.s.at).getTime();return a>=t&&a<t2});
-    out.push({i,from:t,to:Math.min(t2,end),full:t2<=end,live:live&&t2>end,items,label:new Date(t).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})+" - "+new Date(t2).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})})}return out}
+/* ---------- Work hours (server) ---------- */
+async function beat(){if(!ME||!TOK||isAdmin())return;try{await rpc("ft_hb",{p_token:TOK})}catch(e){}}
+function slotsOf(sess,uid,nowT){const subs=allSubs().filter(x=>x.s.user_id===uid),st=new Date(sess.started_at).getTime(),ls=new Date(sess.last_seen).getTime(),live=nowT-ls<10*60e3,end=live?nowT:ls,out=[];
+  for(let i=0,t=st;t<end&&i<24;i++,t+=36e5){const t2=t+36e5,items=subs.filter(x=>{const a=new Date(subAt(x.s)).getTime();return a>=t&&a<t2});out.push({i,full:t2<=end,items,label:new Date(t).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})+" - "+new Date(t2).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})})}return {out,live,ms:end-st}}
 const dur=ms=>{const m=Math.floor(ms/6e4);return `${Math.floor(m/60)}س ${m%60}د`};
-function periodStats(uid){const t=today(),d=new Date(t+"T12:00:00Z"),wk=new Date(d-((d.getUTCDay()+1)%7)*864e5).toISOString().slice(0,10),mo=t.slice(0,8)+"01";const s=allSubs().filter(x=>x.s.by===uid);
-  const c=f=>{const l=s.filter(f);return {ap:l.filter(x=>x.s.stage==="approved").length,pe:l.filter(x=>!["approved","rejected"].includes(x.s.stage)).length,rj:l.filter(x=>x.s.stage==="rejected").length}};
-  return {Daily:c(x=>x.d===t),Weekly:c(x=>x.d>=wk&&x.d<=t),Monthly:c(x=>x.d>=mo&&x.d<=t),Total:c(()=>true),list:s}}
+function periodStats(uid){const t=today(),d=new Date(t+"T12:00:00Z"),wk=new Date(d-((d.getUTCDay()+1)%7)*864e5).toISOString().slice(0,10),mo=t.slice(0,8)+"01";const s=allSubs().filter(x=>x.s.user_id===uid);
+  const c=f=>{const l=s.filter(f);return {ap:l.filter(x=>x.s.status==="approved").length,pe:l.filter(x=>!["approved","rej_emp"].includes(x.s.status)).length,rj:l.filter(x=>x.s.status==="rej_emp").length}};
+  return {Daily:c(x=>x.d===t),Weekly:c(x=>x.d>=wk&&x.d<=t),Monthly:c(x=>x.d>=mo&&x.d<=t),Total:c(()=>true)}}
 let HDAY=null;
-VIEWS.hours=function(){if(!isMgr())return go("dashboard");const d=HDAY||today(),emps=DB.users.filter(u=>u.role!=="admin"&&u.role!=="supervisor");
+VIEWS.hours=async function(){if(!isMgr())return go("dashboard");const d=HDAY||today();
+  try{const r=await rpc("ft_work_get",{p_token:TOK,p_from:new Date(d+"T00:00:00+03:00").toISOString(),p_to:new Date(d+"T23:59:59+03:00").toISOString()});WORK=r.error?{sessions:[]}:r}catch(e){}
+  await loadSubs();const nowT=new Date(WORK.now||Date.now()).getTime(),emps=DB.users.filter(u=>u.role!=="admin"&&u.role!=="supervisor");
   $("#main").innerHTML=header("ساعات العمل والإنجاز","متابعة مباشرة لساعات عمل الموظفين وإنجازهم",`<input type="date" value="${d}" onchange="FTWF.hday(this.value)">`)+
-  emps.map(u=>{const o=DB.tracker[WK]?.[d]?.[u.id],sl=slots(u.id,d),live=o&&Date.now()-new Date(o.last)<15*60e3,tot=(o?.sessions||[]).reduce((a,s)=>a+(new Date(live&&s===o.sessions.at(-1)?Date.now():s.to)-new Date(s.from)),0),ps=periodStats(u.id);
-    return `<div class="card wh-emp"><div class="ph"><div><h3 style="margin:0">${esc(u.name)} ${live?'<span class="badge b-ok wh-live">● متصل الآن</span>':o?'<span class="badge b-mut">غير متصل</span>':'<span class="badge b-bad">لم يسجّل دخول</span>'}</h3><small style="color:var(--muted)">${esc(FTHierarchy.roles[u.role]||"")} ${o?"· أول دخول "+fmtAt(o.start)+" · مدة العمل "+dur(tot):""}</small></div>
+  emps.map(u=>{const ss=(WORK.sessions||[]).filter(s=>s.user_id===u.id).slice().reverse(),sl=ss.map(s=>slotsOf(s,u.id,nowT)),live=sl.some(x=>x.live),tot=sl.reduce((a,x)=>a+x.ms,0),ps=periodStats(u.id),cards=sl.flatMap(x=>x.out);
+    return `<div class="card wh-emp"><div class="ph"><div><h3 style="margin:0">${esc(u.name)} ${live?'<span class="badge b-ok wh-live">● متصل الآن</span>':ss.length?'<span class="badge b-mut">غير متصل</span>':'<span class="badge b-bad">لم يسجّل دخول</span>'}</h3><small style="color:var(--muted)">${esc(FTHierarchy.roles[u.role]||"")} ${ss.length?"· أول دخول "+fmtAt(ss[0].started_at)+" · مدة العمل "+dur(tot):""}</small></div>
     <div class="wh-per">${["Daily","Weekly","Monthly","Total"].map(k=>`<div><b class="en">${k}</b><span>✓${ps[k].ap} ⏳${ps[k].pe} ✕${ps[k].rj}</span></div>`).join("")}</div></div>
-    <div class="wh-grid">${sl.map(h=>`<div class="wh-card ${h.items.length?"ok":h.full?"empty-h":"live"}"><div class="en"><b>${h.label}</b></div><div>${h.items.length?`✅ ${h.items.length} مهمة`:h.full?"⚠️ ساعة فارغة":"⏱ جارية"}</div>${h.items.map(x=>`<a onclick="FTWF.review('${x.p.id}','${x.d}','${x.k}')">• ${esc(TNAME(x.k))} — ${esc(x.p.client)} <span class="badge ${STG[x.s.stage][1]}">${STG[x.s.stage][0]}</span></a>`).join("")}</div>`).join("")||'<div class="empty">لا توجد ساعات عمل لهذا اليوم</div>'}</div></div>`}).join("")};
+    <div class="wh-grid">${cards.map(h=>`<div class="wh-card ${h.items.length?"ok":h.full?"empty-h":"live"}"><div class="en"><b>${h.label}</b></div><div>${h.items.length?`✅ ${h.items.length} مهمة`:h.full?"⚠️ ساعة فارغة":"⏱ جارية"}</div>${h.items.map(x=>`<a onclick="FTWF.review('${x.p.id}','${x.d}','${x.k}')">• ${esc(TNAME(x.k))} — ${esc(x.p.client)} <span class="badge ${STG[x.s.status]?.[1]}">${STG[x.s.status]?.[0]}</span></a>`).join("")}</div>`).join("")||'<div class="empty">لا توجد ساعات عمل لهذا اليوم</div>'}</div></div>`}).join("")};
 FTWF.hday=v=>{HDAY=v;VIEWS.hours()};
 
 /* ---------- Approvals ---------- */
-VIEWS.approvals=function(){const mine=allSubs().filter(x=>canAct(x.s)),own=allSubs().filter(x=>x.s.by===ME.id),all=isMgr()?allSubs():[];
-  const row=x=>`<tr onclick="FTWF.review('${x.p.id}','${x.d}','${x.k}')" style="cursor:pointer"><td class="en">${x.d}</td><td>${esc(x.p.client)}</td><td>${esc(TNAME(x.k))}</td><td>${esc(uName(x.s.by))}</td><td><span class="badge ${STG[x.s.stage][1]}">${STG[x.s.stage][0]}</span></td><td>${score(x.s)!=null?score(x.s)+"%":"—"}</td></tr>`;
-  const tbl=(l,e)=>l.length?`<div class="tbl"><table><thead><tr><th>التاريخ</th><th>المشروع</th><th>المهمة</th><th>الموظف</th><th>الحالة</th><th>التقييم</th></tr></thead><tbody>${l.sort((a,b)=>(b.s.at||"").localeCompare(a.s.at||"")).map(row).join("")}</tbody></table></div>`:`<div class="empty">${e}</div>`;
-  const rejSup=all.filter(x=>(x.s.history||[]).some(h=>h.act==="reject"&&h.role==="supervisor")&&x.s.stage!=="approved");
+VIEWS.approvals=async function(){await loadSubs();const mine=allSubs().filter(x=>canAct(x.s)),own=allSubs().filter(x=>x.s.user_id===ME.id),all=isMgr()?allSubs():[];
+  const row=x=>`<tr onclick="FTWF.review('${x.p.id}','${x.d}','${x.k}')" style="cursor:pointer"><td class="en">${x.d}</td><td>${esc(x.p.client)}</td><td>${esc(TNAME(x.k))}</td><td>${esc(uName(x.s.user_id))}</td><td><span class="badge ${STG[x.s.status][1]}">${STG[x.s.status][0]}</span></td><td>${score(x.s)!=null?score(x.s)+"%":"—"}</td></tr>`;
+  const tbl=(l,e)=>l.length?`<div class="tbl"><table><thead><tr><th>التاريخ</th><th>المشروع</th><th>المهمة</th><th>الموظف</th><th>الحالة</th><th>التقييم</th></tr></thead><tbody>${l.sort((a,b)=>(b.s.updated_at||"").localeCompare(a.s.updated_at||"")).map(row).join("")}</tbody></table></div>`:`<div class="empty">${e}</div>`;
+  const rejSup=all.filter(x=>(x.s.history||[]).some(h=>h.act==="reject"&&h.role==="supervisor")&&x.s.status!=="approved");
   $("#main").innerHTML=header("الموافقات","مسار اعتماد المهام: الموظف ← مسؤول الفريق ← المسؤول ← المدير العام")+
   `<div class="card"><h3 style="margin-top:0">⏳ بانتظار إجرائك (${mine.length})</h3>${tbl(mine,"لا يوجد شيء بانتظارك")}</div>`+
   (isAdmin()?`<div class="card" style="margin-top:16px"><h3 style="margin-top:0">❌ مهام رفضها المسؤول (${rejSup.length})</h3>${tbl(rejSup,"لا يوجد")}</div>`:"")+
@@ -824,8 +789,8 @@ VIEWS.approvals=function(){const mine=allSubs().filter(x=>canAct(x.s)),own=allSu
 
 /* ---------- Employee evaluation ---------- */
 let EVD=null,EVM=null;
-VIEWS.evaluation=function(){if(!isMgr())return go("dashboard");const m=EVM||today().slice(0,7),d=EVD;const emps=DB.users.filter(u=>u.role!=="admin"&&u.role!=="supervisor");
-  const rank=f=>emps.map(u=>{const l=allSubs().filter(x=>x.s.by===u.id&&x.s.stage==="approved"&&f(x.d)),sc=l.map(x=>score(x.s)).filter(v=>v!=null);return {u,n:l.length,avg:sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length):0,rated:sc.length}}).sort((a,b)=>b.avg-a.avg||b.n-a.n);
+VIEWS.evaluation=async function(){if(!isMgr())return go("dashboard");await loadSubs();const m=EVM||today().slice(0,7),d=EVD;const emps=DB.users.filter(u=>u.role!=="admin"&&u.role!=="supervisor");
+  const rank=f=>emps.map(u=>{const l=allSubs().filter(x=>x.s.user_id===u.id&&x.s.status==="approved"&&f(x.d)),sc=l.map(x=>score(x.s)).filter(v=>v!=null);return {u,n:l.length,avg:sc.length?Math.round(sc.reduce((a,b)=>a+b,0)/sc.length):0,rated:sc.length}}).sort((a,b)=>b.avg-a.avg||b.n-a.n);
   const mr=rank(x=>x.startsWith(m)),star=mr.find(x=>x.rated),dr=d?rank(x=>x===d):mr;
   $("#main").innerHTML=header("تقييم الموظفين","ترتيب الموظفين حسب تقييم مهامهم المعتمدة",`<input type="month" value="${m}" onchange="FTWF.evm(this.value)"><input type="date" value="${d||""}" onchange="FTWF.evd(this.value)" title="يوم محدد">${d?`<button class="btn sm" onclick="FTWF.evd('')">كل الشهر</button>`:""}`)+
   (star?`<div class="eom"><div class="eom-glow"></div><div class="eom-crown">👑</div><div class="eom-t">موظف الشهر · <span class="en">${m}</span></div><div class="eom-n">${esc(star.u.name)}</div><div class="eom-s"><b>${star.avg}%</b> متوسط التقييم · ${star.n} مهمة معتمدة</div></div>`:"")+
@@ -835,7 +800,7 @@ FTWF.evm=v=>{EVM=v;EVD=null;VIEWS.evaluation()};FTWF.evd=v=>{EVD=v||null;if(v)EV
 /* ---------- Nav ---------- */
 const _bn=window.buildNav;window.buildNav=function(){_bn();const add=(k,i,t)=>$("#nav").insertAdjacentHTML("beforeend",`<a data-k="${k}" onclick="go('${k}')"><span>${i}</span>${t}</a>`);
   const pend=allSubs().filter(x=>canAct(x.s)).length;add("approvals","✔",`الموافقات${pend?` <b class="nbadge-s">${pend}</b>`:""}`);if(isMgr()){add("hours","⏱","ساعات العمل والإنجاز");add("evaluation","🏆","تقييم الموظفين")}};
-const _start=window.start;window.start=function(){_start();beat()};setInterval(beat,5*60e3);
+const _start=window.start;window.start=function(){_start();beat();loadSubs().then(()=>{const pg=location.hash.slice(1).split("/")[0];if(["projects","calendar","ratings"].includes(pg))rerender()})};setInterval(beat,4*60e3);setInterval(loadSubs,60e3);
 const css=document.createElement("style");css.textContent=`
 .pf-files{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.pf-img{max-width:160px;max-height:160px;border-radius:10px;border:1px solid var(--line,#333)}
 .wf-hist{display:grid;gap:6px;margin-bottom:10px}.wf-h{padding:8px 10px;border-radius:10px;background:rgba(127,127,127,.08);font-size:13px;border-inline-start:3px solid #888}.wf-h.approve{border-color:#3ddc97}.wf-h.reject{border-color:#ff6b6b}.wf-h.forward{border-color:#ffb547}
