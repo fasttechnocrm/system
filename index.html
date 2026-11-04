@@ -330,21 +330,22 @@ const PLANS = {
     {name:"INFINITY",icon:"∞",desc:"Presence without limits — Social media, Google & Artificial Intelligence.",price:"650 JOD",period:"/ month",badge:"Signature · Premium",publicPdf:"https://drive.google.com/file/d/1jO86BarYAwK__86HU0VRB_KsqH2Pe7Ih/view?usp=sharing",features:["12 professional posts (3 per week)", "4 carousel posts", "5 AI-generated videos", "6 professional reels", "Daily stories (30 per month)", "20,000 likes & 20,000 shares", "Management of 5 accounts: Facebook, Instagram, TikTok, Snapchat & LinkedIn", "Paid ads management with A/B testing & daily follow-up", "Post boosting for top-performing content", "Precise targeting, lookalike audiences & retargeting", "Branding & unified visual identity", "Monthly marketing strategy & plan", "Professional website", "SEO — Google search optimisation", "GEO — visibility in AI search engines", "Market and audience analysis (SWOT, segmentation, targeting & positioning)", "Weekly performance monitoring & month-end report", "Short brand identity guide: colors, fonts, templates and brand voice; monthly marketing plan and content calendar.", "Website design/development: mobile-responsive, fast-loading, search-friendly, with WhatsApp, contact-form/social links and Google measurement tools.", "SEO: keyword research, technical/page-content optimization, Google Business Profile optimization and monthly keyword-ranking follow-up.", "GEO: structured Q&A content, Schema data, authoritative brand mentions and monitoring brand visibility in AI answers.", "Advertising budget is not included; agreed separately and paid directly to the platforms."]}
   ]};
 
-/* default monthly targets per plan (editable per project) */
+/* default monthly targets per plan (editable per project)
+   Content Creator is an extra task outside the plans: target 0 by default, set per project */
 const PLAN_TARGETS={
- ORBIT:{stories:8,posts:9,reels:1,design:1,ads:1},
- NOVA:{stories:12,posts:8,reels:2,design:1,ads:1},
- GALAXY:{stories:30,posts:10,reels:4,design:2,ads:4},
- COSMOS:{stories:30,posts:16,reels:6,design:5,ads:4},
- INFINITY:{stories:30,posts:16,reels:6,design:5,ads:4}
+ ORBIT:{content:4,stories:8,posts:9,reels:1,design:1,ads:1},
+ NOVA:{content:4,stories:12,posts:8,reels:2,design:1,ads:1},
+ GALAXY:{content:4,stories:30,posts:10,reels:4,design:2,ads:4},
+ COSMOS:{content:4,stories:30,posts:16,reels:6,design:5,ads:4},
+ INFINITY:{content:4,stories:30,posts:16,reels:6,design:5,ads:4}
 };
-const TASKS=[["stories","Stories","ستوري"],["posts","Posts","بوست"],["reels","Reels","ريلز"],["design","Design","تصميم"],["ads","Ads","إعلان"]];
+const TASKS=[["stories","Stories","ستوري"],["posts","Posts","بوست"],["reels","Reels","ريلز"],["design","Design","تصميم"],["ads","Ads","إعلان"],["content","Content Creator","صانع محتوى"]];
 const STATUS={active:["نشط","b-ok"],paused:["متوقف","b-warn"],completed:["مكتمل","b-mut"]};
 
 /* ===== Storage ===== */
 (function(root){
   const roles={admin:'المدير العام',supervisor:'المسؤول',it_lead:'مسؤول IT',marketing_lead:'مسؤول Digital Marketing',photography_lead:'مسؤول التصوير',employee:'موظف'};
-  const departments={management:'الإدارة',it:'IT',marketing:'Digital Marketing',design:'Design',photography:'التصوير',legal:'المحاماة'};
+  const departments={management:'الإدارة',it:'IT',marketing:'Digital Marketing',design:'Digital Marketing — Designer',photography:'التصوير',legal:'المحاماة'};
   function canManage(actor,target){
     if(!actor||!target)return false;
     if(actor.role==='admin')return true;
@@ -428,7 +429,7 @@ $("#logout").onclick=async()=>{try{await rpc("ft_logout",{p_token:TOK})}catch(e)
 function start(){if(!DB)return;ME=DB.users.find(u=>u.id===sessionStorage.getItem("ft_sess"));if(!ME)return;$("#login").classList.add("hidden");$("#loginPrefs").classList.add("hidden");$("#app").classList.remove("hidden");$("#meName").textContent=ME.name;$("#meRole").textContent=FTHierarchy.roles[ME.role]||ME.title;$("#meAv").textContent=ME.name.trim()[0]||"؟";buildNav();go(location.hash.slice(1)||"dashboard");loadInbox()}
 
 /* ===== Nav ===== */
-function buildNav(){const items=[["dashboard","◈","لوحة التحكم"],["calendar","▦","تقويم المهام"],["projects","▤","المشاريع"],["plans","✦","الباقات"]];if(isAdmin())items.push(["team","◉","الموظفون"],["ratings","★","التقييم"],["notes","✉","الملاحظات"],["community","◎","اشعارات العمل"],["settings","⚙","الإعدادات"]);else items.push(["ratings","★","تقييمي"],["notes","✉","ملاحظاتي"],["settings","⚙","حسابي"]);items.splice(items.findIndex(i=>i[0]==="notes")+1,0,["community","◎","اشعارات العمل"]);if(!isAdmin()&&FTHierarchy.canManageTeam(ME)){items.splice(3,0,["team","◉","الموظفون"]);const n=items.find(i=>i[0]==="notes");if(n)n[2]="ملاحظات الفريق";items.splice(items.findIndex(i=>i[0]==="notes")+1,0,["mynotes","✉","ملاحظاتي"])}if(FTHierarchy.canManageTeam(ME))items.splice(1,0,["hub","◎","مركز الفريق"]);$("#nav").innerHTML=items.map(([k,i,t])=>`<a data-k="${k}" onclick="go('${k}')"><span>${i}</span>${t}</a>`).join("")}
+function buildNav(){const items=[["dashboard","◈","لوحة التحكم"],["calendar","▦","تقويم المهام"],["projects","▤","المشاريع"],["plans","✦","الباقات"]];if(isAdmin())items.push(["team","◉","الموظفون"],["ratings","★","التقييم"],["notes","✉","الملاحظات"],["settings","⚙","الإعدادات"]);else items.push(["ratings","★","تقييمي"],["notes","✉","ملاحظاتي"],["settings","⚙","حسابي"]);items.splice(items.findIndex(i=>i[0]==="notes")+1,0,["community","◎","اشعارات العمل"]);if(!isAdmin()&&FTHierarchy.canManageTeam(ME)){items.splice(3,0,["team","◉","الموظفون"]);const n=items.find(i=>i[0]==="notes");if(n)n[2]="ملاحظات الفريق";items.splice(items.findIndex(i=>i[0]==="notes")+1,0,["mynotes","✉","ملاحظاتي"])}if(FTHierarchy.canManageTeam(ME))items.splice(1,0,["hub","◎","مركز الفريق"]);$("#nav").innerHTML=items.map(([k,i,t])=>`<a data-k="${k}" onclick="go('${k}')"><span>${i}</span>${t}</a>`).join("")}
 function go(v){if(location.hash.slice(1)!==v){location.hash=v;$("#side").classList.remove("open");return}const [page,arg]=v.split("/");document.querySelectorAll("#nav a").forEach(a=>a.classList.toggle("active",a.dataset.k===page));$("#side").classList.remove("open");(VIEWS[page]||VIEWS.dashboard)(arg);window.scrollTo(0,0)}
 const header=(t,s,btns="")=>`<div class="top"><div style="display:flex;gap:10px;align-items:center"><button class="btn sm menu-btn" onclick="$('#side').classList.toggle('open')">☰</button><div><h2>${t}</h2><p>${s}</p></div></div><div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">${btns}<span class="prefs">${PREFS_HTML()}</span><button class="btn sm bell" title="الإشعارات" onclick="togglePanel(event)">🔔<i class="nbadge" style="${UNREAD()?"":"display:none"}">${UNREAD()}</i></button></div></div>`;
 
@@ -951,12 +952,12 @@ document.head.appendChild(css);
 
 /* ---------- Smart auto task distribution (by specialty + plan) ---------- */
 const FTAUTO=(()=>{
- const SPEC={stories:["marketing"],posts:["marketing"],reels:["photography"],design:["design"],ads:["marketing"]};
+ const SPEC={stories:["marketing"],posts:["marketing"],reels:["photography"],design:["design"],ads:["marketing"],content:["marketing","photography"]};
  const ADS_RX=/ads|ad |media|إعلان|اعلان|ميديا/i;
  const active=()=>DB.projects.filter(p=>p.status!=="completed");
  function load(uid,skip){let n=0;active().forEach(p=>{if(p.id===skip)return;TASKS.forEach(([k])=>{if(p.assign?.[k]===uid)n+=+(p.targets?.[k]||0)})});return n}
  function avg(uid){const a=[];DB.projects.forEach(p=>{const t=DB.tracker[p.id]||{};Object.entries(p.taskRatings||{}).forEach(([key,o])=>{const [d,k]=key.split("|");if(o.s&&t[d]?.by?.[k]===uid)a.push(o.s)})});return a.length?a.reduce((x,y)=>x+y,0)/a.length:0}
- function eligible(k){return DB.users.filter(u=>!u.disabled&&!["admin","supervisor"].includes(u.role)&&SPEC[k].includes(u.department))}
+ function eligible(k){return DB.users.filter(u=>!u.disabled&&u.role!=="admin")}
  function pick(k,p,pool){let c=eligible(k);if(pool.length){const inPool=c.filter(u=>pool.includes(u.id));if(inPool.length)c=inPool}
   if(k==="ads"){const ad=c.filter(u=>ADS_RX.test(u.title||""));if(ad.length)c=ad}
   if(!c.length)return null;
@@ -978,14 +979,13 @@ const _saveProject=window.saveProject;window.saveProject=function(id){
  try{_saveProject(id)}finally{window.save=_s}
  p=id?DB.projects.find(x=>x.id===id):DB.projects.find(x=>!before.has(x.id));
  if(!p||($("#modalRoot")&&$("#modalRoot").innerHTML.trim()))return;
- if(!id||oldPlan!==p.plan||!p.assign){p.assign=FTAUTO.distribute(p,pool);Object.values(p.assign).forEach(u=>{if(!p.members.includes(u))p.members.push(u)});FTAUTO.notifyAssign(p,p.assign,oldAssign);
-  const miss=TASKS.filter(([k])=>+(p.targets?.[k]||0)&&!p.assign[k]).map(([k])=>TNAME(k));if(miss.length)toast("⚠ لا يوجد موظف متخصص لـ: "+miss.join("، "))}
+ /* auto-distribution disabled: tasks are assigned manually by team leads / supervisor / admin */p.assign=p.assign||{};p.members=p.members||[];pool.forEach(u=>{if(!p.members.includes(u))p.members.push(u)});
  save();go(location.hash.slice(1));
 };
 
 /* admin/supervisor manual reassignment */
-window.reassignTask=function(pid,k,uid){if(!canEditCreds())return;const p=DB.projects.find(x=>x.id===pid);if(!p)return;const old={...(p.assign||{})};p.assign=p.assign||{};if(uid)p.assign[k]=uid;else delete p.assign[k];if(uid&&!p.members.includes(uid))p.members.push(uid);save();if(uid)FTAUTO.notifyAssign(p,{[k]:uid},old);toast("تم نقل المهمة ✓")};
-window.redistribute=function(pid){if(!canEditCreds())return;const p=DB.projects.find(x=>x.id===pid);if(!p||!confirm("إعادة توزيع مهام هذا المشروع تلقائياً؟"))return;const old={...(p.assign||{})};p.assign=FTAUTO.distribute(p,[]);Object.values(p.assign).forEach(u=>{if(!p.members.includes(u))p.members.push(u)});FTAUTO.notifyAssign(p,p.assign,old);save();toast("تمت إعادة التوزيع ✓")};
+window.reassignTask=function(pid,k,uid){if(!FTHierarchy.canManageTeam(ME))return;const p=DB.projects.find(x=>x.id===pid);if(!p)return;const old={...(p.assign||{})};p.assign=p.assign||{};if(uid)p.assign[k]=uid;else delete p.assign[k];if(uid&&!p.members.includes(uid))p.members.push(uid);save();if(uid)FTAUTO.notifyAssign(p,{[k]:uid},old);toast("تم نقل المهمة ✓")};
+window.redistribute=function(pid){if(FTHierarchy.canManageTeam(ME)&&window.FTMT)return FTMT.open(pid);return;const p=DB.projects.find(x=>x.id===pid);if(!p||!confirm("إعادة توزيع مهام هذا المشروع تلقائياً؟"))return;const old={...(p.assign||{})};p.assign=FTAUTO.distribute(p,[]);Object.values(p.assign).forEach(u=>{if(!p.members.includes(u))p.members.push(u)});FTAUTO.notifyAssign(p,p.assign,old);save();toast("تمت إعادة التوزيع ✓")};
 
 /* ownership guard: only the assignee completes their task */
 const _attach=window.attachModal;window.attachModal=function(pid,d,k){if(!FTAUTO.canDo(pid,k)){const o=FTAUTO.owner(pid,k);return toast("🔒 هذه المهمة مسندة إلى "+(DB.users.find(u=>u.id===o)?.name||"موظف آخر")+" ولا يمكنك إنجازها")}return _attach.apply(this,arguments)};
@@ -994,7 +994,7 @@ const _attach=window.attachModal;window.attachModal=function(pid,d,k){if(!FTAUTO
 const _tv2=window.trackerView;window.trackerView=function(id){_tv2(id);const p=DB.projects.find(x=>x.id===id);if(!p)return;const tr=document.querySelector(".trk tr.target");if(!tr)return;const mgr=canEditCreds();
  const cells=TASKS.map(([k])=>{const o=p.assign?.[k];if(FTTeam.canAssign(p,k)){const c=FTTeam.candidates(k);return `<td><select class="asg" onchange="reassignTask('${p.id}','${k}',this.value)"><option value="">— غير مسندة —</option>${c.map(u=>`<option value="${u.id}" ${u.id===o?"selected":""}>${esc(u.name)}</option>`).join("")}</select></td>`}
   const n=DB.users.find(u=>u.id===o)?.name;return `<td class="asg-name ${o===ME.id?"mine":""}">${o?(o===ME.id?"⭐ أنت":"🔒 "+esc(n||"")):"—"}</td>`}).join("");
- tr.insertAdjacentHTML("afterend",`<tr class="owner"><td class="d">المسؤول</td><td></td>${cells}<td style="text-align:start">${mgr?`<button class="btn sm" onclick="redistribute('${p.id}')">⚡ إعادة التوزيع</button>`:'<span style="font-size:12px;color:var(--muted)">توزيع تلقائي حسب التخصص</span>'}</td></tr>`);
+ tr.insertAdjacentHTML("afterend",`<tr class="owner"><td class="d">المسؤول</td><td></td>${cells}<td style="text-align:start">${mgr?`<button class="btn sm" onclick="FTMT.open('${p.id}')">👥 توزيع يدوي</button>`:'<span style="font-size:12px;color:var(--muted)">توزيع تلقائي حسب التخصص</span>'}</td></tr>`);
  document.querySelectorAll(".trk .cb").forEach(el=>{const m=(el.getAttribute("onclick")||"").match(/'([^']+)','([^']+)','([^']+)'/);if(m&&!FTAUTO.canDo(m[1],m[3]))el.classList.add("cb-lock")})};
 
 /* calendar: lock others' tasks */
@@ -1004,19 +1004,14 @@ const _cal2=VIEWS.calendar;VIEWS.calendar=function(a){_cal2(a);document.querySel
 const _pm=window.projectModal;window.projectModal=function(id,pl){_pm(id,pl);const l=document.querySelector("#pm")?.previousElementSibling;if(l)l.insertAdjacentHTML("beforeend",' <span class="lock">⚡ يتم توزيع المهام تلقائياً حسب التخصص والباقة — اختيار الموظفين اختياري لتحديد الفريق</span>')};
 /* ===== Team assignment policy ===== */
 (function(root){
- const SPEC={stories:['marketing'],posts:['marketing'],reels:['photography'],design:['design'],ads:['marketing']};
+ const SPEC={stories:['marketing'],posts:['marketing'],reels:['photography'],design:['design'],ads:['marketing'],content:['marketing','photography']};
  const leads={marketing_lead:['marketing','design'],photography_lead:['photography'],it_lead:['it']};
  const manager=a=>Boolean(a&&['admin','supervisor'].includes(a.role));
- function team(a,users){return (users||[]).filter(u=>!u.disabled&&u.role==='employee'&&(manager(a)||(a&&u.manager_id===a.id&&(leads[a.role]||[]).includes(u.department))))}
- function canView(a,p,users){return Boolean(a&&p&&(manager(a)||(p.members||[]).includes(a.id)||(leads[a.role]&&team(a,users).some(u=>(p.members||[]).includes(u.id)||Object.values(p.assign||{}).includes(u.id))))) }
- function canAssign(a,p,k,users){
-  if(!a||!p||!SPEC[k]||!(Number(p.targets?.[k])>0)||p.status==='completed')return false;
-  if(manager(a))return true;
-  if(!leads[a.role]||!canView(a,p,users)||!SPEC[k].some(d=>leads[a.role].includes(d)))return false;
-  const owner=p.assign?.[k],u=(users||[]).find(x=>x.id===owner);
-  return !owner||Boolean(u&&u.role==='employee'&&u.manager_id===a.id&&leads[a.role].includes(u.department));
- }
- function candidates(a,k,users){return team(a,users).filter(u=>(SPEC[k]||[]).includes(u.department))}
+ const isLead=a=>Boolean(a&&(manager(a)||leads[a.role]));
+ function team(a,users){const base=(users||[]).filter(u=>!u.disabled&&u.role!=='admin');if(!a)return[];if(manager(a))return base;const depts=leads[a.role];return depts?base.filter(u=>depts.includes(u.department)):[]}
+ function canView(a,p,users){return Boolean(a&&p&&(isLead(a)||(p.members||[]).includes(a.id)||(leads[a.role]&&team(a,users).some(u=>(p.members||[]).includes(u.id)||Object.values(p.assign||{}).includes(u.id))))) }
+ function canAssign(a,p,k,users){return Boolean(isLead(a)&&p&&p.status!=='completed')}
+ function candidates(a,k,users){return team(a,users)}
  function valid(a,p,k,id,users){return canAssign(a,p,k,users)&&Boolean(id&&candidates(a,k,users).some(u=>u.id===id))}
  root.FTTeamPolicy={team,canView,canAssign,candidates,valid,manager};
 })(typeof window==='undefined'?globalThis:window);
@@ -1086,5 +1081,231 @@ window.reassignTask=async function(pid,k,id){if(await FTTeam.commit(pid,{[k]:id}
 FTWF.attach=window.attachModal;
 const _teamHub=VIEWS.hub;VIEWS.hub=function(){_teamHub();if(FTHierarchy.canManageTeam(ME))$('#main .head')?.insertAdjacentHTML('beforeend',`<button class="btn" onclick="go('assignments')">${LANG==='en'?'Assign tasks':'توزيع المهام'}</button>`)};
 
+</script>
+<script>
+const itT=(ar,en)=>LANG==="en"?en:ar;
+/* ===== IT department workspace: IT staff see only their own IT tasks ===== */
+const FTIT=(function(){
+ const TYPES=[["website","🌐","موقع إلكتروني","Website"],["seo","🔎","SEO","SEO"],["geo","🤖","GEO","GEO"],["hosting","🗄","استضافة ودومين","Hosting & domain"],["maintenance","🛠","صيانة وتحديثات","Maintenance"],["support","🎧","دعم فني","Tech support"],["security","🔒","حماية وأمان","Security"],["other","◇","أخرى","Other"]];
+ const ST={todo:["لم تبدأ","To do","b-mut"],doing:["قيد التنفيذ","In progress","b-warn"],done:["منجزة","Done","b-ok"]};
+ const PR={high:["عالية","High","var(--bad)"],normal:["متوسطة","Normal","var(--warn,#f5b041)"],low:["منخفضة","Low","var(--ok)"]};
+ let FILTER={who:"",st:"",q:""};
+ const isIT=u=>Boolean(u&&(u.department==="it"||u.role==="it_lead"));
+ const manager=()=>Boolean(ME&&["admin","supervisor","it_lead"].includes(ME.role));
+ const who=t=>Array.isArray(t.assignees)?t.assignees:(t.assignee?[t.assignee]:[]);
+ const itOnly=()=>isIT(ME)&&!["admin","supervisor"].includes(ME.role);
+ const staff=()=>DB.users.filter(u=>u.department==="it"||u.role==="it_lead");
+ const type=k=>TYPES.find(t=>t[0]===k)||TYPES[TYPES.length-1];
+ const stateOf=(p,t)=>DB.tracker[p.id]?._it?.[t.id]||{};
+ const status=(p,t)=>stateOf(p,t).s||"todo";
+ function all(){const out=[];DB.projects.forEach(p=>(p.itTasks||[]).forEach(t=>out.push({p,t,s:status(p,t)})));return out}
+ function mine(){return all().filter(x=>manager()?true:who(x.t).includes(ME.id))}
+ const late=x=>x.s!=="done"&&x.t.due&&x.t.due<FTDaily.today();
+ const uName=ids=>ids.length?ids.map(id=>esc(DB.users.find(u=>u.id===id)?.name||"?")).join("، "):itT("غير مسندة","Unassigned");
+ function board(){
+  if(!isIT(ME)&&!manager())return VIEWS.dashboard();
+  const list=mine(),f=list.filter(x=>(!FILTER.who||who(x.t).includes(FILTER.who))&&(!FILTER.st||(FILTER.st==="late"?late(x):x.s===FILTER.st))&&(!FILTER.q||(x.t.title+" "+x.p.client).toLowerCase().includes(FILTER.q.toLowerCase())));
+  f.sort((a,b)=>(a.s==="done")-(b.s==="done")||(a.t.due||"9").localeCompare(b.t.due||"9"));
+  const c=k=>list.filter(x=>x.s===k).length,lt=list.filter(late).length,pct=list.length?Math.round(c("done")/list.length*100):0;
+  $("#main").innerHTML=header(manager()?itT("مهام قسم IT","IT department tasks"):itT("مهامي في IT","My IT tasks"),manager()?itT("أسند مهام تقنية لفريق IT وتابع تنفيذها","Assign technical tasks to the IT team and track progress"):itT("المهام التقنية المسندة إليك فقط","Only the technical tasks assigned to you"),manager()?`<button class="btn primary" onclick="FTIT.edit()">＋ ${itT("مهمة IT جديدة","New IT task")}</button>`:"")+
+  `<div class="grid stats">
+   <div class="card stat"><div class="n grad-text">${list.length}</div><div class="l">${itT("إجمالي المهام","Total tasks")}</div></div>
+   <div class="card stat"><div class="n" style="color:var(--muted)">${c("todo")}</div><div class="l">${ST.todo[LANG==="en"?1:0]}</div></div>
+   <div class="card stat"><div class="n" style="color:var(--warn,#f5b041)">${c("doing")}</div><div class="l">${ST.doing[LANG==="en"?1:0]}</div></div>
+   <div class="card stat"><div class="n" style="color:var(--ok)">${c("done")}</div><div class="l">${ST.done[LANG==="en"?1:0]} · ${pct}%</div></div>
+   <div class="card stat"><div class="n" style="color:var(--bad)">${lt}</div><div class="l">${itT("متأخرة","Overdue")}</div></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+   <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px">
+    <input id="itq" placeholder="${itT("بحث بالمهمة أو العميل","Search task or client")}" value="${esc(FILTER.q)}" style="flex:1 1 200px">
+    <select id="itst" style="flex:0 1 170px"><option value="">${itT("كل الحالات","All statuses")}</option>${Object.entries(ST).map(([k,v])=>`<option value="${k}" ${FILTER.st===k?"selected":""}>${v[LANG==="en"?1:0]}</option>`).join("")}<option value="late" ${FILTER.st==="late"?"selected":""}>${itT("متأخرة","Overdue")}</option></select>
+    ${manager()?`<select id="itwho" style="flex:0 1 190px"><option value="">${itT("كل فريق IT","Whole IT team")}</option>${staff().map(u=>`<option value="${u.id}" ${FILTER.who===u.id?"selected":""}>${esc(u.name)}</option>`).join("")}</select>`:""}
+   </div>
+   <div style="display:grid;gap:10px">${f.map(card).join("")||`<div class="empty">${list.length?itT("لا توجد مهام مطابقة","No matching tasks"):manager()?itT("لا توجد مهام IT بعد — أضف أول مهمة","No IT tasks yet — add the first one"):itT("لا توجد مهام IT مسندة إليك حالياً","No IT tasks are assigned to you right now")}</div>`}</div>
+  </div>`;
+  $("#itq").oninput=e=>{FILTER.q=e.target.value;const pos=e.target.selectionStart;board();const i=$("#itq");i.focus();i.setSelectionRange(pos,pos)};
+  $("#itst").onchange=e=>{FILTER.st=e.target.value;board()};
+  if($("#itwho"))$("#itwho").onchange=e=>{FILTER.who=e.target.value;board()};
+ }
+ function card(x){const{p,t,s}=x,ty=type(t.type),pr=PR[t.priority]||PR.normal,st=ST[s],L=LANG==="en"?1:0,info=stateOf(p,t),canAct=manager()||who(t).includes(ME.id);
+  return `<div class="card" style="padding:14px 16px;${late(x)?"border-color:var(--bad)":""};${s==="done"?"opacity:.75":""}">
+   <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap">
+    <div style="font-size:22px;line-height:1">${ty[1]}</div>
+    <div style="flex:1 1 220px;min-width:0">
+     <b style="display:block;font-size:15px;overflow-wrap:anywhere;${s==="done"?"text-decoration:line-through":""}">${esc(t.title)}</b>
+     <small style="color:var(--muted);display:block;margin-top:4px;line-height:1.8">${LANG==="en"?ty[3]:ty[2]} · ${esc(p.client)}${manager()?" · 👥 "+uName(who(t)):""}${t.due?` · 📅 <span class="en">${t.due}</span>`:""} · <span style="color:${pr[2]}">● ${pr[L]}</span>${late(x)?` · <b style="color:var(--bad)">${itT("متأخرة","Overdue")}</b>`:""}</small>
+     ${t.desc?`<p style="margin:8px 0 0;color:var(--muted);font-size:13px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere">${esc(t.desc)}</p>`:""}
+     ${info.note?`<p style="margin:8px 0 0;font-size:13px">📝 ${esc(info.note)}</p>`:""}
+    </div>
+    <span class="badge ${st[2]}">${st[L]}</span>
+   </div>
+   ${canAct?`<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:12px">
+    ${Object.entries(ST).filter(([k])=>k!==s).map(([k,v])=>`<button class="btn sm ${k==="done"?"primary":""}" onclick="FTIT.set('${p.id}','${t.id}','${k}')">${k==="done"?"✓ ":""}${v[L]}</button>`).join("")}
+    <button class="btn sm" onclick="FTIT.note('${p.id}','${t.id}')">📝 ${itT("ملاحظة","Note")}</button>
+    ${manager()?`<button class="btn sm" onclick="FTIT.edit('${p.id}','${t.id}')">✎ ${itT("تعديل","Edit")}</button><button class="btn sm" onclick="FTIT.del('${p.id}','${t.id}')">🗑</button>`:""}
+   </div>`:""}
+  </div>`}
+ function find(pid,id){const p=DB.projects.find(x=>x.id===pid);return {p,t:p?.itTasks?.find(x=>x.id===id)}}
+ function slot(pid,id){const tr=DB.tracker[pid]||(DB.tracker[pid]={}),it=tr._it||(tr._it={});return it[id]||(it[id]={})}
+ async function set(pid,id,s){const{p,t}=find(pid,id);if(!t||!(manager()||who(t).includes(ME.id)))return;const o=slot(pid,id);o.s=s;o.by=ME.id;o.at=new Date().toISOString();board();await save({tracker:[pid]});
+  const to=[...new Set(DB.users.filter(u=>u.role==="it_lead"||u.role==="admin").map(u=>u.id).concat(who(t)))].filter(x=>x!==ME.id);
+  if(to.length)notify(to,s==="done"?"done":"edit",(s==="done"?"✅ ":"🔄 ")+ME.name+" — "+t.title,p.client+" · "+ST[s][0],"it");board()}
+ async function note(pid,id){const{t}=find(pid,id);if(!t)return;const o=slot(pid,id),v=prompt(itT("ملاحظة على المهمة","Note on this task"),o.note||"");if(v===null)return;o.note=v.trim();board();await save({tracker:[pid]});board()}
+ function edit(pid,id){if(!manager())return;const cur=pid?find(pid,id):{};const t=cur.t||{title:"",type:"website",priority:"normal",due:"",assignees:[],desc:""},L=LANG==="en"?3:2;
+  if(!DB.projects.length)return toast(itT("أضف مشروعاً أولاً","Add a project first"));
+  modal(`<h3>${pid?itT("تعديل مهمة IT","Edit IT task"):itT("مهمة IT جديدة","New IT task")}</h3><form id="itf" class="form">
+   <div class="full"><label>${itT("عنوان المهمة","Task title")}</label><input id="itt" value="${esc(t.title)}" required maxlength="140"></div>
+   <div><label>${itT("نوع المهمة","Task type")}</label><select id="ity">${TYPES.map(x=>`<option value="${x[0]}" ${x[0]===t.type?"selected":""}>${x[1]} ${x[L]}</option>`).join("")}</select></div>
+   <div><label>${itT("المشروع / العميل","Project / client")}</label><select id="itp" ${pid?"disabled":""}>${DB.projects.map(p=>`<option value="${p.id}" ${p.id===pid?"selected":""}>${esc(p.client)}</option>`).join("")}</select></div>
+   <div class="full"><label>${itT("الموظفون المسؤولون (يمكن اختيار أكثر من موظف)","Assigned employees (select one or more)")}</label><div id="ita" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:6px">${staff().map(u=>`<label style="display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid var(--line-strong);border-radius:999px;cursor:pointer;font-size:13px;margin:0"><input type="checkbox" value="${u.id}" ${who(t).includes(u.id)?"checked":""} style="width:auto;margin:0">${esc(u.name)}</label>`).join("")}</div></div>
+   <div><label>${itT("الموعد النهائي","Due date")}</label><input type="date" id="itd" value="${esc(t.due)}"></div>
+   <div><label>${itT("الأولوية","Priority")}</label><select id="itr">${Object.entries(PR).map(([k,v])=>`<option value="${k}" ${k===t.priority?"selected":""}>${v[LANG==="en"?1:0]}</option>`).join("")}</select></div>
+   <div class="full"><label>${itT("التفاصيل","Details")}</label><textarea id="itx" rows="3">${esc(t.desc)}</textarea></div>
+   <div class="full actions"><button type="button" class="btn" onclick="closeModal()">${itT("إلغاء","Cancel")}</button><button class="btn primary">${itT("حفظ","Save")}</button></div>
+  </form>`);
+  if(!staff().length)$("#ita").insertAdjacentHTML("afterend",`<small style="color:var(--bad)">${itT("لا يوجد موظفون في قسم IT","No employees in the IT department")}</small>`);
+  $("#itf").onsubmit=async e=>{e.preventDefault();const p=DB.projects.find(x=>x.id===(pid||$("#itp").value));if(!p)return;const a=[...document.querySelectorAll("#ita input:checked")].map(i=>i.value);if(!a.length)return toast(itT("اختر موظفاً واحداً على الأقل","Select at least one employee"));
+   p.itTasks=p.itTasks||[];const old=who(t);const o=cur.t||{id:"it_"+uid(),created:new Date().toISOString(),by:ME.id};
+   Object.assign(o,{title:$("#itt").value.trim(),type:$("#ity").value,assignees:a,due:$("#itd").value,priority:$("#itr").value,desc:$("#itx").value.trim()});
+   delete o.assignee;if(!cur.t)p.itTasks.push(o);a.forEach(x=>{if(!p.members.includes(x))p.members.push(x)});
+   closeModal();await save();toast(itT("تم حفظ المهمة ✓","Task saved ✓"));const nw=a.filter(x=>!old.includes(x)&&x!==ME.id);if(nw.length)notify(nw,"task","🛠 "+itT("مهمة IT جديدة: ","New IT task: ")+o.title,p.client+(o.due?" · "+o.due:""),"it");board()}}
+ async function del(pid,id){if(!manager()||!confirm(itT("حذف هذه المهمة؟","Delete this task?")))return;const p=DB.projects.find(x=>x.id===pid);if(!p)return;p.itTasks=(p.itTasks||[]).filter(x=>x.id!==id);if(DB.tracker[pid]?._it)delete DB.tracker[pid]._it[id];await save();await save({tracker:[pid]});board()}
+ return {board,set,note,edit,del,isIT,itOnly,manager};
+})();
+VIEWS.it=FTIT.board;
+/* IT staff get a dedicated menu; marketing pages are hidden from them */
+const _itNav=window.buildNav;window.buildNav=function(){_itNav();if(!ME)return;const nav=$("#nav");
+ if(FTIT.itOnly()){nav.querySelectorAll('a[data-k="dashboard"],a[data-k="calendar"],a[data-k="projects"],a[data-k="plans"],a[data-k="assignments"],a[data-k="hours"],a[data-k="approvals"]').forEach(a=>a.remove())}
+ if(FTIT.isIT(ME)||FTIT.manager())nav.insertAdjacentHTML("afterbegin",`<a data-k="it" onclick="go('it')"><span>🛠</span>${FTIT.manager()?itT("مهام قسم IT","IT department tasks"):itT("مهامي في IT","My IT tasks")}</a>`);
+ const k=(location.hash.slice(1)||"dashboard").split("/")[0];nav.querySelectorAll("a").forEach(a=>a.classList.toggle("active",a.dataset.k===k||(k==="dashboard"&&FTIT.itOnly()&&a.dataset.k==="it")))};
+["dashboard","calendar","projects","plans","assignments"].forEach(k=>{const v=VIEWS[k];if(v)VIEWS[k]=function(...a){return FTIT.itOnly()?FTIT.board():v.apply(this,a)}});
+</script>
+<script>
+/* ===== Note attachments: anyone can attach any file type to a note ===== */
+(function(){
+ const SBN=()=>supabase.createClient("https://lsuxtbimioljbdpfswbm.supabase.co","sb_publishable_sI9JJuvg0DbfZixDmjtpMA_1R55fy1X",{auth:{persistSession:false},global:{headers:{"x-ft-token":TOK}}});
+ const T=(ar,en)=>LANG==="en"?en:ar,MARK="\n\n[[FTFILES]]",MAX=50*1024*1024;
+ let PICK=[];
+ function recipients(){
+  if(FTHierarchy.canManageTeam(ME)){const t=FTHierarchy.teamOf(ME,DB.users);if(t.length)return t}
+  return DB.users.filter(u=>u.id!==ME.id&&(u.role==="admin"||u.role==="supervisor"||u.id===ME.manager_id))}
+ const icon=t=>/^image\//.test(t)?"🖼":/^video\//.test(t)?"🎬":/^audio\//.test(t)?"🎵":/pdf/.test(t)?"📕":/sheet|excel|csv/.test(t)?"📊":/word|document/.test(t)?"📝":/zip|rar|7z/.test(t)?"🗜":"📎";
+ const size=b=>b>1048576?(b/1048576).toFixed(1)+" MB":Math.max(1,Math.round(b/1024))+" KB";
+ function paintPick(){const el=$("#nfList");if(!el)return;el.innerHTML=PICK.map((f,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;margin-top:6px;font-size:13px"><span>${icon(f.type)}</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(f.name)}</span><small class="en" style="color:var(--muted)">${size(f.size)}</small><button type="button" class="btn sm" onclick="FTNF.rm(${i})" aria-label="remove">✕</button></div>`).join("")}
+ function add(files){for(const f of files){if(f.size>MAX){toast(T("الملف أكبر من 50MB: ","File larger than 50MB: ")+f.name);continue}if(PICK.length>=10){toast(T("الحد 10 ملفات","Max 10 files"));break}PICK.push(f)}paintPick()}
+ window.FTNF={rm(i){PICK.splice(i,1);paintPick()}};
+ window.noteModal=function(pre){const emps=recipients();if(!emps.length)return toast(T("لا يوجد أشخاص يمكنك مراسلتهم","No one available to message"));PICK=[];
+  const lead=FTHierarchy.canManageTeam(ME);
+  modal(`<h3 style="margin-top:0">${lead?T("إرسال ملاحظة للفريق","Send a note to the team"):T("إرسال ملاحظة","Send a note")}</h3><div class="full" style="margin-bottom:12px"><label>${lead?T("إلى (أعضاء فريقك فقط)","To (your team only)"):T("إلى","To")}</label><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px" id="nto"><span class="chip" onclick="document.querySelectorAll('#nto .chip[data-id]').forEach(c=>c.classList.add('on'))">${T("الكل","Everyone")}</span>${emps.map(u=>`<span class="chip ${pre===u.id?"on":""}" data-id="${u.id}" onclick="this.classList.toggle('on')">${esc(u.name)} <small style="opacity:.6">${esc(FTHierarchy.roles[u.role]&&u.role!=="employee"?FTHierarchy.roles[u.role]:FTHierarchy.departments[u.department]||"")}</small></span>`).join("")}</div></div>
+  <div style="display:flex;gap:10px;flex-wrap:wrap"><div style="flex:1 1 140px"><label>${T("النوع","Type")}</label><select id="nkd" style="width:100%;margin:6px 0 12px">${Object.entries(NKIND).map(([k,v])=>`<option value="${k}">${v[0]} ${v[1]}</option>`).join("")}</select></div><div style="flex:1 1 140px"><label>${T("الأولوية","Priority")}</label><select id="npr" style="width:100%;margin:6px 0 12px">${Object.entries(NPRI).map(([k,v])=>`<option value="${k}">${v[1]}</option>`).join("")}</select></div></div>
+  <label>${T("العنوان","Title")}</label><input id="ntt" maxlength="150" style="width:100%;margin:6px 0 12px"><label>${T("نص الملاحظة","Note text")}</label><textarea id="ntb" rows="5" style="width:100%;margin-top:6px"></textarea>
+  <label style="display:block;margin-top:12px">${T("المرفقات (صور، فيديو، أو أي ملف)","Attachments (images, video or any file)")}</label>
+  <label id="nfDrop" for="nfIn" style="display:block;margin-top:6px;padding:18px;border:1.5px dashed var(--line-strong);border-radius:12px;text-align:center;cursor:pointer;color:var(--muted);font-size:13px;transition:border-color .2s,background .2s">📎 ${T("اضغط لاختيار الملفات أو اسحبها هنا","Click to choose files or drop them here")}<br><small>${T("حتى 10 ملفات · 50MB للملف","Up to 10 files · 50MB each")}</small></label>
+  <input type="file" id="nfIn" multiple style="display:none"><div id="nfList"></div>
+  <p id="nerr" style="color:#ff6b6b;min-height:18px"></p><div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="closeModal()">${T("إلغاء","Cancel")}</button><button class="btn primary" id="nfSend" onclick="sendNote()">${T("إرسال","Send")}</button></div>`);
+  const d=$("#nfDrop");$("#nfIn").onchange=e=>{add([...e.target.files]);e.target.value=""};
+  ["dragenter","dragover"].forEach(ev=>d.addEventListener(ev,e=>{e.preventDefault();d.style.borderColor="var(--accent,#4f8cff)"}));
+  ["dragleave","drop"].forEach(ev=>d.addEventListener(ev,e=>{e.preventDefault();d.style.borderColor=""}));
+  d.addEventListener("drop",e=>add([...e.dataTransfer.files]))};
+ window.sendNote=async function(){const to=[...document.querySelectorAll("#nto .chip.on[data-id]")].map(c=>c.dataset.id),t=$("#ntt").value.trim();let b=$("#ntb").value.trim();
+  if(!to.length)return $("#nerr").textContent=T("اختر شخصاً واحداً على الأقل","Select at least one person");
+  if(!t||(!b&&!PICK.length))return $("#nerr").textContent=T("يرجى كتابة العنوان ونص الملاحظة أو إرفاق ملف","Enter a title and a note or attach a file");
+  const btn=$("#nfSend");btn.disabled=true;
+  try{const files=[];if(PICK.length){const c=SBN();for(let i=0;i<PICK.length;i++){const f=PICK[i];btn.textContent=T("جارٍ الرفع ","Uploading ")+(i+1)+"/"+PICK.length;const path=`${ME.id}/notes/${Date.now()}-${Math.random().toString(36).slice(2,6)}-${f.name.replace(/[^\w.\-]/g,"_")}`;const {error}=await c.storage.from("ft-proofs").upload(path,f,{contentType:f.type||"application/octet-stream"});if(error)throw "up";files.push({path,name:f.name,type:f.type||"",size:f.size})}}
+   btn.textContent=T("جارٍ الإرسال…","Sending…");
+   if(files.length)b=(b||"📎")+MARK+JSON.stringify(files);
+   const r=await rpc("ft_note_send",{p_token:TOK,p_to:to,p_title:t,p_body:b,p_priority:$("#npr").value,p_kind:$("#nkd").value});if(r.error)throw r.error;
+   PICK=[];closeModal();toast(T("تم إرسال الملاحظة ✓","Note sent ✓"));loadInbox()}
+  catch(e){btn.disabled=false;btn.textContent=T("إرسال","Send");$("#nerr").textContent=e==="up"?T("تعذّر رفع الملف، حاول مجدداً","Couldn't upload the file, try again"):e==="forbidden"?T("غير مسموح لك بمراسلة هذا الشخص","You're not allowed to message this person"):T("تعذّر الإرسال","Couldn't send")}};
+ /* show attachments inside notes */
+ function split(s){const i=(s||"").indexOf("[[FTFILES]]");if(i<0)return null;let f=[];try{f=JSON.parse(s.slice(i+11))}catch(e){}return {text:s.slice(0,i).trim(),files:Array.isArray(f)?f:[]}}
+ async function render(files,el){const c=SBN();const out=await Promise.all(files.map(async f=>{const {data}=await c.storage.from("ft-proofs").createSignedUrl(f.path,3600);const u=esc(data?.signedUrl||"#"),n=esc(f.name);
+  return /^image\//.test(f.type)?`<a href="${u}" target="_blank" rel="noopener" title="${n}"><img src="${u}" alt="${n}" loading="lazy" style="width:100%;height:150px;object-fit:cover;border-radius:10px;border:1px solid var(--line)"></a>`
+  :/^video\//.test(f.type)?`<video src="${u}" controls preload="metadata" style="width:100%;max-height:220px;border-radius:10px;background:#000"></video>`
+  :/^audio\//.test(f.type)?`<audio src="${u}" controls style="width:100%"></audio>`
+  :`<a class="btn sm" href="${u}" target="_blank" rel="noopener" download="${n}" style="justify-content:flex-start;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${icon(f.type)} ${n}${f.size?` <small class="en" style="opacity:.6">${size(f.size)}</small>`:""}</a>`}));
+  el.innerHTML=out.join("")}
+ function enhance(root){(root||document).querySelectorAll(".note p").forEach(p=>{if(p.__nf)return;const s=split(p.textContent);if(!s)return;p.__nf=1;p.textContent=s.text==="📎"?"":s.text;
+  const box=document.createElement("div");box.style.cssText="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:8px;margin-top:12px";box.innerHTML=`<small style="color:var(--muted)">⏳ ${T("جارٍ تحميل المرفقات…","Loading attachments…")}</small>`;p.after(box);render(s.files,box).catch(()=>box.innerHTML="")})}
+ ["notes","community"].forEach(k=>{const v=VIEWS[k];VIEWS[k]=function(...a){const r=v.apply(this,a);enhance($("#main"));
+  if(!$("#main .top button[onclick^='noteModal']")){const bt=$("#main .top .prefs");if(bt)bt.insertAdjacentHTML("beforebegin",`<button class="btn primary" onclick="noteModal()">＋ ${T("ملاحظة جديدة","New note")}</button>`)}return r}});
+ VIEWS.mynotes=function(){return VIEWS.notes("received")};
+ const _rp=window.renderPanel;window.renderPanel=function(){_rp();document.querySelectorAll("#npanel p").forEach(p=>{const s=split(p.textContent);if(s)p.textContent=(s.text==="📎"?"":s.text+" ")+"📎 "+s.files.length})};
+})();
+</script>
+<script>
+/* ===== Multiple employees per marketing task (Stories, Posts, Reels, Design, Ads) =====
+   p.assign[k] stays the primary employee (kept for compatibility); p.assignX[k] holds the extra employees. */
+(function(){
+ const T=(ar,en)=>LANG==="en"?en:ar;
+ const list=(p,k)=>[...new Set([p?.assign?.[k],...((p?.assignX||{})[k]||[])].filter(Boolean))];
+ const nm=id=>DB.users.find(u=>u.id===id)?.name||"?";
+ const canEdit=(p,k)=>(typeof canEditCreds==="function"&&canEditCreds())||FTTeam.canAssign(p,k);
+ function pool(p,k){const c=(typeof canEditCreds==="function"&&canEditCreds())?FTAUTO.eligible(k):FTTeam.candidates(k);const ids=new Set(c.map(u=>u.id));list(p,k).forEach(id=>{if(!ids.has(id)){const u=DB.users.find(x=>x.id===id);if(u)c.push(u)}});return c}
+ FTAUTO.owners=list;
+ FTAUTO.canDo=(pid,k)=>{const l=list(DB.projects.find(x=>x.id===pid),k);return !l.length||l.includes(ME.id)||(typeof canEditCreds==="function"&&canEditCreds())};
+ function open(pid,only){const p=DB.projects.find(x=>x.id===pid);if(!p)return;const tasks=TASKS.filter(([k])=>(!only||k===only)&&canEdit(p,k));
+  if(!tasks.length)return toast(T("لا توجد مهام يمكنك توزيعها في هذا المشروع","No tasks you can assign in this project"));
+  modal(`<h3 style="margin-top:0">👥 ${T("توزيع المهام","Assign tasks")} — ${esc(p.client)}</h3><p style="color:var(--muted);font-size:13px;margin-top:-4px">${T("يمكنك اختيار أكثر من موظف لكل مهمة","You can choose more than one employee for each task")}</p>
+  <div style="display:grid;gap:14px;max-height:60vh;overflow:auto;padding-inline-end:4px">${tasks.map(([k])=>{const sel=list(p,k),c=pool(p,k);return `<div data-mk="${k}" style="border:1px solid var(--line);border-radius:12px;padding:12px"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px"><b>${esc(TNAME(k))}</b><label style="display:inline-flex;align-items:center;gap:6px;margin:0;font-size:12px;color:var(--muted)">${T("العدد المطلوب","Quantity")}<input type="number" min="0" data-qty="${k}" value="${+(p.targets?.[k]||0)}" style="width:70px;margin:0"></label></div><div style="display:flex;flex-wrap:wrap;gap:6px">${c.map(u=>`<label style="display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border:1px solid var(--line-strong);border-radius:999px;cursor:pointer;font-size:13px;margin:0"><input type="checkbox" value="${u.id}" ${sel.includes(u.id)?"checked":""} style="width:auto;margin:0">${esc(u.name)}</label>`).join("")||`<small style="color:var(--muted)">${T("لا يوجد موظفون","No employees")}</small>`}</div></div>`}).join("")}</div>
+  <div id="mtErr" style="color:var(--bad);font-size:13px;min-height:18px;margin-top:8px"></div><div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="closeModal()">${T("إلغاء","Cancel")}</button><button class="btn primary" id="mtSave">${T("حفظ التوزيع","Save assignments")}</button></div>`);
+  $("#mtSave").onclick=async()=>{const fresh={};p.targets=p.targets||{};document.querySelectorAll("[data-qty]").forEach(i=>{p.targets[i.dataset.qty]=Math.max(0,+i.value||0)});document.querySelectorAll("[data-mk]").forEach(b=>{const k=b.dataset.mk,ids=[...b.querySelectorAll("input:checked")].map(i=>i.value);const old=list(p,k);fresh[k]=ids.filter(id=>!old.includes(id));
+    p.assign=p.assign||{};p.assignX=p.assignX||{};if(!ids.length){delete p.assign[k];delete p.assignX[k];return}
+    const primary=ids.includes(p.assign[k])?p.assign[k]:ids[0];p.assign[k]=primary;const extra=ids.filter(x=>x!==primary);if(extra.length)p.assignX[k]=extra;else delete p.assignX[k];
+    p.members=p.members||[];ids.forEach(id=>{if(!p.members.includes(id))p.members.push(id)})});
+   $("#mtSave").disabled=true;closeModal();await save();
+   const by={};Object.entries(fresh).forEach(([k,ids])=>ids.forEach(u=>{if(u!==ME.id)(by[u]=by[u]||[]).push(TNAME(k)+" ("+(p.targets?.[k]||0)+")")}));
+   Object.entries(by).forEach(([u,l])=>notify([u],"task","🎯 مهام جديدة مسندة إليك: "+p.client,"الباقة "+p.plan+" — "+l.join("، "),"projects/"+p.id));
+   toast(T("تم حفظ التوزيع ✓","Assignments saved ✓"));rerender()}}
+ window.FTMT={open,list};
+ FTTeam.open=pid=>open(pid);
+ /* team assignment board: show every employee on each task */
+ const NAMES=()=>Object.fromEntries(TASKS.map(([k])=>[TNAME(k),k]));
+ const _board=VIEWS.assignments;VIEWS.assignments=FTTeam.board=function(...a){const r=_board.apply(this,a);const map=NAMES();
+  document.querySelectorAll(".ta-table tbody tr").forEach(tr=>{const b=tr.querySelector("button[onclick*='FTTeam.open']"),td=tr.children;if(!b||td.length<4)return;const pid=(b.getAttribute("onclick").match(/'([^']+)'/)||[])[1],k=map[td[2].textContent.trim()],p=DB.projects.find(x=>x.id===pid);if(!p||!k)return;
+   const l=list(p,k);td[3].innerHTML=l.length?l.map(id=>`<span class="badge b-mut" style="margin:2px">${esc(nm(id))}</span>`).join(""):T("غير مسندة","Unassigned")});
+  const ef=$("#taEmployee")?.value;if(ef)document.querySelectorAll(".ta-table tbody tr").forEach(tr=>{if(tr.children[3]&&!tr.children[3].textContent.includes(nm(ef)))tr.remove()});
+  return r};
+ /* project tracker: owner row lists all employees + manage button */
+ const _tv=window.trackerView;window.trackerView=function(id){_tv(id);const p=DB.projects.find(x=>x.id===id);const row=document.querySelector(".trk tr.owner");if(!p||!row)return;
+  TASKS.forEach(([k],i)=>{const td=row.children[i+2];if(!td)return;const l=list(p,k),edit=canEdit(p,k);
+   td.innerHTML=`<div style="display:flex;flex-direction:column;gap:3px;align-items:center">${l.map(u=>`<span class="${u===ME.id?"mine":""}" style="white-space:nowrap">${u===ME.id?"⭐ "+T("أنت","You"):esc(nm(u))}</span>`).join("")||"—"}${edit?`<button class="btn sm" style="padding:2px 8px;font-size:11px" onclick="FTMT.open('${p.id}','${k}')">👥 ${l.length?T("تعديل","Edit"):T("إسناد","Assign")}</button>`:""}</div>`});
+  document.querySelectorAll(".trk .cb").forEach(el=>{const m=(el.getAttribute("onclick")||"").match(/'([^']+)','([^']+)','([^']+)'/);if(m)el.classList.toggle("cb-lock",!FTAUTO.canDo(m[1],m[3]))})};
+ /* workload counts all assigned employees */
+ const _load=FTAUTO.load;FTAUTO.load=function(uid,skip){let n=_load(uid,skip);DB.projects.forEach(p=>{if(p.id===skip||p.status==="completed")return;TASKS.forEach(([k])=>{if((p.assignX?.[k]||[]).includes(uid))n+=+(p.targets?.[k]||0)})});return n};
+})();
+
+/* ===== Content Creator: extra task outside the plans — make sure every project has a target so it appears ===== */
+(function(){
+ const fix=()=>{try{(DB&&DB.users||[]).forEach(u=>{if(u.department==='marketing'&&/design|مصمم|ديزاين/i.test(u.title||''))u.department='design'});(DB&&DB.projects||[]).forEach(p=>{p.targets=p.targets||{};if(p.targets.content==null)p.targets.content=4})}catch(e){}};
+ const _vp=window.visibleProjects;window.visibleProjects=function(){fix();return _vp.apply(this,arguments)};
+ const _tv=window.trackerView;if(_tv)window.trackerView=function(){fix();return _tv.apply(this,arguments)};
+ const _rr=window.rerender;if(_rr)window.rerender=function(){fix();return _rr.apply(this,arguments)};
+ fix();
+})();
+
+/* ===== Team-lead "assign team tasks" button inside each project + employee "My tasks" page ===== */
+(function(){
+ const T=(ar,en)=>LANG==="en"?en:ar;
+ const owners=(p,k)=>(window.FTMT?FTMT.list(p,k):[p?.assign?.[k]].filter(Boolean));
+ const _tv=window.trackerView;window.trackerView=function(id){_tv.apply(this,arguments);const p=DB.projects.find(x=>x.id===id);if(!p||!FTHierarchy.canManageTeam(ME))return;
+  const box=document.querySelector("#main .top > div:last-child");if(box&&!box.querySelector(".ft-assign-btn"))box.insertAdjacentHTML("afterbegin",`<button class="btn primary ft-assign-btn" onclick="FTMT.open('${p.id}')">👥 ${T("توزيع مهام الفريق","Assign team tasks")}</button>`)};
+ function myItems(){const out=[];DB.projects.filter(p=>p.status!=="completed").forEach(p=>{const t=DB.tracker[p.id]||{};TASKS.forEach(([k,en,ar])=>{const g=+(p.targets?.[k]||0);if(!g||!owners(p,k).includes(ME.id))return;
+   const done=countDone(t,k),mine=Object.values(t).filter(r=>r&&r[k]&&r.by?.[k]===ME.id).length,todayDone=!!(t[today()]||{})[k];out.push({p,k,en,ar,g,done,mine,left:Math.max(0,g-done),todayDone,team:owners(p,k).length})})});
+  return out.sort((a,b)=>(a.p.deadline||"9999").localeCompare(b.p.deadline||"9999")||b.left-a.left)}
+ VIEWS.mytasks=function(){const it=myItems(),left=it.reduce((s,x)=>s+x.left,0),done=it.reduce((s,x)=>s+x.mine,0),open=it.filter(x=>x.left>0);
+  const byP={};it.forEach(x=>(byP[x.p.id]=byP[x.p.id]||[]).push(x));
+  $("#main").innerHTML=header(T("مهامي","My tasks"),T("المهام المسندة إليك وما يجب عليك إنجازه","Tasks assigned to you and what you need to deliver"))+
+  `<div class="grid stats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:18px">
+   <div class="card stat"><div class="n grad-text">${Object.keys(byP).length}</div><div class="l">${T("مشاريع مسندة","Assigned projects")}</div></div>
+   <div class="card stat"><div class="n" style="color:var(--warn,#ffc94a)">${left}</div><div class="l">${T("متبقٍ للإنجاز","Remaining")}</div></div>
+   <div class="card stat"><div class="n" style="color:var(--ok)">${done}</div><div class="l">${T("أنجزتها أنا","Done by me")}</div></div>
+   <div class="card stat"><div class="n">${open.length}</div><div class="l">${T("مهام مفتوحة","Open tasks")}</div></div></div>`+
+  (it.length?Object.values(byP).map(l=>{const p=l[0].p;return `<div class="card" style="margin-bottom:16px"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px"><div><h3 style="margin:0">${esc(p.client)}</h3><small style="color:var(--muted)"><span class="badge b-plan">${p.plan}</span> · Deadline: ${deadlineBadge(p)}</small></div><button class="btn primary sm" onclick="go('projects/${p.id}')">${T("فتح المشروع ←","Open project →")}</button></div>
+   <div class="tbl"><table><thead><tr><th>${T("المهمة","Task")}</th><th>${T("المطلوب","Target")}</th><th>${T("المنجز","Done")}</th><th>${T("المتبقي","Remaining")}</th><th>${T("التقدم","Progress")}</th><th>${T("اليوم","Today")}</th><th>${T("الفريق","Team")}</th></tr></thead><tbody>${l.map(x=>{const pr=Math.min(100,Math.round(x.done/x.g*100));return `<tr><td><b>${esc(LANG==="en"?x.en:x.ar)}</b> <small class="en" style="color:var(--muted)">${x.en}</small></td><td class="en">${x.g}</td><td class="en">${x.done} <small style="color:var(--muted)">(${T("أنت","you")}: ${x.mine})</small></td><td class="en" style="color:${x.left?"inherit":"var(--ok)"}"><b>${x.left?x.left:"✓"}</b></td><td><div style="display:flex;gap:8px;align-items:center;min-width:110px"><div class="bar" style="flex:1"><i style="width:${pr}%"></i></div><small class="en">${pr}%</small></div></td><td>${x.todayDone?`<span class="badge b-ok">${T("تم","Done")}</span>`:`<span class="badge b-mut">—</span>`}</td><td class="en">${x.team}</td></tr>`}).join("")}</tbody></table></div></div>`}).join(""):`<div class="card" style="text-align:center;color:var(--muted);padding:40px">${T("لا توجد مهام مسندة إليك حالياً","No tasks are assigned to you right now")}</div>`)};
+ const _nav=window.buildNav;window.buildNav=function(){_nav.apply(this,arguments);const n=$("#nav");if(!n||n.querySelector('[data-k="mytasks"]')||isAdmin())return;const cnt=myItems().filter(x=>x.left>0).length;
+  const a=`<a data-k="mytasks" onclick="go('mytasks')"><span>✓</span>${T("مهامي","My tasks")}${cnt?` <b class="badge b-warn" style="margin-inline-start:auto">${cnt}</b>`:""}</a>`;const first=n.querySelector('[data-k="dashboard"]');first?first.insertAdjacentHTML("afterend",a):n.insertAdjacentHTML("afterbegin",a)};
+ try{if(window.ME&&$("#nav"))buildNav()}catch(e){}
+})();
 </script>
 </html>
