@@ -245,6 +245,69 @@ html[data-theme="light"] #ft-backdrop{background:rgba(11,21,48,.3)}
 @media (hover:none){.btn:hover{transform:none}}
 @media (prefers-reduced-motion:reduce){*,*::before,*::after{transition-duration:.01ms!important;animation-duration:.01ms!important;scroll-behavior:auto!important}}
 </style>
+<style id="ft-mobile-pro">
+/* ===== Mobile Pro layer ===== */
+*,*::before,*::after{box-sizing:border-box}
+html,body{max-width:100%}
+input,select,textarea,button{max-width:100%;font-family:inherit}
+.card{min-width:0;overflow-wrap:anywhere}
+.btn{min-height:40px;justify-content:center;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.btn:active{transform:scale(.97)}
+.btn.sm{min-height:34px}
+@media (max-width:900px){
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .stat .n{font-size:24px}
+ .card{padding:16px}
+ .modal .card{width:100%}
+ .toolbar input,.toolbar select{min-width:0}
+}
+@media (max-width:640px){
+ body{font-size:14px}
+ .card{padding:14px;border-radius:14px}
+ .grid{gap:12px}
+ .stats{gap:10px}
+ .stat .n{font-size:22px}.stat .l{font-size:12px}
+ .top{gap:8px}
+ .top>div:last-child{display:flex;flex-wrap:wrap;gap:8px}
+ .top>div:last-child .btn{flex:1 1 auto}
+ .btn{min-height:44px;padding:10px 14px;border-radius:12px;font-size:14px}
+ .btn.sm{min-height:38px;padding:7px 12px;font-size:13px}
+ .toolbar{gap:8px}
+ .toolbar>*{flex:1 1 100%!important;width:100%}
+ input,select,textarea{min-height:44px}
+ input[type=checkbox],input[type=radio]{min-height:auto}
+ .form{grid-template-columns:1fr!important}
+ .modal{padding:0;align-items:end}
+ .modal .card{max-height:92dvh;border-radius:20px 20px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));animation:ftSheet .3s cubic-bezier(.22,1,.36,1)}
+ .modal .actions{position:sticky;bottom:calc(-18px - env(safe-area-inset-bottom));background:var(--bg-2);padding:12px 0 calc(4px + env(safe-area-inset-bottom));margin-bottom:0;z-index:2}
+ /* tables -> cards */
+ .tbl.ft-cards{overflow:visible}
+ table.ft-cards thead{display:none}
+ table.ft-cards,table.ft-cards tbody{display:block;width:100%}
+ table.ft-cards tr{display:block;margin:0 0 10px;padding:10px 12px;border:1px solid var(--line);border-radius:14px;background:var(--surface-1)}
+ table.ft-cards td{display:flex;justify-content:space-between;align-items:center;gap:12px;text-align:end;border:0;padding:7px 0;white-space:normal;overflow-wrap:anywhere;font-size:13.5px}
+ table.ft-cards td+td{border-top:1px dashed var(--line)}
+ table.ft-cards td[data-label]:not([data-label=""])::before{content:attr(data-label);color:var(--muted);font-size:12px;text-align:start;flex:none;max-width:45%}
+ table.ft-cards td>*:only-child{margin-inline-start:auto}
+ table.ft-cards td:has(.btn){flex-wrap:wrap;justify-content:flex-end}
+ table.ft-cards td[colspan]{justify-content:center;text-align:center}
+ table.ft-cards td[colspan]::before{display:none}
+ /* wide tables that stay scrollable */
+ .tbl:not(.ft-cards){margin-inline:-14px;padding-inline:14px;scroll-snap-type:x proximity}
+ .tbl:not(.ft-cards) th,.tbl:not(.ft-cards) td{padding:9px 8px;font-size:12.5px;white-space:nowrap}
+ .tbl:not(.ft-cards) th:first-child,.tbl:not(.ft-cards) td:first-child{position:sticky;inset-inline-start:0;background:var(--bg-2);z-index:1}
+ .cal-day.btn{min-height:0}
+ #npanel{max-height:85dvh}
+}
+@media (max-width:380px){
+ .stats{grid-template-columns:1fr 1fr}
+ .stat .n{font-size:19px}
+ main{padding-inline:10px}
+ .top{margin-inline:-10px;padding-inline:10px}
+ .top h2{font-size:16px}
+}
+@keyframes ftSheet{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+</style>
 </head>
 <body>
 
@@ -761,6 +824,30 @@ if(TOK)refresh(true).then(()=>{if(TOK&&ME)start()});
  // wrap bare wide tables for horizontal scroll
  function wrapTables(){document.querySelectorAll('main table').forEach(function(t){if(!t.closest('.tbl')&&!t.parentElement.classList.contains('ft-tw')){var w=document.createElement('div');w.className='tbl ft-tw';t.parentNode.insertBefore(w,t);w.appendChild(t)}})}
  var m=document.getElementById('main');if(m)new MutationObserver(function(){clearTimeout(m._t);m._t=setTimeout(wrapTables,30)}).observe(m,{childList:true,subtree:true});
+})();
+</script>
+<script id="ft-mobile-pro-js">
+(function(){
+ var MQ=window.matchMedia("(max-width:640px)");
+ function prep(t){
+  if(t.classList.contains("trk"))return; // wide daily tracker stays scrollable
+  var head=t.tHead;if(!head||!head.rows.length)return;
+  var hs=[].map.call(head.rows[0].cells,function(c){return c.textContent.trim()});
+  if(hs.length>9)return;
+  [].forEach.call(t.tBodies,function(b){[].forEach.call(b.rows,function(r){
+   var i=0;[].forEach.call(r.cells,function(c){if(!c.hasAttribute("data-label"))c.setAttribute("data-label",hs[i]||"");i+=c.colSpan||1});
+  })});
+  t.classList.add("ft-cards");
+  var p=t.closest(".tbl");if(p)p.classList.add("ft-cards");
+ }
+ function run(){if(!MQ.matches){document.querySelectorAll(".ft-cards").forEach(function(e){e.classList.remove("ft-cards")});return}
+  document.querySelectorAll("main table, .modal table").forEach(prep)}
+ var q=0;function sched(){if(q)return;q=requestAnimationFrame(function(){q=0;run()})}
+ new MutationObserver(sched).observe(document.documentElement,{childList:true,subtree:true});
+ (MQ.addEventListener?MQ.addEventListener("change",sched):MQ.addListener(sched));
+ document.addEventListener("DOMContentLoaded",sched);sched();
+ // close side menu after choosing a page on mobile
+ document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("#nav a");if(a&&window.innerWidth<=900){var s=document.getElementById("side");if(s&&s.classList.contains("open")){setTimeout(function(){s.classList.remove("open");var b=document.getElementById("ft-backdrop");if(b)b.classList.remove("show");document.body.classList.remove("ft-lock")},60)}}},true);
 })();
 </script>
 </body>
