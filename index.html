@@ -2,7 +2,8 @@
 <html lang="ar" dir="rtl" data-theme="dark">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#05070F">
 <script>(function(){try{var t=localStorage.getItem("ft-theme")||"dark";document.documentElement.dataset.theme=t;var l=localStorage.getItem("ft-lang");if(l==="en"){document.documentElement.lang="en";document.documentElement.dir="ltr"}}catch(e){}})();</script>
 <title>Fast Techno System</title>
@@ -338,6 +339,34 @@ img,video,canvas,svg,iframe{max-width:100%}
 @media (min-width:641px) and (max-width:1200px){
  .grid:has(.tbl){grid-template-columns:minmax(0,1fr)!important}
 }
+</style>
+<style id="ft-mobile-ux">
+html{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{-webkit-tap-highlight-color:transparent;overscroll-behavior-y:none}
+#ft-tabbar{display:none}
+@media (max-width:900px){
+ input,select,textarea{font-size:16px!important}
+ html{scroll-behavior:smooth}
+ main,#main{padding-bottom:calc(84px + env(safe-area-inset-bottom))!important}
+ .top{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+ .top h2{font-size:18px;line-height:1.3}
+ .top p{font-size:12px;opacity:.8;margin-top:2px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+ .card{border-radius:16px;transition:transform .15s}
+ .card h3{font-size:16px}
+ .stat{border-radius:14px}
+ #nav a{min-height:48px;font-size:15px;border-radius:12px}
+ aside{width:min(84vw,300px)!important;box-shadow:0 0 40px rgba(0,0,0,.5);overflow-y:auto;-webkit-overflow-scrolling:touch}
+ #ft-tabbar{display:flex;position:fixed;left:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:35;height:62px;padding:6px;gap:4px;border-radius:20px;background:var(--bg-2);border:1px solid var(--line-strong);box-shadow:0 10px 30px rgba(0,0,0,.45);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+ #ft-tabbar button{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:0;border-radius:14px;background:transparent;color:var(--muted);font:inherit;font-size:10.5px;font-weight:600;cursor:pointer;transition:background .2s,color .2s,transform .15s;touch-action:manipulation}
+ #ft-tabbar button .i{font-size:19px;line-height:1}
+ #ft-tabbar button span.t{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2px}
+ #ft-tabbar button.on{color:var(--white);background:linear-gradient(120deg,rgba(95,224,255,.16),rgba(58,123,255,.22))}
+ #ft-tabbar button:active{transform:scale(.92)}
+ body.ft-lock #ft-tabbar,body:has(.modal.show) #ft-tabbar,body:has(.modal[style*="flex"]) #ft-tabbar{opacity:0;pointer-events:none}
+ #live{bottom:calc(82px + env(safe-area-inset-bottom))!important;left:12px!important;font-size:11px!important;padding:4px 10px!important;opacity:.85}
+ .toast{bottom:calc(84px + env(safe-area-inset-bottom))!important}
+}
+@media print{#ft-tabbar{display:none!important}}
 </style>
 </head>
 <body>
@@ -879,6 +908,32 @@ if(TOK)refresh(true).then(()=>{if(TOK&&ME)start()});
  document.addEventListener("DOMContentLoaded",sched);sched();
  // close side menu after choosing a page on mobile
  document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("#nav a");if(a&&window.innerWidth<=900){var s=document.getElementById("side");if(s&&s.classList.contains("open")){setTimeout(function(){s.classList.remove("open");var b=document.getElementById("ft-backdrop");if(b)b.classList.remove("show");document.body.classList.remove("ft-lock")},60)}}},true);
+})();
+</script>
+<div id="ft-tabbar" role="navigation" aria-label="Quick navigation"></div>
+<script>
+(function(){
+ /* block all zoom gestures (iOS ignores user-scalable) */
+ ['gesturestart','gesturechange','gestureend'].forEach(function(e){document.addEventListener(e,function(ev){ev.preventDefault()},{passive:false})});
+ document.addEventListener('touchmove',function(e){if(e.touches.length>1||(e.scale&&e.scale!==1))e.preventDefault()},{passive:false});
+ var lt=0;document.addEventListener('touchend',function(e){var n=Date.now();if(n-lt<300&&!e.target.closest('input,textarea,select'))e.preventDefault();lt=n},{passive:false});
+ document.addEventListener('wheel',function(e){if(e.ctrlKey)e.preventDefault()},{passive:false});
+ document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&['+','-','=','0'].indexOf(e.key)>-1)e.preventDefault()});
+ /* bottom tab bar mirrors the main menu */
+ var bar=document.getElementById('ft-tabbar');
+ function build(){var nav=document.getElementById('nav');if(!nav)return;var links=[].slice.call(nav.querySelectorAll('a[data-k]'));
+  if(!links.length||!document.getElementById('app')||getComputedStyle(document.getElementById('app')).display==='none'){bar.style.display='none';return}bar.style.display='';
+  var pick=links.slice(0,4),h='';
+  pick.forEach(function(a){var sp=a.querySelector('span'),ic=sp?sp.textContent.trim():'•',lb=a.textContent.trim().slice(sp?sp.textContent.length:0).trim();
+   h+='<button data-k="'+a.dataset.k+'" class="'+(a.classList.contains('active')?'on':'')+'"><span class="i">'+ic+'</span><span class="t">'+lb+'</span></button>'});
+  var more=document.documentElement.dir==='ltr'?'More':'المزيد',act=links.some(function(a,i){return i>=4&&a.classList.contains('active')});
+  h+='<button data-more="1" class="'+(act?'on':'')+'"><span class="i">☰</span><span class="t">'+more+'</span></button>';
+  if(bar.innerHTML!==h)bar.innerHTML=h}
+ bar.addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;if(navigator.vibrate)try{navigator.vibrate(8)}catch(x){}
+  if(b.dataset.more){var t=document.querySelector('.menu-btn');if(t)t.click();else document.getElementById('side').classList.toggle('open');return}
+  var a=document.querySelector('#nav a[data-k="'+b.dataset.k+'"]');if(a)a.click();else if(window.go)go(b.dataset.k)});
+ new MutationObserver(build).observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class','style']});
+ window.addEventListener('hashchange',build);build();
 })();
 </script>
 </body>
