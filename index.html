@@ -1323,7 +1323,10 @@ const FTIT=(function(){
  async function set(pid,id,s){const{p,t}=find(pid,id);if(!t||!(manager()||who(t).includes(ME.id)))return;const o=slot(pid,id);o.s=s;o.by=ME.id;o.at=new Date().toISOString();board();await save({tracker:[pid]});
   const to=[...new Set(DB.users.filter(u=>u.role==="it_lead"||u.role==="admin").map(u=>u.id).concat(who(t)))].filter(x=>x!==ME.id);
   if(to.length)notify(to,s==="done"?"done":"edit",(s==="done"?"✅ ":"🔄 ")+ME.name+" — "+t.title,p.client+" · "+ST[s][0],"it");board()}
- async function note(pid,id){const{t}=find(pid,id);if(!t)return;const o=slot(pid,id),v=prompt(itT("ملاحظة على المهمة","Note on this task"),o.note||"");if(v===null)return;o.note=v.trim();board();await save({tracker:[pid]});board()}
+ async function note(pid,id){const{p,t}=find(pid,id);if(!t)return;const o=slot(pid,id);
+  const ups=DB.users.filter(u=>u.id!==ME.id&&(u.role==="it_lead"||u.role==="admin"||u.role==="supervisor")).map(u=>u.id);
+  const pre=manager()?who(t).filter(x=>x!==ME.id):DB.users.filter(u=>u.id!==ME.id&&(u.role==="it_lead"||u.id===ME.manager_id)).map(u=>u.id);
+  noteModal(pre.length?pre:ups,{kind:"task",title:"🛠 "+t.title+" — "+p.client,body:o.note||"",onSent:async b=>{o.note=String(b||"").split("[[FTFILES]]")[0].trim();o.noteBy=ME.id;o.noteAt=new Date().toISOString();await save({tracker:[pid]});board()}})}
  function edit(pid,id){if(!manager())return;const cur=pid?find(pid,id):{};const t=cur.t||{title:"",type:"website",priority:"normal",due:"",assignees:[],desc:""},L=LANG==="en"?3:2;
   if(!DB.projects.length)return toast(itT("أضف مشروعاً أولاً","Add a project first"));
   modal(`<h3>${pid?itT("تعديل مهمة IT","Edit IT task"):itT("مهمة IT جديدة","New IT task")}</h3><form id="itf" class="form">
@@ -1359,23 +1362,27 @@ const _itNav=window.buildNav;window.buildNav=function(){_itNav();if(!ME)return;c
  const SBN=()=>supabase.createClient("https://lsuxtbimioljbdpfswbm.supabase.co","sb_publishable_sI9JJuvg0DbfZixDmjtpMA_1R55fy1X",{auth:{persistSession:false},global:{headers:{"x-ft-token":TOK}}});
  const T=(ar,en)=>LANG==="en"?en:ar,MARK="\n\n[[FTFILES]]",MAX=50*1024*1024;
  let PICK=[];
- function recipients(){
-  if(FTHierarchy.canManageTeam(ME)){const t=FTHierarchy.teamOf(ME,DB.users);if(t.length)return t}
-  return DB.users.filter(u=>u.id!==ME.id&&(u.role==="admin"||u.role==="supervisor"||u.id===ME.manager_id))}
+ const LEADOF={it:"it_lead",photography:"photography_lead",marketing:"marketing_lead",design:"marketing_lead"};
+ function upward(){const dl=LEADOF[ME.department];return DB.users.filter(u=>u.id!==ME.id&&!u.disabled&&(u.role==="admin"||u.role==="supervisor"||u.id===ME.manager_id||(ME.role==="employee"&&dl&&u.role===dl)))}
+ function recipients(){const team=FTHierarchy.canManageTeam(ME)?FTHierarchy.teamOf(ME,DB.users):[];const seen=new Set(),out=[];
+  upward().concat(team).forEach(u=>{if(!seen.has(u.id)){seen.add(u.id);out.push(u)}});
+  const rk={admin:0,supervisor:1,it_lead:2,marketing_lead:2,photography_lead:2,employee:3};return out.sort((a,b)=>(rk[a.role]??9)-(rk[b.role]??9))}
+ let CTX=null;
  const icon=t=>/^image\//.test(t)?"🖼":/^video\//.test(t)?"🎬":/^audio\//.test(t)?"🎵":/pdf/.test(t)?"📕":/sheet|excel|csv/.test(t)?"📊":/word|document/.test(t)?"📝":/zip|rar|7z/.test(t)?"🗜":"📎";
  const size=b=>b>1048576?(b/1048576).toFixed(1)+" MB":Math.max(1,Math.round(b/1024))+" KB";
  function paintPick(){const el=$("#nfList");if(!el)return;el.innerHTML=PICK.map((f,i)=>`<div style="display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;margin-top:6px;font-size:13px"><span>${icon(f.type)}</span><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(f.name)}</span><small class="en" style="color:var(--muted)">${size(f.size)}</small><button type="button" class="btn sm" onclick="FTNF.rm(${i})" aria-label="remove">✕</button></div>`).join("")}
  function add(files){for(const f of files){if(f.size>MAX){toast(T("الملف أكبر من 50MB: ","File larger than 50MB: ")+f.name);continue}if(PICK.length>=10){toast(T("الحد 10 ملفات","Max 10 files"));break}PICK.push(f)}paintPick()}
  window.FTNF={rm(i){PICK.splice(i,1);paintPick()}};
- window.noteModal=function(pre){const emps=recipients();if(!emps.length)return toast(T("لا يوجد أشخاص يمكنك مراسلتهم","No one available to message"));PICK=[];
+ window.noteModal=function(pre,opt){opt=opt||{};CTX=opt.onSent||null;const PRE=Array.isArray(pre)?pre:pre?[pre]:[];const emps=recipients();if(!emps.length)return toast(T("لا يوجد أشخاص يمكنك مراسلتهم","No one available to message"));PICK=[];
   const lead=FTHierarchy.canManageTeam(ME);
-  modal(`<h3 style="margin-top:0">${lead?T("إرسال ملاحظة للفريق","Send a note to the team"):T("إرسال ملاحظة","Send a note")}</h3><div class="full" style="margin-bottom:12px"><label>${lead?T("إلى (أعضاء فريقك فقط)","To (your team only)"):T("إلى","To")}</label><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px" id="nto"><span class="chip" onclick="document.querySelectorAll('#nto .chip[data-id]').forEach(c=>c.classList.add('on'))">${T("الكل","Everyone")}</span>${emps.map(u=>`<span class="chip ${pre===u.id?"on":""}" data-id="${u.id}" onclick="this.classList.toggle('on')">${esc(u.name)} <small style="opacity:.6">${esc(FTHierarchy.roles[u.role]&&u.role!=="employee"?FTHierarchy.roles[u.role]:FTHierarchy.departments[u.department]||"")}</small></span>`).join("")}</div></div>
+  modal(`<h3 style="margin-top:0">${lead?T("إرسال ملاحظة للفريق","Send a note to the team"):T("إرسال ملاحظة","Send a note")}</h3><div class="full" style="margin-bottom:12px"><label>${lead?T("إلى (فريقك أو الإدارة)","To (your team or management)"):T("إلى (مسؤول الفريق أو المسؤول أو المدير)","To (team lead, supervisor or manager)")}</label><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px" id="nto"><span class="chip" onclick="document.querySelectorAll('#nto .chip[data-id]').forEach(c=>c.classList.add('on'))">${T("الكل","Everyone")}</span>${emps.map(u=>`<span class="chip ${PRE.includes(u.id)?"on":""}" data-id="${u.id}" onclick="this.classList.toggle('on')">${esc(u.name)} <small style="opacity:.6">${esc(FTHierarchy.roles[u.role]&&u.role!=="employee"?FTHierarchy.roles[u.role]:FTHierarchy.departments[u.department]||"")}</small></span>`).join("")}</div></div>
   <div style="display:flex;gap:10px;flex-wrap:wrap"><div style="flex:1 1 140px"><label>${T("النوع","Type")}</label><select id="nkd" style="width:100%;margin:6px 0 12px">${Object.entries(NKIND).map(([k,v])=>`<option value="${k}">${v[0]} ${v[1]}</option>`).join("")}</select></div><div style="flex:1 1 140px"><label>${T("الأولوية","Priority")}</label><select id="npr" style="width:100%;margin:6px 0 12px">${Object.entries(NPRI).map(([k,v])=>`<option value="${k}">${v[1]}</option>`).join("")}</select></div></div>
   <label>${T("العنوان","Title")}</label><input id="ntt" maxlength="150" style="width:100%;margin:6px 0 12px"><label>${T("نص الملاحظة","Note text")}</label><textarea id="ntb" rows="5" style="width:100%;margin-top:6px"></textarea>
   <label style="display:block;margin-top:12px">${T("المرفقات (صور، فيديو، أو أي ملف)","Attachments (images, video or any file)")}</label>
   <label id="nfDrop" for="nfIn" style="display:block;margin-top:6px;padding:18px;border:1.5px dashed var(--line-strong);border-radius:12px;text-align:center;cursor:pointer;color:var(--muted);font-size:13px;transition:border-color .2s,background .2s">📎 ${T("اضغط لاختيار الملفات أو اسحبها هنا","Click to choose files or drop them here")}<br><small>${T("حتى 10 ملفات · 50MB للملف","Up to 10 files · 50MB each")}</small></label>
   <input type="file" id="nfIn" multiple style="display:none"><div id="nfList"></div>
   <p id="nerr" style="color:#ff6b6b;min-height:18px"></p><div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="closeModal()">${T("إلغاء","Cancel")}</button><button class="btn primary" id="nfSend" onclick="sendNote()">${T("إرسال","Send")}</button></div>`);
+  if(opt.title)$("#ntt").value=opt.title;if(opt.body)$("#ntb").value=opt.body;if(opt.kind&&$("#nkd").querySelector(`option[value="${opt.kind}"]`))$("#nkd").value=opt.kind;
   const d=$("#nfDrop");$("#nfIn").onchange=e=>{add([...e.target.files]);e.target.value=""};
   ["dragenter","dragover"].forEach(ev=>d.addEventListener(ev,e=>{e.preventDefault();d.style.borderColor="var(--accent,#4f8cff)"}));
   ["dragleave","drop"].forEach(ev=>d.addEventListener(ev,e=>{e.preventDefault();d.style.borderColor=""}));
@@ -1387,7 +1394,12 @@ const _itNav=window.buildNav;window.buildNav=function(){_itNav();if(!ME)return;c
   try{const files=[];if(PICK.length){const c=SBN();for(let i=0;i<PICK.length;i++){const f=PICK[i];btn.textContent=T("جارٍ الرفع ","Uploading ")+(i+1)+"/"+PICK.length;const path=`${ME.id}/notes/${Date.now()}-${Math.random().toString(36).slice(2,6)}-${f.name.replace(/[^\w.\-]/g,"_")}`;const {error}=await c.storage.from("ft-proofs").upload(path,f,{contentType:f.type||"application/octet-stream"});if(error)throw "up";files.push({path,name:f.name,type:f.type||"",size:f.size})}}
    btn.textContent=T("جارٍ الإرسال…","Sending…");
    if(files.length)b=(b||"📎")+MARK+JSON.stringify(files);
-   const r=await rpc("ft_note_send",{p_token:TOK,p_to:to,p_title:t,p_body:b,p_priority:$("#npr").value,p_kind:$("#nkd").value});if(r.error)throw r.error;
+   let ok=false;try{const r=await rpc("ft_note_send",{p_token:TOK,p_to:to,p_title:t,p_body:b,p_priority:$("#npr").value,p_kind:$("#nkd").value});ok=!(r&&r.error)}catch(e){ok=false}
+   if(!ok){/* the shared note channel only allows top-down notes for this account: deliver straight to each recipient's inbox instead */
+    const pr=$("#npr").value,tag=pr==="urgent"?"🚨 ":pr==="high"?"⚠️ ":"";
+    await rpc("ft_notify",{p_token:TOK,p_to:to,p_kind:"note",p_title:tag+"✉ "+ME.name+": "+t,p_body:b,p_link:FTHierarchy.canManageTeam(ME)?"notes":"mynotes"});
+    try{const box=JSON.parse(localStorage.getItem("ft_sent_"+ME.id)||"[]");box.unshift({to,title:t,body:b,at:new Date().toISOString()});localStorage.setItem("ft_sent_"+ME.id,JSON.stringify(box.slice(0,50)))}catch(e){}}
+   const cb=CTX;CTX=null;if(cb)try{await cb(b)}catch(e){}
    PICK=[];closeModal();toast(T("تم إرسال الملاحظة ✓","Note sent ✓"));loadInbox()}
   catch(e){btn.disabled=false;btn.textContent=T("إرسال","Send");$("#nerr").textContent=e==="up"?T("تعذّر رفع الملف، حاول مجدداً","Couldn't upload the file, try again"):e==="forbidden"?T("غير مسموح لك بمراسلة هذا الشخص","You're not allowed to message this person"):T("تعذّر الإرسال","Couldn't send")}};
  /* show attachments inside notes */
@@ -1403,6 +1415,14 @@ const _itNav=window.buildNav;window.buildNav=function(){_itNav();if(!ME)return;c
  ["notes","community"].forEach(k=>{const v=VIEWS[k];VIEWS[k]=function(...a){const r=v.apply(this,a);enhance($("#main"));
   if(!$("#main .top button[onclick^='noteModal']")){const bt=$("#main .top .prefs");if(bt)bt.insertAdjacentHTML("beforebegin",`<button class="btn primary" onclick="noteModal()">＋ ${T("ملاحظة جديدة","New note")}</button>`)}return r}});
  VIEWS.mynotes=function(){return VIEWS.notes("received")};
+ const _nv=VIEWS.notes;VIEWS.notes=function(...a){const r=_nv.apply(this,a);let box=[];try{box=JSON.parse(localStorage.getItem("ft_sent_"+ME.id)||"[]")}catch(e){}
+  const inbox=(INBOX.notifs||[]).filter(n=>n.kind==="note"&&n.title&&n.title.includes("✉ "));
+  const card=(h,b,meta)=>`<div class="card note" style="margin-bottom:12px"><b style="font-size:15px">${esc(h)}</b><div style="color:var(--muted);font-size:12px;margin-top:6px">${meta}</div><p style="white-space:pre-wrap;line-height:1.9;margin:12px 0 0">${esc(b)}</p></div>`;
+  let html="";
+  if(inbox.length)html+=`<h3 style="margin:22px 0 10px">📥 ${T("ملاحظات واردة من الموظفين","Notes received from employees")}</h3>`+inbox.map(n=>card(n.title,n.body||"",`<span class="en">${ago(n.created_at)}</span>`)).join("");
+  if(box.length)html+=`<h3 style="margin:22px 0 10px">📤 ${T("ملاحظات أرسلتها","Notes I sent")}</h3>`+box.map(n=>card(n.title,n.body,T("إلى: ","To: ")+n.to.map(i=>`<span class="badge b-mut">${esc(uname(i))}</span>`).join(" ")+` · <span class="en">${ago(n.at)}</span>`)).join("");
+  if(html){$("#main").insertAdjacentHTML("beforeend",html);enhance($("#main"))}
+  if(!$("#main .top button[onclick^='noteModal']")){const bt=$("#main .top .prefs");if(bt)bt.insertAdjacentHTML("beforebegin",`<button class="btn primary" onclick="noteModal()">＋ ${T("ملاحظة جديدة","New note")}</button>`)}return r};
  const _rp=window.renderPanel;window.renderPanel=function(){_rp();document.querySelectorAll("#npanel p").forEach(p=>{const s=split(p.textContent);if(s)p.textContent=(s.text==="📎"?"":s.text+" ")+"📎 "+s.files.length})};
 })();
 </script>
