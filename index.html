@@ -1422,16 +1422,55 @@ const _itNav=window.buildNav;window.buildNav=function(){_itNav();if(!ME)return;c
   modal(`<h3 style="margin-top:0">👥 ${T("توزيع المهام","Assign tasks")} — ${esc(p.client)}</h3><p style="color:var(--muted);font-size:13px;margin-top:-4px">${T("يمكنك اختيار أكثر من موظف لكل مهمة","You can choose more than one employee for each task")}</p>
   <div style="display:grid;gap:14px;max-height:60vh;overflow:auto;padding-inline-end:4px">${tasks.map(([k])=>{const sel=list(p,k),c=pool(p,k);return `<div data-mk="${k}" style="border:1px solid var(--line);border-radius:12px;padding:12px"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:8px"><b>${esc(TNAME(k))}</b><label style="display:inline-flex;align-items:center;gap:6px;margin:0;font-size:12px;color:var(--muted)">${T("العدد المطلوب","Quantity")}<input type="number" min="0" data-qty="${k}" value="${+(p.targets?.[k]||0)}" style="width:70px;margin:0"></label></div><div style="display:flex;flex-wrap:wrap;gap:6px">${c.map(u=>`<label style="display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border:1px solid var(--line-strong);border-radius:999px;cursor:pointer;font-size:13px;margin:0"><input type="checkbox" value="${u.id}" ${sel.includes(u.id)?"checked":""} style="width:auto;margin:0">${esc(u.name)}</label>`).join("")||`<small style="color:var(--muted)">${T("لا يوجد موظفون","No employees")}</small>`}</div></div>`}).join("")}</div>
   <div id="mtErr" style="color:var(--bad);font-size:13px;min-height:18px;margin-top:8px"></div><div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="closeModal()">${T("إلغاء","Cancel")}</button><button class="btn primary" id="mtSave">${T("حفظ التوزيع","Save assignments")}</button></div>`);
-  $("#mtSave").onclick=async()=>{const fresh={};p.targets=p.targets||{};document.querySelectorAll("[data-qty]").forEach(i=>{p.targets[i.dataset.qty]=Math.max(0,+i.value||0)});document.querySelectorAll("[data-mk]").forEach(b=>{const k=b.dataset.mk,ids=[...b.querySelectorAll("input:checked")].map(i=>i.value);const old=list(p,k);fresh[k]=ids.filter(id=>!old.includes(id));
-    p.assign=p.assign||{};p.assignX=p.assignX||{};if(!ids.length){delete p.assign[k];delete p.assignX[k];return}
-    const primary=ids.includes(p.assign[k])?p.assign[k]:ids[0];p.assign[k]=primary;const extra=ids.filter(x=>x!==primary);if(extra.length)p.assignX[k]=extra;else delete p.assignX[k];
-    p.members=p.members||[];ids.forEach(id=>{if(!p.members.includes(id))p.members.push(id)})});
-   $("#mtSave").disabled=true;closeModal();await save();
-   const by={};Object.entries(fresh).forEach(([k,ids])=>ids.forEach(u=>{if(u!==ME.id)(by[u]=by[u]||[]).push(TNAME(k)+" ("+(p.targets?.[k]||0)+")")}));
-   Object.entries(by).forEach(([u,l])=>notify([u],"task","🎯 مهام جديدة مسندة إليك: "+p.client,"الباقة "+p.plan+" — "+l.join("، "),"projects/"+p.id));
-   toast(T("تم حفظ التوزيع ✓","Assignments saved ✓"));rerender()}}
- window.FTMT={open,list};
+  $("#mtSave").onclick=async()=>{
+   /* FIX: read selections from the form first (never mutate the stale "p" captured when the modal opened) */
+   const sel={},qty={};
+   document.querySelectorAll("[data-qty]").forEach(i=>{qty[i.dataset.qty]=Math.max(0,+i.value||0)});
+   document.querySelectorAll("[data-mk]").forEach(b=>{sel[b.dataset.mk]=[...b.querySelectorAll("input:checked")].map(i=>i.value)});
+   const btn=$("#mtSave");btn.disabled=true;btn.textContent=T("جارٍ الحفظ…","Saving…");
+   const r=await FTMT.commit(pid,sel,qty);
+   if(r.ok){closeModal();toast(T("تم حفظ التوزيع ✓","Assignments saved ✓"));rerender()}
+   else if($("#mtSave")){btn.disabled=false;btn.textContent=T("حفظ التوزيع","Save assignments");$("#mtErr").textContent=r.msg}
+  }}
+ /* FIX: robust save — fetch latest data, apply changes to the fresh project object, save, then verify on the server copy */
+ let busySave=false;
+ async function commit(pid,sel,qty){
+  if(busySave)return{ok:false,msg:T("جارٍ حفظ عملية سابقة…","A previous save is in progress…")};
+  if(!TOK)return{ok:false,msg:T("انتهت الجلسة، سجّل الدخول مجدداً","Session expired, sign in again")};
+  busySave=true;
+  try{
+   const latest=await rpc("ft_get",{p_token:TOK});if(!apply(latest))throw new Error("read");
+   const p=DB.projects.find(x=>x.id===pid);if(!p)throw new Error("gone");
+   const keys=Object.keys(sel);
+   if(keys.some(k=>!canEdit(p,k)))throw new Error("perm");
+   const allowed=k=>new Set(pool(p,k).map(u=>u.id));
+   if(keys.some(k=>{const a=allowed(k);return sel[k].some(id=>!a.has(id))}))throw new Error("perm");
+   const old={};keys.forEach(k=>old[k]=list(p,k));
+   p.assign={...(p.assign||{})};p.assignX={...(p.assignX||{})};p.targets={...(p.targets||{})};p.members=[...(p.members||[])];
+   Object.entries(qty||{}).forEach(([k,v])=>{p.targets[k]=v});
+   keys.forEach(k=>{const ids=[...new Set(sel[k])];
+    if(!ids.length){delete p.assign[k];delete p.assignX[k];return}
+    const primary=ids.includes(p.assign[k])?p.assign[k]:ids[0];p.assign[k]=primary;
+    const extra=ids.filter(x=>x!==primary);if(extra.length)p.assignX[k]=extra;else delete p.assignX[k];
+    ids.forEach(id=>{if(!p.members.includes(id))p.members.push(id)})});
+   const want={};keys.forEach(k=>want[k]=list(p,k).slice().sort().join(","));
+   const res=await rpc("ft_save",{p_token:TOK,p_data:DB,p_scope:{meta:true}});
+   if(!res||res.error||!apply(res))throw new Error("save");
+   const saved=DB.projects.find(x=>x.id===pid);
+   if(!saved||keys.some(k=>list(saved,k).slice().sort().join(",")!==want[k]))throw new Error("rejected");
+   const by={};keys.forEach(k=>list(saved,k).filter(u=>!old[k].includes(u)&&u!==ME.id).forEach(u=>(by[u]=by[u]||[]).push(TNAME(k)+" ("+(saved.targets?.[k]||0)+")")));
+   Object.entries(by).forEach(([u,l])=>notify([u],"task","🎯 مهام جديدة مسندة إليك: "+saved.client,"الباقة "+saved.plan+" — "+l.join("، "),"projects/"+saved.id));
+   return{ok:true};
+  }catch(e){
+   try{const l=await rpc("ft_get",{p_token:TOK});apply(l)}catch(_){}
+   const m=e&&e.message;
+   return{ok:false,msg:m==="perm"?T("لا تملك صلاحية إسناد هذه المهمة لهذا الموظف","You can't assign this task to this employee"):m==="gone"?T("المشروع لم يعد موجوداً","Project no longer exists"):m==="rejected"?T("رفض الخادم حفظ التوزيع؛ تحقق من صلاحياتك","The server rejected the assignment; check your permissions"):T("تعذّر الحفظ؛ تحقق من الاتصال وأعد المحاولة","Couldn't save; check the connection and retry")};
+  }finally{busySave=false}
+ }
+ window.FTMT={open,list,commit};
  FTTeam.open=pid=>open(pid);
+ /* FIX: inline dropdown reassignment (tracker table) uses the same verified save */
+ window.reassignTask=async function(pid,k,id){const r=await commit(pid,{[k]:id?[id]:[]});toast(r.ok?T("تم نقل المهمة ✓","Task reassigned ✓"):r.msg);rerender()};
  /* team assignment board: show every employee on each task */
  const NAMES=()=>Object.fromEntries(TASKS.map(([k])=>[TNAME(k),k]));
  const _board=VIEWS.assignments;VIEWS.assignments=FTTeam.board=function(...a){const r=_board.apply(this,a);const map=NAMES();
