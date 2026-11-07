@@ -1184,7 +1184,7 @@ const _pm=window.projectModal;window.projectModal=function(id,pl){_pm(id,pl);con
  function team(a,users){const base=(users||[]).filter(u=>!u.disabled&&u.role!=='admin');if(!a)return[];if(manager(a))return base;const depts=leads[a.role];return depts?base.filter(u=>depts.includes(u.department)):[]}
  function canView(a,p,users){return Boolean(a&&p&&(isLead(a)||(p.members||[]).includes(a.id)||(leads[a.role]&&team(a,users).some(u=>(p.members||[]).includes(u.id)||Object.values(p.assign||{}).includes(u.id))))) }
  function canAssign(a,p,k,users){return Boolean(isLead(a)&&p&&p.status!=='completed')}
- function candidates(a,k,users){return team(a,users)}
+ function candidates(a,k,users){if(!a)return[];const c=team(a,users);return manager(a)?(users||[]).filter(u=>!u.disabled):c.filter(u=>u.id===a.id||u.role==='employee'&&u.manager_id===a.id)}
  function valid(a,p,k,id,users){return canAssign(a,p,k,users)&&Boolean(id&&candidates(a,k,users).some(u=>u.id===id))}
  root.FTTeamPolicy={team,canView,canAssign,candidates,valid,manager};
 })(typeof window==='undefined'?globalThis:window);
@@ -1212,7 +1212,7 @@ const FTTeam=(()=>{
    if(!p||keys.some(k=>!P.valid(ME,p,k,changes[k],DB.users)||(p.assign?.[k]||'')!==(old[k]||'')))throw new Error('changed');
    const assign={...(p.assign||{}),...changes},members=[...new Set([...(p.members||[]),...Object.values(changes)])];
    const draft={...DB,projects:DB.projects.map(x=>x.id===pid?{...x,assign,members}:x)};
-   const result=await rpc('ft_save',{p_token:TOK,p_data:draft,p_scope:{meta:true}});
+   const patches={};keys.forEach(k=>patches[k]={ids:[changes[k]],expected:window.FTMT.list(p,k)});const result=await rpc('ft_assign_save',{p_token:TOK,p_project:pid,p_changes:patches});
    if(result.error||!apply(result))throw new Error('save');
    const saved=DB.projects.find(x=>x.id===pid);
    if(!saved||keys.some(k=>saved.assign?.[k]!==changes[k]))throw new Error('save');
@@ -1414,7 +1414,7 @@ const _itNav=window.buildNav;window.buildNav=function(){_itNav();if(!ME)return;c
  const list=(p,k)=>[...new Set([p?.assign?.[k],...((p?.assignX||{})[k]||[])].filter(Boolean))];
  const nm=id=>DB.users.find(u=>u.id===id)?.name||"?";
  const canEdit=(p,k)=>(typeof canEditCreds==="function"&&canEditCreds())||FTTeam.canAssign(p,k);
- function pool(p,k){const c=(typeof canEditCreds==="function"&&canEditCreds())?FTAUTO.eligible(k):FTTeam.candidates(k);const ids=new Set(c.map(u=>u.id));list(p,k).forEach(id=>{if(!ids.has(id)){const u=DB.users.find(x=>x.id===id);if(u)c.push(u)}});return c}
+ function pool(p,k){const c=FTTeam.candidates(k).slice();const ids=new Set(c.map(u=>u.id));list(p,k).forEach(id=>{if(!ids.has(id)){const u=DB.users.find(x=>x.id===id);if(u)c.push(u)}});return c}
  FTAUTO.owners=list;
  FTAUTO.canDo=(pid,k)=>{const l=list(DB.projects.find(x=>x.id===pid),k);return !l.length||l.includes(ME.id)||(typeof canEditCreds==="function"&&canEditCreds())};
  function open(pid,only){const p=DB.projects.find(x=>x.id===pid);if(!p)return;const tasks=TASKS.filter(([k])=>(!only||k===only)&&canEdit(p,k));
@@ -1445,7 +1445,7 @@ const _itNav=window.buildNav;window.buildNav=function(){_itNav();if(!ME)return;c
    if(keys.some(k=>!canEdit(p,k)))throw new Error("perm");
    const allowed=k=>new Set(pool(p,k).map(u=>u.id));
    if(keys.some(k=>{const a=allowed(k);return sel[k].some(id=>!a.has(id))}))throw new Error("perm");
-   const old={};keys.forEach(k=>old[k]=list(p,k));
+   const old={},oldQty={};keys.forEach(k=>{old[k]=list(p,k);oldQty[k]=p.targets?.[k]??0});
    p.assign={...(p.assign||{})};p.assignX={...(p.assignX||{})};p.targets={...(p.targets||{})};p.members=[...(p.members||[])];
    Object.entries(qty||{}).forEach(([k,v])=>{p.targets[k]=v});
    keys.forEach(k=>{const ids=[...new Set(sel[k])];
@@ -1454,17 +1454,19 @@ const _itNav=window.buildNav;window.buildNav=function(){_itNav();if(!ME)return;c
     const extra=ids.filter(x=>x!==primary);if(extra.length)p.assignX[k]=extra;else delete p.assignX[k];
     ids.forEach(id=>{if(!p.members.includes(id))p.members.push(id)})});
    const want={};keys.forEach(k=>want[k]=list(p,k).slice().sort().join(","));
-   const res=await rpc("ft_save",{p_token:TOK,p_data:DB,p_scope:{meta:true}});
-   if(!res||res.error||!apply(res))throw new Error("save");
+   const changes={};keys.forEach(k=>{const changed=list(p,k).slice().sort().join(",")!==old[k].slice().sort().join(","),quantityChanged=Object.prototype.hasOwnProperty.call(qty||{},k)&&Number(qty[k])!==Number(oldQty[k]);if(!changed&&!quantityChanged)return;changes[k]={ids:list(p,k),expected:old[k]};if(quantityChanged){changes[k].quantity=qty[k];changes[k].expectedQuantity=oldQty[k]}});
+   if(!Object.keys(changes).length)return{ok:true};
+   const res=await rpc("ft_assign_save",{p_token:TOK,p_project:pid,p_changes:changes});
+   if(!res||res.error||!apply(res))throw new Error(res?.error||"save");
    const saved=DB.projects.find(x=>x.id===pid);
-   if(!saved||keys.some(k=>list(saved,k).slice().sort().join(",")!==want[k]))throw new Error("rejected");
+   if(!saved||keys.some(k=>list(saved,k).slice().sort().join(",")!==want[k]||Object.prototype.hasOwnProperty.call(qty||{},k)&&Number(saved.targets?.[k])!==qty[k]))throw new Error("rejected");
    const by={};keys.forEach(k=>list(saved,k).filter(u=>!old[k].includes(u)&&u!==ME.id).forEach(u=>(by[u]=by[u]||[]).push(TNAME(k)+" ("+(saved.targets?.[k]||0)+")")));
    Object.entries(by).forEach(([u,l])=>notify([u],"task","🎯 مهام جديدة مسندة إليك: "+saved.client,"الباقة "+saved.plan+" — "+l.join("، "),"projects/"+saved.id));
    return{ok:true};
   }catch(e){
    try{const l=await rpc("ft_get",{p_token:TOK});apply(l)}catch(_){}
    const m=e&&e.message;
-   return{ok:false,msg:m==="perm"?T("لا تملك صلاحية إسناد هذه المهمة لهذا الموظف","You can't assign this task to this employee"):m==="gone"?T("المشروع لم يعد موجوداً","Project no longer exists"):m==="rejected"?T("رفض الخادم حفظ التوزيع؛ تحقق من صلاحياتك","The server rejected the assignment; check your permissions"):T("تعذّر الحفظ؛ تحقق من الاتصال وأعد المحاولة","Couldn't save; check the connection and retry")};
+   return{ok:false,msg:m==="conflict"?T("تغيّر التوزيع أثناء الحفظ؛ أعد الاختيار والمحاولة","Assignments changed during saving; choose again and retry"):m==="forbidden_role"||m==="forbidden"?T("حسابك لا يملك صلاحية توزيع المهام","Your account cannot assign tasks"):m==="closed"?T("المشروع مكتمل؛ فقط المدير العام أو المسؤول يمكنه تعديل توزيعه","Project is completed; only the general manager or supervisor can change it"):m==="forbidden_add"?T("يمكنك الإسناد لنفسك أو لموظفي فريقك فقط","You can only assign yourself or your team"):m==="forbidden_remove"?T("لا يمكنك إزالة موظف من خارج فريقك من هذه المهمة","You can’t remove an employee outside your team"):m==="unknown_employee"?T("أحد الموظفين المختارين معطّل أو غير موجود","A selected employee is disabled or missing"):m==="perm"?T("لا تملك صلاحية إسناد هذه المهمة لهذا الموظف","You can't assign this task to this employee"):m==="gone"?T("المشروع لم يعد موجوداً","Project no longer exists"):m==="rejected"?T("رفض الخادم حفظ التوزيع؛ تحقق من صلاحياتك","The server rejected the assignment; check your permissions"):T("تعذّر الحفظ؛ تحقق من الاتصال وأعد المحاولة","Couldn't save; check the connection and retry")};
   }finally{busySave=false}
  }
  window.FTMT={open,list,commit};
