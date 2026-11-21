@@ -514,7 +514,7 @@ const uid=()=>Math.random().toString(36).slice(2,10)+Date.now().toString(36).sli
   root.FTDaily={today,days,planned,entries};
 })(typeof window==='undefined'?globalThis:window);
 let DB;
-const SB=supabase.createClient("https://lsuxtbimioljbdpfswbm.supabase.co","sb_publishable_sI9JJuvg0DbfZixDmjtpMA_1R55fy1X",{auth:{persistSession:false}});
+const SB=supabase.createClient("https://izpsgbjakngixusmreai.supabase.co","sb_publishable_sj1vRQ6rHFyrWyFwF4ZPng_dh54k6d5",{auth:{persistSession:false}});
 let TOK=sessionStorage.getItem("ft_tok"),VER=0,PENDING=false;
 function setLive(ok){const l=$("#live");l.textContent=ok?"● Live":"● Offline";l.style.color=ok?"#3ddc97":"#ff6b6b"}
 async function rpc(fn,args){const {data,error}=await SB.rpc(fn,args);if(error){setLive(false);throw error}return data}
@@ -997,7 +997,7 @@ const nowISO=()=>new Date().toISOString();
 const STG={lead:["بانتظار مسؤول الفريق","b-warn"],sup:["بانتظار المسؤول","b-warn"],admin:["بانتظار المدير العام","b-warn"],approved:["معتمدة ✓","b-ok"],rej_emp:["مرفوضة — أعد الرفع","b-bad"],ret_lead:["مُعادة لمسؤول الفريق","b-bad"],ret_sup:["مُعادة للمسؤول","b-bad"]};
 const ACT={submit:"رفع المهمة",resubmit:"إعادة رفع",approve:"موافقة",reject:"رفض",forward:"إعادة توجيه",cancel:"إلغاء"};
 let SUBS=[],WORK={sessions:[],now:null};
-const SBH=()=>supabase.createClient("https://lsuxtbimioljbdpfswbm.supabase.co","sb_publishable_sI9JJuvg0DbfZixDmjtpMA_1R55fy1X",{auth:{persistSession:false},global:{headers:{"x-ft-token":TOK}}});
+const SBH=()=>supabase.createClient("https://izpsgbjakngixusmreai.supabase.co","sb_publishable_sj1vRQ6rHFyrWyFwF4ZPng_dh54k6d5",{auth:{persistSession:false},global:{headers:{"x-ft-token":TOK}}});
 async function loadSubs(){if(!TOK)return;try{const r=await rpc("ft_subs_get",{p_token:TOK,p_from:null,p_to:null});SUBS=r.subs||[]}catch(e){}}
 function wrap(x){const p=DB.projects.find(q=>q.id===x.project_id);return p?{p,d:x.day,k:x.task_key,s:x}:null}
 function allSubs(){return SUBS.map(wrap).filter(Boolean)}
@@ -1374,7 +1374,7 @@ const _itNav=window.buildNav;window.buildNav=function(){_itNav();if(!ME)return;c
 <script>
 /* ===== Note attachments: anyone can attach any file type to a note ===== */
 (function(){
- const SBN=()=>supabase.createClient("https://lsuxtbimioljbdpfswbm.supabase.co","sb_publishable_sI9JJuvg0DbfZixDmjtpMA_1R55fy1X",{auth:{persistSession:false},global:{headers:{"x-ft-token":TOK}}});
+ const SBN=()=>supabase.createClient("https://izpsgbjakngixusmreai.supabase.co","sb_publishable_sj1vRQ6rHFyrWyFwF4ZPng_dh54k6d5",{auth:{persistSession:false},global:{headers:{"x-ft-token":TOK}}});
  const T=(ar,en)=>LANG==="en"?en:ar,MARK="\n\n[[FTFILES]]",MAX=50*1024*1024;
  let PICK=[];
  const LEADOF={it:"it_lead",photography:"photography_lead",marketing:"marketing_lead",design:"marketing_lead"};
