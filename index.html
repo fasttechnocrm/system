@@ -30,6 +30,27 @@ button,input,select,textarea{font-family:inherit;font-size:14px}
 .btn:hover{border-color:var(--cyan);transform:translateY(-1px)}
 .btn.primary{background:var(--grad);border:0;color:#fff;box-shadow:0 8px 24px -8px rgba(58,123,255,.6)}
 .btn.danger{border-color:rgba(255,93,108,.4);color:var(--bad)}
+.btn.danger-solid{background:linear-gradient(135deg,#ff5d6c,#d62f45);border:0;color:#fff;box-shadow:0 10px 28px -10px rgba(255,93,108,.75)}
+.btn.danger-solid:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+.danger-card{border-color:rgba(255,93,108,.35)!important;background:linear-gradient(180deg,rgba(255,93,108,.07),transparent 70%),var(--bg-2)}
+.danger-card h3{color:var(--bad)}
+.danger-card .dz-list{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 16px;padding:0;list-style:none}
+.danger-card .dz-list li{font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid rgba(255,93,108,.3);color:var(--muted)}
+.wipe{width:100%}
+.wipe-ic{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;font-size:28px;margin-bottom:14px;background:rgba(255,93,108,.12);border:1px solid rgba(255,93,108,.4);color:var(--bad);animation:wipePulse 1.8s ease-in-out infinite}
+@keyframes wipePulse{0%,100%{box-shadow:0 0 0 0 rgba(255,93,108,.35)}50%{box-shadow:0 0 0 10px rgba(255,93,108,0)}}
+.wipe-sub{color:var(--muted);font-size:13px;line-height:1.8;margin:0 0 16px}
+.wipe-opts{display:grid;gap:8px;margin-bottom:14px}
+.wipe-opt{display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid var(--line-strong);border-radius:12px;cursor:pointer;margin:0;transition:border-color .2s,background .2s}
+.wipe-opt:has(input:checked){border-color:rgba(255,93,108,.6);background:rgba(255,93,108,.07)}
+.wipe-opt input{width:auto;margin-top:3px;accent-color:#ff5d6c}
+.wipe-opt b{display:block;font-size:14px;margin-bottom:3px}
+.wipe-opt small{color:var(--muted);font-size:12px;line-height:1.7}
+.wipe-ack{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);margin:12px 0 0;cursor:pointer}
+.wipe-ack input{width:auto;accent-color:#ff5d6c}
+.wipe-err{min-height:20px;color:var(--bad);font-size:13px;margin-top:10px}
+.wipe-actions{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:6px}
+.wipe-backup{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 12px;border-radius:12px;border:1px dashed var(--line-strong);margin-bottom:14px;font-size:12px;color:var(--muted)}
 .btn.sm{padding:5px 10px;font-size:12px;border-radius:9px}
 input,select,textarea{width:100%;background:var(--input-bg);border:1px solid var(--line-strong);color:var(--white);border-radius:11px;padding:10px 12px;outline:none}
 input:focus,select:focus,textarea:focus{border-color:var(--cyan);box-shadow:0 0 0 3px rgba(63,212,255,.12)}
@@ -409,6 +430,8 @@ const PREFS_HTML=()=>`<button type="button" class="icon-btn" data-theme-btn aria
 function toggleTheme(){const h=document.documentElement,t=h.dataset.theme==="dark"?"light":"dark";h.dataset.theme=t;const m=document.querySelector('meta[name="theme-color"]');if(m)m.setAttribute("content",t==="light"?"#F6F8FC":"#05070F");try{localStorage.setItem("ft-theme",t)}catch(e){}}
 const EN={"البيانات محفوظة في قاعدة بيانات مشتركة وتتحدّث مباشرة لدى جميع المستخدمين. يمكنك تصدير نسخة احتياطية، أو استيراد نسخة سابقة لاستبدال البيانات الحالية لدى الجميع": "Data is stored in a shared database and updates live for all users. You can export a backup, or import a previous one to replace the current data for everyone", "حدد تاريخ البدء والانتهاء للمشروع لعرض جدول المتابعة": "Set the project's start and end dates to show the tracking table", "تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء": "End date must be after the start date", "تغيير اسم المستخدم وكلمة المرور والنسخ الاحتياطي": "Change username, password and backups", "حذف هذا المشروع وكل بيانات المتابعة الخاصة به؟": "Delete this project and all its tracking data?", "الباقات المعتمدة من موقع fasttechnoagency.com": "Official plans from fasttechnoagency.com", "أحرف إنجليزية وأرقام فقط (3 أحرف على الأقل)": "English letters and digits only (at least 3 characters)", "سيتم استبدال جميع البيانات الحالية. متابعة؟": "All current data will be replaced. Continue?", "تعذّر الاتصال بالخادم، تحقق من الإنترنت": "Couldn't reach the server, check your internet", "إدارة حسابات فريق الـ Digital Marketing": "Manage Digital Marketing team accounts", "اسم المستخدم أو كلمة المرور غير صحيحة": "Incorrect username or password", "الباقة المعتمدة (من موقع Fast Techno)": "Approved plan (from the Fast Techno website)", "أرسل ملاحظات للموظفين وتابع من قرأها": "Send notes to employees and track who read them", "جميع مشاريع العملاء لدى Fast Techno": "All client projects at Fast Techno", "الملاحظات المرسلة إليك من الإدارة": "Notes sent to you by management", "يجب أن يبقى مسؤول واحد على الأقل": "At least one admin must remain", "لا توجد مشاريع مسندة لهذا الموظف": "No projects assigned to this employee", "يرجى كتابة العنوان ونص الملاحظة": "Please enter the title and the note text", "يرجى تعبئة اسم العميل والتواريخ": "Please fill in the client name and dates", "كلمة المرور الحالية غير صحيحة": "Current password is incorrect", "تقييم المدير لكل مهمة أنجزتها": "Manager's rating for every task you completed", "الموظفون المسؤولون عن المشروع": "Employees responsible for the project", "ملاحظة المدير على هذه المهمة": "Manager's note on this task", "قيّم كل مهمة أنجزها الموظفون": "Rate every task completed by employees", "اختر موظفاً واحداً على الأقل": "Select at least one employee", "تعذّر الاتصال، لم يتم الحفظ": "Connection failed, not saved", "سجل المهام المنجزة والتقييم": "Completed tasks log & ratings", "تم تعطيلك عن أداء المهام": "You have been disabled from performing tasks", "الاسم و Username مطلوبان": "Name and Username are required", "ملاحظة المدير على مهمتك": "Manager's note on your task", "المتابعة اليومية للمهام": "Daily task tracking", "لا توجد مهام منجزة بعد": "No completed tasks yet", "مهامي المنجزة وتقييمها": "My completed tasks and their ratings", "تم تغيير اسم المستخدم": "Username changed", "تم إسنادك لمشروع جديد": "You were assigned to a new project", "مشروع على هذه الباقة": "projects on this plan", "تم تغيير كلمة المرور": "Password changed", "اسم العميل / المشروع": "Client / project name", "يرجى مراجعة الإدارة": "Please contact management", "العودة لصفحة الدخول": "Back to login", "تجاوزت الـ Deadline": "Past Deadline", "كلمة المرور الحالية (للتأكيد)": "Current password (to confirm)", "كلمة المرور 6 أحرف على الأقل": "Password must be at least 6 characters", "اتركه فارغاً لعدم التغيير": "leave empty to keep unchanged", "الإيراد الشهري (النشطة)": "Monthly revenue (active)", "أضفهم من صفحة الموظفين": "Add them from the Employees page", "اسم المستخدم الحالي": "Current username", "اسم المستخدم الجديد": "New username", "تغيير اسم المستخدم": "Change username", "تصدير المشاريع CSV": "Export projects CSV", "مشروع بهذه الباقة": "projects with this plan", "كلمة المرور الحالية": "Current password", "كلمة المرور الجديدة": "New password", "لا توجد ملاحظات بعد": "No notes yet", "إنجازه في كل مشروع": "Progress in each project", "اطّلع على الملاحظة": "read the note", "تم تحديث صلاحياتك": "Your permissions were updated", "باقات Fast Techno": "Fast Techno Plans", "تغيير كلمة المرور": "Change password", "كل المهام المنجزة": "All completed tasks", "أضاف ملاحظة يومية": "added a daily note", "تعليم الكل كمقروء": "Mark all as read", "مسح كل الإشعارات؟": "Clear all notifications?", "تم إرسال الملاحظة": "Note sent", "حذف هذه الملاحظة؟": "Delete this note?", "مهام منجزة اليوم": "Tasks done today", "المشاريع المسندة": "Assigned projects", "إجمالي المشاريع": "Total projects", "بحث باسم العميل": "Search by client name", "النسخ الاحتياطي": "Backup", "تم حفظ الملاحظة": "Note saved", "بانتظار التقييم": "Awaiting rating", "لا توجد إشعارات": "No notifications", "حذف هذا الحساب؟": "Delete this account?", "بانتظار تقييمك": "Awaiting your rating", "لم تُقيَّم بعد": "Not rated yet", "مسندة إليك بعد": "assigned to you yet", "تعديل المشروع": "Edit project", "لم يقرأها بعد": "Not read yet", "المهام المنجزة": "Completed tasks", "تم حفظ التقييم": "Rating saved", "تم تقييم مهمتك": "Your task was rated", "ترتيب الموظفين": "Employee ranking", "لا يوجد موظفون": "No employees", "لا توجد مشاريع": "No projects", "تاريخ الانتهاء": "End date", "تم تحديث مشروع": "Project updated", "تم حفظ المشروع": "Project saved", "المسمى الوظيفي": "Job title", "متوسط التقييم": "Average rating", "تقدم المشاريع": "Projects progress", "توزيع الباقات": "Plans distribution", "مستخدم مسبقاً": "already in use", "ملاحظة المدير": "Manager's note", "مهام مُقيَّمة": "Rated tasks", "إجمالي إنجازه": "Total completed", "الإنجاز الكلي": "Overall progress", "تعذّر الإرسال": "Couldn't send", "تم حفظ الحساب": "Account saved", "اسم المستخدم": "Username", "تسجيل الدخول": "Sign in", "تعديل الحساب": "Edit account", "متوسط تقييمه": "Average rating", "تقدم المشروع": "Project progress", "ملاحظة جديدة": "New note", "إرسال ملاحظة": "Send a note", "إلى الموظفين": "To employees", "الاسم الكامل": "Full name", "تم الاستيراد": "Imported", "ملف غير صالح": "Invalid file", "تصدير JSON": "Export JSON", "تم الاطلاع": "Acknowledged", "تعديل حساب": "Edit account", "كلمة المرور": "Password", "تعذّر الحفظ": "Couldn't save", "لوحة التحكم": "Dashboard", "مشاريع نشطة": "Active projects", "خلال 5 أيام": "within 5 days", "كل الموظفين": "All employees", "وقت الإنجاز": "Completed at", "مهام مكتملة": "Completed tasks", "كل المشاريع": "All projects", "نص الملاحظة": "Note text", "تاريخ البدء": "Start date", "المسؤول فقط": "admin only", "مشروع جديد": "New project", "كل الباقات": "All plans", "كل الحالات": "All statuses", "أنجز اليوم": "Done today", "آخر 7 أيام": "Last 7 days", "ألغى إنجاز": "undid", "نظام فريق": "Team system —", "يوم متبقي": "days left", "مسح الكل": "Clear all", "الملاحظات": "Notes", "الإعدادات": "Settings", "موظف جديد": "New employee", "كل المهام": "All tasks", "الإشعارات": "Notifications", "المشاريع": "Projects", "الموظفون": "Employees", "ملاحظاتي": "My notes", "الصلاحية": "Role", "في مشروع": "in project", "مُقيَّمة": "Rated", "التفاصيل": "Details", "المتابعة": "Tracking", "حسب باقة": "based on plan", "مشاريعي": "My projects", "استيراد": "Import", "الباقات": "Plans", "التقييم": "Ratings", "التاريخ": "Date", "المشروع": "Project", "الإنجاز": "Progress", "البداية": "Start", "النهاية": "End", "ملاحظات": "Notes", "العنوان": "Title", "تقييمي": "My ratings", "أهلاً،": "Hello,", "أهلاً": "Hello", "المسمى": "Title", "محذوف": "deleted", "المهمة": "Task", "الحالة": "Status", "مكتملة": "Completed", "الموظف": "Employee", "الباقة": "Plan", "العميل": "Client", "الفريق": "Team", "جديدة": "New", "قرأها": "Read", "ستوري": "Story", "تصميم": "Design", "إعلان": "Ad", "متوقف": "Paused", "مكتمل": "Completed", "مسؤول": "Admin", "متأخر": "Late by", "حسابي": "My account", "الاسم": "Name", "تعديل": "Edit", "طباعة": "Print", "اليوم": "Today", "إلغاء": "Cancel", "إرسال": "Send", "خروج": "Sign out", "الآن": "now", "جديد": "New", "بوست": "Post", "ريلز": "Reels", "مهمة": "task", "الكل": "All", "رجوع": "Back", "أنجز": "completed", "موظف": "Employee", "نشط": "Active", "يوم": "day", "حفظ": "Save", "حذف": "Delete", "قبل": "", "إلى": "To", "من": "From", "د": "m ago", "س": "h ago", "؟": "?", "،": ",", "لن يُحتسب الـ Check إلا بعد إرفاق ملف واعتماده من مسؤول الفريق ثم المسؤول ثم المدير العام": "The Check only counts after a file is attached and approved by the team lead, then the supervisor, then the general manager", "مجتمع الشركة: كل الملاحظات والتوجيهات المرسلة من الإدارة ومسؤولي الفرق يراها الجميع": "Company community: all notes and guidance from management and team leads are visible to everyone", "مسار اعتماد المهام: الموظف ← مسؤول الفريق ← المسؤول ← المدير العام": "Task approval path: Employee → Team lead → Supervisor → General manager", "تعذّر الحفظ؛ تأكد من تطبيق ملف تحديث الصلاحيات واتصال الإنترنت": "Couldn't save; check permissions and your internet connection", "انقل الموظفين التابعين أولاً قبل حذف مسؤولهم أو تغيير صلاحيته": "Move their team members first before deleting or changing this lead's role", "لا يوجد أعضاء في فريقك بعد — أضفهم من صفحة الموظفين": "No members in your team yet — add them from the Employees page", "متابعة حيّة لأداء فريقك ومهامه وتفاعله مع ملاحظاتك": "Live view of your team's performance, tasks and response to your notes", "الاسم و Username مطلوبان (3–50 حرفاً إنجليزياً": "Name and Username are required (3–50 English characters", "أرسل ملاحظات لفريقك فقط وتابع من اطّلع عليها": "Send notes to your team and track who read them", "على أدائك المميز خلال الفترة الأخيرة. استمر": "for your outstanding performance recently. Keep it up", "متابعة مباشرة لساعات عمل الموظفين وإنجازهم": "Live tracking of employees' work hours and output", "تعذّر الحفظ؛ تحقق من الاتصال وأعد المحاولة": "Couldn't save; check your connection and try again", "أحرف إنجليزية وأرقام فقط (3 أحرف على الأقل": "English letters and digits only (at least 3 characters", "ترتيب الموظفين حسب تقييم مهامهم المعتمدة": "Employees ranked by the rating of their approved tasks", "استخدم صفحة الموظفين لتغيير الحسابات": "Use the Employees page to change accounts", "اختر القسم والمسؤول المباشر الصحيحين": "Choose the correct department and direct lead", "يجب أن يبقى مدير عام واحد على الأقل": "At least one general manager must remain", "التعديلات المطلوبة للمرحلة السابقة": "Changes requested from the previous stage", "اكتب سبب الرفض والتعديلات المطلوبة": "Write the rejection reason and required changes", "تعذّر الحذف؛ لم تتغير البيانات": "Couldn't delete; nothing changed", "غير مسموح لك بإدارة هذا الحساب": "You're not allowed to manage this account", "مثال: تم تنزيل ستوري عرض الخصم": "Example: discount offer story published", "يمكنك المراسلة داخل فريقك فقط": "You can only message your own team", "لا توجد ساعات عمل لهذا اليوم": "No work hours for this day", "كلمة المرور الحالية (للتأكيد": "Current password (to confirm", "يجب إرفاق ملف واحد على الأقل": "Attach at least one file", "ملاحظاتك (إلزامية عند الرفض": "Your notes (required when rejecting", "لا يوجد موظفون في فريقك بعد": "No employees in your team yet", "لا يمكن إنجاز مهمة مستقبلية": "You can't complete a future task", "تم الرفع، بانتظار الموافقة": "Uploaded, awaiting approval", "هذه المهمة مسندة لموظف آخر": "This task is assigned to another employee", "الباقات المعتمدة من موقع": "Official plans from", "تم رفع هذه المهمة مسبقاً": "This task was already uploaded", "الباقة المعتمدة (من موقع": "Approved plan (from", "جميع مشاريع العملاء لدى": "All client projects at", "ملاحظة عاجلة غير مقروءة": "unread urgent note", "لا توجد مهام لهذا اليوم": "No tasks for this day", "الملاحظات المرسلة إليك": "Notes sent to you", "الإيراد الشهري (النشطة": "Monthly revenue (active", "التقييم العام للمشروع": "Overall project rating", "بانتظار المدير العام": "Awaiting general manager", "ساعات العمل والإنجاز": "Work hours & output", "لا يوجد شيء بانتظارك": "Nothing waiting for you", "إلى (أعضاء فريقك فقط": "To (your team members only", "بانتظار مسؤول الفريق": "Awaiting team lead", "مُعادة لمسؤول الفريق": "Returned to team lead", "لم ينجز أي مهمة بعد": "No tasks done yet", "التبديل إلى العربية": "Switch to Arabic", "تم إغلاق هذه المهمة": "This task is closed", "لم ترفع أي مهمة بعد": "You haven't uploaded any task yet", "إرفاق إثبات الإنجاز": "Attach proof of completion", "إرسال ملاحظة للفريق": "Send a note to the team", "تقييم المشروع العام": "Overall project rating", "جارٍ تحميل الملفات": "Loading files", "مرفوضة — أعد الرفع": "Rejected — re-upload", "مهام رفضها المسؤول": "Tasks rejected by supervisor", "مشاريع قيد التنفيذ": "Projects in progress", "تقييم المدير العام": "General manager rating", "ملاحظات غير مقروءة": "Unread notes", "متوسط تقييم المهام": "Average task rating", "إظهار كلمة المرور": "Show password", "إخفاء كلمة المرور": "Hide password", "إلغاء هذه المهمة؟": "Cancel this task?", "بيانات غير صالحة": "Invalid data", "وصف ما تم إنجازه": "Describe what was done", "الحساب غير موجود": "Account not found", "تم إرسال الإشادة": "Praise sent", "المسؤول المباشر": "Direct lead", "مهام منجزة خلال": "Tasks done in", "بانتظار الإنجاز": "Pending", "التقييم بين 0 و": "Rating between 0 and", "بانتظار المسؤول": "Awaiting supervisor", "مؤشر صحة الفريق": "Team health index", "تعذّر رفع الملف": "Couldn't upload the file", "بدون إنجاز منذ": "No output since", "مهامي المرفوعة": "My uploaded tasks", "ملاحظات مقروءة": "Notes read", "مُعادة للمسؤول": "Returned to supervisor", "يحتاجون متابعة": "Need follow-up", "تصدير المشاريع": "Export projects", "تقييم الموظفين": "Employee ratings", "بانتظار إجرائك": "Awaiting your action", "اكتب سبب الرفض": "Write the rejection reason", "ملاحظة للفريق": "Note to the team", "تقييمك للمهمة": "Your task rating", "تفاصيل التقدم": "Progress details", "تم حذف الحساب": "Account deleted", "تقييم المسؤول": "Supervisor rating", "سجل الموافقات": "Approvals log", "يجب إرفاق ملف": "A file is required", "الحد 10 ملفات": "Max 10 files", "مسؤول التصوير": "Photography lead", "اشعارات العمل": "Work feed", "لم يسجّل دخول": "Not logged in", "تنبيهات ذكية": "Smart alerts", "لم تُنجز بعد": "Not done yet", "إدارة الفريق": "Team management", "رفع للمراجعة": "Submit for review", "تقويم المهام": "Task calendar", "المدير العام": "General manager", "أعضاء الفريق": "Team members", "يحتاج متابعة": "Needs follow-up", "نسبة الاطلاع": "Read rate", "الشهر السابق": "Previous month", "الشهر التالي": "Next month", "قيد المراجعة": "Under review", "إشادة بأدائك": "Praise for your performance", "مركز الفريق": "Team hub", "إعادة الرفع": "Re-upload", "مؤشر الأداء": "Performance index", "مهمة معتمدة": "approved task", "إعادة توجيه": "Forward", "تعذّر الحذف": "Couldn't delete", "مهام معتمدة": "Approved tasks", "تم الاعتماد": "Approved", "تجاوزت الـ": "Past", "موظف الشهر": "Employee of the month", "جارٍ الرفع": "Uploading", "مهمة، مؤشر": "tasks, index", "آخر 14 يوم": "Last 14 days", "رفع المهمة": "Upload task", "ساعة فارغة": "Empty hour", "أداء ممتاز": "Excellent performance", "أرسل إشادة": "Send praise", "مهام منجزة": "Tasks done", "جارٍ الحفظ": "Saving", "مهام اليوم": "Today's tasks", "كل الأقسام": "All departments", "نجم الفترة": "Star of the period", "موجّهة لك": "Addressed to you", "غير مسموح": "Not allowed", "مدة العمل": "Work duration", "إعادة رفع": "Re-upload", "كل الفريق": "Whole team", "متصل الآن": "Online now", "الموافقات": "Approvals", "كل الشهر": "Whole month", "غير متصل": "Offline", "أول دخول": "First login", "المحاماة": "Legal", "آخر نشاط": "Last activity", "تم الحفظ": "Saved", "يوم محدد": "Specific day", "الأولوية": "Priority", "لا نشاط": "No activity", "المتبقي": "Remaining", "الإدارة": "Management", "المسؤول": "Supervisor", "لا يوجد": "None", "الترتيب": "Rank", "التصوير": "Photography", "موافقة": "Approve", "أربعاء": "Wed", "ثلاثاء": "Tue", "مرفوضة": "Rejected", "الفترة": "Period", "معتمدة": "Approved", "مقيّمة": "Rated", "ملاحظة": "Note", "جارية": "Ongoing", "تواصل": "Contact", "إغلاق": "Close", "اثنين": "Mon", "تصدير": "Export", "شكراً": "Thanks", "تنبيه": "Alert", "تكليف": "Assignment", "النوع": "Type", "مستقر": "Stable", "باقات": "Plans", "عاجلة": "Urgent", "إشادة": "Praise", "القسم": "Department", "توجيه": "Guidance", "تعذّر": "Couldn't", "عادية": "Normal", "خميس": "Thu", "ليوم": "for day", "لشهر": "for month", "جمعة": "Fri", "قادم": "Upcoming", "أيام": "days", "رفض": "Reject", "سبت": "Sat", "أحد": "Sun", "تم": "Done", "مهمة بانتظار مراجعتك": "Task awaiting your review", "رفع إثبات إنجاز ليوم": "uploaded proof of completion for", "ملاحظة من": "Note from", "أرفق ملاحظة إلى": "attached a note to", "ساعة عمل فارغة": "Empty work hour", "لم يُنجز أي مهمة بين": "completed no task between", "اعتماد نهائي": "Final approval", "وافق الجميع على المهمة واعتُمد الـ check للموظف": "Everyone approved the task; check confirmed for", "وافق عليها": "Approved by", "وافق": "Approved by", "على مهمتك": "your task", "انتقلت للمرحلة التالية من المراجعة": "Moved to the next review stage", "رُفضت مهمتك": "Your task was rejected", "رفض المسؤول مهمة": "Supervisor rejected a task", "أُعيدت مهمة لفريقك": "A task was returned to your team", "يرجى توجيهها للموظف": "please direct it to the employee", "رفض المدير العام مهمة": "General manager rejected a task", "يرجى توجيهها لمسؤول الفريق": "please direct it to the team lead", "عاجل": "Urgent", "مهم": "Important", "و": "and", "بين": "between"};
 Object.assign(EN,{"مسؤول IT":"IT team lead","مسؤول Digital Marketing":"Digital Marketing team lead","مسؤول التصوير":"Photography team lead","تغيير اسم المستخدم وكلمة المرور": "Change username and password", "بيانات حسابك": "Your account details", "بيانات الدخول": "Sign-in details", "تغيير اسم المستخدم وكلمة المرور متاح فقط للمدير والمسؤول. يرجى مراجعة الإدارة لأي تعديل.": "Only the general manager and supervisor can change usernames and passwords. Contact management for changes.", "تغيير اسم المستخدم وكلمة المرور متاح فقط للمدير والمسؤول": "Only the general manager and supervisor can change usernames and passwords", "يرجى مراجعة الإدارة لأي تعديل": "Contact management for any changes", "إدارة الموظفين متاحة فقط للمدير والمسؤول": "Only the general manager and supervisor can manage employees", "المدير والمسؤول فقط": "General manager and supervisor only", "تعيين اسم المستخدم وكلمة المرور متاح فقط للمدير والمسؤول": "Only the general manager and supervisor can set usernames and passwords", "مطلوبان (3–50 حرفاً إنجليزياً)": "are required (3–50 English characters)", "مهام جديدة مسندة إليك": "New tasks assigned to you", "لا يوجد موظف متخصص لـ": "No specialist available for", "تم نقل المهمة": "Task reassigned", "إعادة توزيع مهام هذا المشروع تلقائياً؟": "Automatically redistribute this project’s tasks?", "تمت إعادة التوزيع": "Tasks redistributed", "هذه المهمة مسندة إلى": "This task is assigned to", "موظف آخر": "another employee", "ولا يمكنك إنجازها": "and you cannot complete it", "غير مسندة": "Unassigned", "أنت": "You", "إعادة التوزيع": "Redistribute", "توزيع تلقائي حسب التخصص": "Automatic assignment by specialty", "مهمتك": "Your task", "يتم توزيع المهام تلقائياً حسب التخصص والباقة — اختيار الموظفين اختياري لتحديد الفريق": "Tasks are automatically assigned by specialty and plan — selecting employees is optional to define the team", "العربية": "Arabic", "على أدائك المميز خلال الفترة الأخيرة": "for your excellent performance recently", "استمر": "Keep it up", "اسم العميل": "Client name", "البيانات محفوظة في قاعدة بيانات مشتركة وتتحدّث مباشرة لدى جميع المستخدمين": "Data is stored in a shared database and updates live for all users", "يمكنك تصدير نسخة احتياطية، أو استيراد نسخة سابقة لاستبدال البيانات الحالية لدى الجميع": "You can export a backup or import a previous one to replace the current data for everyone", "سيتم استبدال جميع البيانات الحالية": "All current data will be replaced", "متابعة؟": "Continue?", "إلا بعد إرفاق ملف واعتماده من مسؤول الفريق ثم المسؤول ثم المدير العام": "only after attaching a file approved by the team lead, supervisor and general manager", "لن يُحتسب الـ": "Will not count the", "وكلمة المرور": "and password", "لأي": "for any", "متاح فقط": "available only", "للمدير": "for the general manager", "والمسؤول": "and supervisor"});
+Object.assign(EN,{"⚠ منطقة الخطر": "⚠ Danger zone", "حذف جميع بيانات العمل نهائياً لدى جميع المستخدمين مع الإبقاء على الحسابات. سيُطلب منك إدخال كلمة مرور حسابك قبل التنفيذ، ولا يمكن التراجع عن هذا الإجراء.": "Permanently delete all system data for every user. You will be asked for your account password first, and this cannot be undone.", "الموظفون": "Employees", "المشاريع": "Projects", "المتابعة اليومية": "Daily tracking", "التقييمات": "Ratings", "الملاحظات": "Notes", "الإشعارات": "Notifications", "مهام IT": "IT tasks", "المهام الإضافية": "Extra tasks", "سجلات العمل": "Work logs", "المرفقات": "Attachments", "🗑 حذف جميع البيانات": "🗑 Delete all data", "حذف جميع البيانات نهائياً": "Permanently delete all data", "سيتم حذف البيانات فوراً لدى جميع المستخدمين، ولا يمكن التراجع عن هذا الإجراء بعد التنفيذ.": "Data will be deleted immediately for all users. This cannot be undone.", "حذف كل شيء عدا حسابي": "Delete everything except my account", "يبقى حسابك فقط: الموظفون، المشاريع، المتابعة اليومية، التقييمات، الملاحظات، الإشعارات، مهام IT، المهام الإضافية، سجلات العمل والمرفقات": "Employees, projects, daily tracking, ratings, notes, notifications, IT tasks, extra tasks, work logs and attachments", "الإبقاء على حسابات الموظفين": "Keep employee accounts", "تُحذف بيانات العمل فقط وتبقى جميع الحسابات وصلاحياتها كما هي": "Only work data is deleted; all accounts and permissions stay as they are", "ننصح بتصدير نسخة احتياطية قبل الحذف": "We recommend exporting a backup first", "⬇ تصدير نسخة احتياطية": "⬇ Export backup", "كلمة مرور حسابك للتأكيد": "Your account password (to confirm)", "أفهم أن جميع البيانات ستُحذف نهائياً": "I understand all data will be permanently deleted", "إلغاء": "Cancel", "جارٍ حذف البيانات…": "Deleting data…", "كلمة المرور غير صحيحة": "Incorrect password", "محاولات كثيرة، تم إيقاف المحاولة لمدة 60 ثانية": "Too many attempts, locked for 60 seconds", "ميزة الحذف غير مفعّلة على الخادم بعد": "Data deletion is not enabled on the server yet", "تعذّر الاتصال بالخادم، لم يتم حذف أي بيانات": "Could not reach the server; nothing was deleted", "هذا الإجراء متاح للمدير العام فقط": "Only the general manager can do this", "تعذّر الحذف، لم تتغير البيانات": "Deletion failed; data unchanged", "تم حذف جميع البيانات بنجاح ✓": "All data deleted successfully ✓"});
+Object.assign(EN,{"حذف جميع بيانات العمل نهائياً لدى جميع المستخدمين مع الإبقاء على الحسابات. سيُطلب منك إدخال كلمة مرور حسابك قبل التنفيذ، ولا يمكن التراجع عن هذا الإجراء.": "Permanently delete all work data for every user while keeping accounts. You will be asked for your account password first, and this cannot be undone.", "حذف كل شيء بما فيه حسابات الموظفين": "Delete everything, including employee accounts", "الإبقاء على حسابات الموظفين (موصى به)": "Keep employee accounts (recommended)", "يبقى حسابك فقط: الموظفون، المشاريع، المتابعة اليومية، التقييمات، الملاحظات، الإشعارات، مهام IT، المهام الإضافية، سجلات العمل والمرفقات": "Only your account stays: employees, projects, daily tracking, ratings, notes, notifications, IT tasks, extra tasks, work logs and attachments"});
 Object.assign(EN,{"توزيع مهام الفريق":"Team task assignment","توزيع المهام":"Assign tasks"});
 const EN_KEYS=Object.keys(EN).sort((a,b)=>b.length-a.length).map(k=>k.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"));
 const EN_RE=new RegExp("(?<![\\u0621-\\u064A])("+EN_KEYS.join("|")+")(?![\\u0621-\\u064A])","g");
@@ -520,7 +543,7 @@ function setLive(ok){const l=$("#live");l.textContent=ok?"● Live":"● Offline
 async function rpc(fn,args){const {data,error}=await SB.rpc(fn,args);if(error){setLive(false);throw error}return data}
 function kicked(){TOK=null;sessionStorage.removeItem("ft_tok");sessionStorage.removeItem("ft_sess");closeModal();$("#kicked").classList.remove("hidden");$("#app").classList.add("hidden")}
 function apply(r){if(r.disabled){kicked();return false}if(r.error){toast(USER_ERRORS[r.error]||"تعذّر الحفظ");return false}DB=r.data;VER=r.version||VER;sessionStorage.setItem("ft_sess",r.me);ME=DB.users.find(u=>u.id===r.me);return true}
-async function save(scope={meta:true}){if(!TOK)return;try{const r=await rpc("ft_save",{p_token:TOK,p_data:DB,p_scope:scope});if(apply(r)&&scope.meta)rerender()}catch(e){toast("تعذّر الاتصال، لم يتم الحفظ");refresh(true)}}
+async function save(scope={meta:true}){if(!TOK)return;try{const r=await rpc("ft_save",{p_token:TOK,p_data:DB,p_scope:scope});if(apply(r)){if(scope.meta)rerender()}else refresh(true)}catch(e){toast("تعذّر الاتصال، لم يتم الحفظ");refresh(true)}}
 async function load(){}
 function busy(){const a=document.activeElement;return $("#modalRoot").innerHTML!==""||(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName)&&!a.closest("#login"))}
 function rerender(){if(!ME)return;const y=window.scrollY;$("#meName").textContent=ME.name;$("#meRole").textContent=FTHierarchy.roles[ME.role]||ME.title;buildNav();const h=location.hash.slice(1)||"dashboard";const [pg,arg]=h.split("/");if(!FTHierarchy.canManageTeam(ME)&&pg==="team")return go("dashboard");document.querySelectorAll("#nav a").forEach(x=>x.classList.toggle("active",x.dataset.k===pg));(VIEWS[pg]||VIEWS.dashboard)(arg);window.scrollTo(0,y)}
@@ -530,8 +553,9 @@ setInterval(()=>{refresh();loadInbox()},30000);document.addEventListener("visibi
 document.addEventListener("focusout",()=>setTimeout(()=>{if(PENDING&&!busy()){PENDING=false;rerender()}},300));
 let ME=null;
 const isAdmin=()=>ME&&ME.role==="admin";
+const canEditProj=()=>ME&&(ME.role==="admin"||ME.role==="supervisor");
 const canEditCreds=()=>ME&&(ME.role==="admin"||ME.role==="supervisor");
-const canPublish=()=>ME&&(ME.role==="admin"||ME.role==="marketing_lead");
+const canPublish=()=>ME&&(ME.role==="admin"||ME.role==="supervisor"||ME.role==="marketing_lead");
 const $=s=>document.querySelector(s);
 const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const fmt=d=>d?new Date(d+"T00:00:00").toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"}):"—";
@@ -602,7 +626,7 @@ ratings(){return ratingsView()},
 settings(){
   $("#main").innerHTML=header(isAdmin()?"الإعدادات":"حسابي",canEditCreds()?"تغيير اسم المستخدم وكلمة المرور":"بيانات حسابك")+
   `<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(320px,1fr))">${canEditCreds()?`<div class="card"><h3 style="margin-top:0">تغيير اسم المستخدم</h3><form id="unf" class="grid" style="gap:12px"><div><label>اسم المستخدم الحالي</label><input class="en" dir="ltr" value="${esc(ME.username)}" disabled></div><div><label>اسم المستخدم الجديد</label><input id="nu" class="en" dir="ltr" required></div><div><label>كلمة المرور الحالية (للتأكيد)</label><input type="password" id="nupw" required></div><button class="btn primary">حفظ</button></form></div>`:""}${canEditCreds()?`<div class="card"><h3 style="margin-top:0">تغيير كلمة المرور</h3><form id="pwf" class="grid" style="gap:12px"><div><label>كلمة المرور الحالية</label><input type="password" id="pw0" required></div><div><label>كلمة المرور الجديدة</label><input type="password" id="pw1" minlength="6" required></div><button class="btn primary">حفظ</button></form></div>`:`<div class="card"><h3 style="margin-top:0">🔒 بيانات الدخول</h3><div><label>اسم المستخدم</label><input class="en" dir="ltr" value="${esc(ME.username)}" disabled></div><p style="color:var(--muted);font-size:13px;line-height:1.8;margin-top:12px">تغيير اسم المستخدم وكلمة المرور متاح فقط للمدير والمسؤول. يرجى مراجعة الإدارة لأي تعديل.</p></div>`}
-  ${isAdmin()?`<div class="card"><h3 style="margin-top:0">النسخ الاحتياطي</h3><p style="color:var(--muted);font-size:13px;line-height:1.8">البيانات محفوظة في قاعدة بيانات مشتركة وتتحدّث مباشرة لدى جميع المستخدمين. يمكنك تصدير نسخة احتياطية، أو استيراد نسخة سابقة لاستبدال البيانات الحالية لدى الجميع.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn primary" onclick="exportData()">⬇ تصدير JSON</button><label class="btn" style="margin:0;color:var(--white)">⬆ استيراد<input type="file" accept=".json" class="hidden" onchange="importData(this)"></label><button class="btn" onclick="exportCSV()">⬇ تصدير المشاريع CSV</button></div></div>`:""}</div>`;
+  ${isAdmin()?`<div class="card"><h3 style="margin-top:0">النسخ الاحتياطي</h3><p style="color:var(--muted);font-size:13px;line-height:1.8">البيانات محفوظة في قاعدة بيانات مشتركة وتتحدّث مباشرة لدى جميع المستخدمين. يمكنك تصدير نسخة احتياطية، أو استيراد نسخة سابقة لاستبدال البيانات الحالية لدى الجميع.</p><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn primary" onclick="exportData()">⬇ تصدير JSON</button><label class="btn" style="margin:0;color:var(--white)">⬆ استيراد<input type="file" accept=".json" class="hidden" onchange="importData(this)"></label><button class="btn" onclick="exportCSV()">⬇ تصدير المشاريع CSV</button></div></div>`:""}${isAdmin()?`<div class="card danger-card"><h3 style="margin-top:0">⚠ منطقة الخطر</h3><p style="color:var(--muted);font-size:13px;line-height:1.8;margin:0">حذف جميع بيانات العمل نهائياً لدى جميع المستخدمين مع الإبقاء على الحسابات. سيُطلب منك إدخال كلمة مرور حسابك قبل التنفيذ، ولا يمكن التراجع عن هذا الإجراء.</p><ul class="dz-list"><li>المشاريع</li><li>المتابعة اليومية</li><li>التقييمات</li><li>الملاحظات</li><li>الإشعارات</li><li>مهام IT</li><li>المهام الإضافية</li><li>سجلات العمل</li><li>المرفقات</li></ul><button class="btn danger-solid" onclick="wipeModal()">🗑 حذف جميع البيانات</button></div>`:""}</div>`;
   if($("#unf"))$("#unf").onsubmit=async e=>{e.preventDefault();if(!canEditCreds())return toast("غير مسموح");const un=$("#nu").value.trim().toLowerCase();if(!/^[a-z0-9._-]{3,}$/.test(un))return toast("Username: أحرف إنجليزية وأرقام فقط (3 أحرف على الأقل)");if(DB.users.some(x=>x.username.toLowerCase()===un&&x.id!==ME.id))return toast("Username مستخدم مسبقاً");if(await sha($("#nupw").value)!==ME.pass)return toast("كلمة المرور الحالية غير صحيحة");const u=DB.users.find(x=>x.id===ME.id);u.username=un;ME=u;save();toast("تم تغيير اسم المستخدم ✓");VIEWS.settings()};
   if($("#pwf"))$("#pwf").onsubmit=async e=>{e.preventDefault();if(!canEditCreds())return toast("غير مسموح");if(await sha($("#pw0").value)!==ME.pass)return toast("كلمة المرور الحالية غير صحيحة");ME.pass=await sha($("#pw1").value);DB.users.find(u=>u.id===ME.id).pass=ME.pass;await save({pass:ME.pass});e.target.reset();toast("تم تغيير كلمة المرور ✓")};
 }};
@@ -647,7 +671,7 @@ function empView(uid){
 
 function projTable(ps,compact){
   if(!ps.length)return `<div class="empty">لا توجد مشاريع${isAdmin()?"":" مسندة إليك بعد"}</div>`;
-  return `<table><thead><tr><th>#</th><th>العميل</th><th>الباقة</th>${compact?"":"<th>البداية</th><th>النهاية</th>"}<th>Deadline</th>${compact?"":"<th>الفريق</th>"}<th>الإنجاز</th><th>التقييم</th>${compact?"":"<th>الحالة</th><th></th>"}</tr></thead><tbody>${ps.map((p,i)=>{const pr=progress(p);return `<tr><td class="en" style="color:var(--muted)">${String(i+1).padStart(2,"0")}</td><td><a style="color:var(--white);font-weight:700;cursor:pointer;text-decoration:none" onclick="go('projects/${p.id}')">${esc(p.client)}</a></td><td><span class="badge b-plan">${p.plan}</span></td>${compact?"":`<td class="en">${fmt(p.start)}</td><td class="en">${fmt(p.end)}</td>`}<td>${deadlineBadge(p)}</td>${compact?"":`<td style="font-size:12px">${p.members.map(m=>esc(DB.users.find(u=>u.id===m)?.name||"")).filter(Boolean).join("، ")||"—"}</td>`}<td><div style="display:flex;gap:8px;align-items:center"><div class="bar" style="flex:1"><i style="width:${pr}%"></i></div><small class="en">${pr}%</small></div></td><td>${stars(p.rating,compact?null:p.id)}</td>${compact?"":`<td><span class="badge ${STATUS[p.status][1]}">${STATUS[p.status][0]}</span></td><td style="white-space:nowrap"><button class="btn sm" onclick="go('projects/${p.id}')">المتابعة</button> ${isAdmin()?`<button class="btn sm" onclick="projectModal('${p.id}')">تعديل</button> <button class="btn sm danger" onclick="delProject('${p.id}')">حذف</button>`:""}</td>`}</tr>`}).join("")}</tbody></table>`;
+  return `<table><thead><tr><th>#</th><th>العميل</th><th>الباقة</th>${compact?"":"<th>البداية</th><th>النهاية</th>"}<th>Deadline</th>${compact?"":"<th>الفريق</th>"}<th>الإنجاز</th><th>التقييم</th>${compact?"":"<th>الحالة</th><th></th>"}</tr></thead><tbody>${ps.map((p,i)=>{const pr=progress(p);return `<tr><td class="en" style="color:var(--muted)">${String(i+1).padStart(2,"0")}</td><td><a style="color:var(--white);font-weight:700;cursor:pointer;text-decoration:none" onclick="go('projects/${p.id}')">${esc(p.client)}</a></td><td><span class="badge b-plan">${p.plan}</span></td>${compact?"":`<td class="en">${fmt(p.start)}</td><td class="en">${fmt(p.end)}</td>`}<td>${deadlineBadge(p)}</td>${compact?"":`<td style="font-size:12px">${p.members.map(m=>esc(DB.users.find(u=>u.id===m)?.name||"")).filter(Boolean).join("، ")||"—"}</td>`}<td><div style="display:flex;gap:8px;align-items:center"><div class="bar" style="flex:1"><i style="width:${pr}%"></i></div><small class="en">${pr}%</small></div></td><td>${stars(p.rating,compact?null:p.id)}</td>${compact?"":`<td><span class="badge ${STATUS[p.status][1]}">${STATUS[p.status][0]}</span></td><td style="white-space:nowrap"><button class="btn sm" onclick="go('projects/${p.id}')">المتابعة</button> ${canEditProj()?`<button class="btn sm" onclick="projectModal('${p.id}')">تعديل</button>${isAdmin()?` <button class="btn sm danger" onclick="delProject('${p.id}')">حذف</button>`:""}`:""}</td>`}</tr>`}).join("")}</tbody></table>`;
 }
 function setRating(id,v){if(!isAdmin())return;const p=DB.projects.find(x=>x.id===id);p.rating=p.rating===v?0:v;save();go(location.hash.slice(1));toast("تم حفظ التقييم")}
 
@@ -683,7 +707,7 @@ function trackerView(id){
   const p=DB.projects.find(x=>x.id===id);if(!p||!FTTeam.canView(p))return go("projects");
   const t=DB.tracker[p.id]||(DB.tracker[p.id]={});const days=dateRange(p.start,p.end);const pl=planOf(p.plan);
   const dn=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-  $("#main").innerHTML=header(esc(p.client),"المتابعة اليومية للمهام",`<button class="btn" onclick="go('projects')">→ رجوع</button><button class="btn" onclick="window.print()">🖨 طباعة</button>${isAdmin()?`<button class="btn primary" onclick="projectModal('${p.id}')">تعديل المشروع</button>`:""}`)+
+  $("#main").innerHTML=header(esc(p.client),"المتابعة اليومية للمهام",`<button class="btn" onclick="go('projects')">→ رجوع</button><button class="btn" onclick="window.print()">🖨 طباعة</button>${canEditProj()?`<button class="btn primary" onclick="projectModal('${p.id}')">تعديل المشروع</button>`:""}`)+
   `<div class="card" style="margin-bottom:16px"><div class="ph"><div><h3>${esc(p.client)} <span class="badge b-plan" style="vertical-align:middle">${pl?.icon||""} ${p.plan}</span></h3><div class="meta"><span>البداية: <b class="en">${fmt(p.start)}</b></span><span>النهاية: <b class="en">${fmt(p.end)}</b></span><span>Deadline: <b class="en">${fmt(p.deadline)}</b> ${deadlineBadge(p)}</span><span>الباقة: <b class="en">${pl?.price||""}</b></span><span>الحالة: <span class="badge ${STATUS[p.status][1]}">${STATUS[p.status][0]}</span></span></div><div class="meta"><span>الفريق: <b>${p.members.map(m=>esc(DB.users.find(u=>u.id===m)?.name||"")).filter(Boolean).join("، ")||"—"}</b></span><span>التقييم: ${stars(p.rating,p.id)}</span></div>${p.notes?`<p style="color:var(--feat);font-size:13px;margin:10px 0 0">📝 ${esc(p.notes)}</p>`:""}</div><div style="min-width:200px"><div style="font-size:13px;color:var(--muted)">الإنجاز الكلي</div><div style="font-size:34px;font-weight:800" class="grad-text en">${progress(p)}%</div><div class="bar"><i style="width:${progress(p)}%"></i></div></div></div></div>
   <div class="card tbl"><table class="trk"><thead><tr><th style="text-align:start">التاريخ</th><th>اليوم</th>${TASKS.map(([k,e])=>`<th>${e}</th>`).join("")}<th style="text-align:start">ملاحظات</th></tr></thead><tbody>
    <tr class="target"><td class="d">Monthly target</td><td></td>${TASKS.map(([k])=>`<td>${isAdmin()?`<input class="num" type="number" min="0" value="${p.targets?.[k]||0}" onchange="setTarget('${p.id}','${k}',this.value)">`:(p.targets?.[k]||0)}</td>`).join("")}<td style="text-align:start;font-size:12px;color:var(--muted)">حسب باقة ${p.plan}</td></tr>
@@ -778,7 +802,7 @@ async function readNote(id){const n=INBOX.notes.find(x=>x.id===id);try{await rpc
 function modal(html){$("#modalRoot").innerHTML=`<div class="modal" onclick="if(event.target===this)closeModal()"><div class="card">${html}</div></div>`}
 function closeModal(){$("#modalRoot").innerHTML="";if(PENDING){PENDING=false;setTimeout(rerender,0)}}
 function projectModal(id,planName){
-  if(id?!isAdmin():!canPublish())return;
+  if(id?!canEditProj():!canPublish())return;
   const p=id?DB.projects.find(x=>x.id===id):{client:"",plan:planName||"ORBIT",start:"",end:"",deadline:"",rating:0,status:"active",members:[],notes:""};
   const emps=DB.users.filter(u=>u.role!=="admin");
   modal(`<h3>${id?"تعديل المشروع":"مشروع جديد"}</h3><form id="pf" class="form">
@@ -797,7 +821,7 @@ function projectModal(id,planName){
   window._rv=()=>rv;
 }
 function saveProject(id){
-  if(id?!isAdmin():!canPublish())return;
+  if(id?!canEditProj():!canPublish())return;
   const v={client:$("#pc").value.trim(),plan:$("#pp").value,start:$("#ps").value,end:$("#pe").value,deadline:$("#pd").value,status:$("#pst").value,rating:window._rv(),members:[...document.querySelectorAll("#pm .chip.on")].map(c=>c.dataset.id),notes:$("#pn").value.trim()};
   if(!v.client||!v.start||!v.end||!v.deadline)return $("#perr").textContent="يرجى تعبئة اسم العميل والتواريخ";
   if(v.end<v.start)return $("#perr").textContent="تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء";
@@ -850,6 +874,52 @@ async function delUser(id){
 function dl(name,data,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;a.click()}
 function exportData(){dl(`fasttechno-backup-${today()}.json`,JSON.stringify(DB,null,2),"application/json")}
 function importData(inp){const f=inp.files[0];if(!f)return;f.text().then(s=>{try{const d=JSON.parse(s);if(!d.users||!d.projects)throw 0;if(!confirm("سيتم استبدال جميع البيانات الحالية. متابعة؟"))return;DB=d;save({meta:true,tracker:"all"}).then(()=>{toast("تم الاستيراد ✓");start()})}catch(e){toast("ملف غير صالح")}})}
+/* ===== Danger zone: wipe all data (admin only, password-confirmed, verified again on the server) ===== */
+let WIPE_FAILS=0,WIPE_LOCK=0;
+function wipeModal(){
+ if(!isAdmin())return toast("غير مسموح");
+ modal(`<div class="wipe"><div class="wipe-ic">⚠</div><h3 style="margin:0 0 6px">حذف جميع البيانات نهائياً</h3>
+ <p class="wipe-sub">سيتم حذف البيانات فوراً لدى جميع المستخدمين، ولا يمكن التراجع عن هذا الإجراء بعد التنفيذ.</p>
+ <div class="wipe-opts">
+  <label class="wipe-opt"><input type="radio" name="wscope" value="keep" checked><div><b>الإبقاء على حسابات الموظفين (موصى به)</b><small>تُحذف بيانات العمل فقط وتبقى جميع الحسابات وصلاحياتها كما هي</small></div></label>
+  <label class="wipe-opt"><input type="radio" name="wscope" value="all"><div><b>حذف كل شيء بما فيه حسابات الموظفين</b><small>يبقى حسابك فقط: الموظفون، المشاريع، المتابعة اليومية، التقييمات، الملاحظات، الإشعارات، مهام IT، المهام الإضافية، سجلات العمل والمرفقات</small></div></label>
+ </div>
+ <div class="wipe-backup"><span>ننصح بتصدير نسخة احتياطية قبل الحذف</span><button type="button" class="btn sm" onclick="exportData()">⬇ تصدير نسخة احتياطية</button></div>
+ <form id="wipef" autocomplete="off">
+  <label>كلمة مرور حسابك للتأكيد</label><input type="password" id="wpw" autocomplete="current-password" required>
+  <label class="wipe-ack"><input type="checkbox" id="wack"> أفهم أن جميع البيانات ستُحذف نهائياً</label>
+  <div class="wipe-err" id="werr"></div>
+  <div class="wipe-actions"><button type="button" class="btn" onclick="closeModal()">إلغاء</button><button class="btn danger-solid" id="wgo" disabled>🗑 حذف جميع البيانات</button></div>
+ </form></div>`);
+ const f=$("#wipef"),pw=$("#wpw"),ack=$("#wack"),go_=$("#wgo"),err=$("#werr");
+ const sync=()=>{go_.disabled=!(pw.value&&ack.checked)||Date.now()<WIPE_LOCK};
+ pw.oninput=()=>{err.textContent="";sync()};ack.onchange=sync;setTimeout(()=>pw.focus(),50);
+ f.onsubmit=async e=>{
+  e.preventDefault();if(!isAdmin())return toast("غير مسموح");
+  if(Date.now()<WIPE_LOCK){err.textContent=`محاولات كثيرة، حاول بعد ${Math.ceil((WIPE_LOCK-Date.now())/1000)} ثانية`;return}
+  if(!pw.value||!ack.checked)return;
+  const h=await sha(pw.value);
+  if(h!==ME.pass){WIPE_FAILS++;pw.value="";sync();
+   if(WIPE_FAILS>=5){WIPE_FAILS=0;WIPE_LOCK=Date.now()+60000;err.textContent="محاولات كثيرة، تم إيقاف المحاولة لمدة 60 ثانية";setTimeout(sync,60100)}
+   else err.textContent=`كلمة المرور غير صحيحة (${5-WIPE_FAILS} محاولات متبقية)`;
+   return}
+  const keep=(document.querySelector('input[name="wscope"]:checked')||{}).value==="keep";
+  go_.disabled=true;go_.textContent="جارٍ حذف البيانات…";pw.disabled=true;
+  let r;
+  try{r=await rpc("ft_wipe_all",{p_token:TOK,p_hash:h,p_keep_users:keep})}
+  catch(x){go_.textContent="🗑 حذف جميع البيانات";pw.disabled=false;sync();
+   err.textContent=(x&&(x.code==="PGRST202"||/ft_wipe_all/.test(x.message||"")))?"ميزة الحذف غير مفعّلة على الخادم بعد":"تعذّر الاتصال بالخادم، لم يتم حذف أي بيانات";return}
+  if(r&&r.error){go_.textContent="🗑 حذف جميع البيانات";pw.disabled=false;pw.value="";sync();
+   err.textContent=r.error==="bad_password"?"كلمة المرور غير صحيحة":r.error==="forbidden"?"هذا الإجراء متاح للمدير العام فقط":"تعذّر الحذف، لم تتغير البيانات";return}
+  WIPE_FAILS=0;
+  if(r&&Array.isArray(r.files)&&r.files.length){try{const st=SBH().storage.from("ft-proofs");for(let i=0;i<r.files.length;i+=100)await st.remove(r.files.slice(i,i+100))}catch(_){}}
+  try{Object.keys(localStorage).filter(k=>k.startsWith("ft_sent_")).forEach(k=>localStorage.removeItem(k))}catch(_){}
+  if(typeof SUBS!=="undefined")SUBS=[];
+  closeModal();
+  if(r&&apply(r)){location.hash="dashboard";start();try{loadInbox(true)}catch(_){}}else await refresh(true);
+  toast("تم حذف جميع البيانات بنجاح ✓");
+ };
+}
 function exportCSV(){const rows=[["Client","Plan","Price","Start","End","Deadline","Status","Rating","Progress %","Team"]];DB.projects.forEach(p=>rows.push([p.client,p.plan,planOf(p.plan)?.price,p.start,p.end,p.deadline,p.status,p.rating,progress(p),p.members.map(m=>DB.users.find(u=>u.id===m)?.name).join(" | ")]));dl(`fasttechno-projects-${today()}.csv`,"\ufeff"+rows.map(r=>r.map(c=>`"${String(c??"").replace(/"/g,'""')}"`).join(",")).join("\n"),"text/csv")}
 window.addEventListener("hashchange",()=>{if(ME){const h=location.hash.slice(1);const [pg]=h.split("/");document.querySelectorAll("#nav a").forEach(a=>a.classList.toggle("active",a.dataset.k===pg));(VIEWS[pg]||VIEWS.dashboard)(h.split("/")[1])}});
 if(TOK)refresh(true).then(()=>{if(TOK&&ME)start()});
@@ -1104,7 +1174,7 @@ FTWF.evm=v=>{EVM=v;EVD=null;VIEWS.evaluation()};FTWF.evd=v=>{EVD=v||null;if(v)EV
 /* ---------- Nav ---------- */
 const _bn=window.buildNav;window.buildNav=function(){_bn();const add=(k,i,t)=>$("#nav").insertAdjacentHTML("beforeend",`<a data-k="${k}" onclick="go('${k}')"><span>${i}</span>${t}</a>`);
   const pend=allSubs().filter(x=>canAct(x.s)).length;add("approvals","✔",`الموافقات${pend?` <b class="nbadge-s">${pend}</b>`:""}`);if(isMgr()){add("hours","⏱","ساعات العمل والإنجاز");add("evaluation","🏆","تقييم الموظفين")}};
-const _start=window.start;window.start=function(){_start();beat();loadSubs().then(()=>{const pg=location.hash.slice(1).split("/")[0];if(["projects","calendar","ratings"].includes(pg))rerender()})};setInterval(beat,4*60e3);setInterval(loadSubs,60e3);
+const _start=window.start;window.start=function(){_start();beat();loadSubs().then(()=>{const pg=location.hash.slice(1).split("/")[0];if(["projects","calendar","ratings","dashboard","mytasks"].includes(pg))rerender()})};setInterval(beat,4*60e3);setInterval(loadSubs,60e3);
 const css=document.createElement("style");css.textContent=`
 .pf-files{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.pf-img{max-width:160px;max-height:160px;border-radius:10px;border:1px solid var(--line,#333)}
 .wf-hist{display:grid;gap:6px;margin-bottom:10px}.wf-h{padding:8px 10px;border-radius:10px;background:rgba(127,127,127,.08);font-size:13px;border-inline-start:3px solid #888}.wf-h.approve{border-color:#3ddc97}.wf-h.reject{border-color:#ff6b6b}.wf-h.forward{border-color:#ffb547}
@@ -1161,7 +1231,7 @@ window.reassignTask=function(pid,k,uid){if(!FTHierarchy.canManageTeam(ME))return
 window.redistribute=function(pid){if(FTHierarchy.canManageTeam(ME)&&window.FTMT)return FTMT.open(pid);return;const p=DB.projects.find(x=>x.id===pid);if(!p||!confirm("إعادة توزيع مهام هذا المشروع تلقائياً؟"))return;const old={...(p.assign||{})};p.assign=FTAUTO.distribute(p,[]);Object.values(p.assign).forEach(u=>{if(!p.members.includes(u))p.members.push(u)});FTAUTO.notifyAssign(p,p.assign,old);save();toast("تمت إعادة التوزيع ✓")};
 
 /* ownership guard: only the assignee completes their task */
-const _attach=window.attachModal;window.attachModal=function(pid,d,k){if(!FTAUTO.canDo(pid,k)){const o=FTAUTO.owner(pid,k);return toast("🔒 هذه المهمة مسندة إلى "+(DB.users.find(u=>u.id===o)?.name||"موظف آخر")+" ولا يمكنك إنجازها")}return _attach.apply(this,arguments)};
+const _attach=window.attachModal||(window.FTWF&&FTWF.attach);window.attachModal=function(pid,d,k){if(!FTAUTO.canDo(pid,k)){const o=FTAUTO.owner(pid,k);return toast("🔒 هذه المهمة مسندة إلى "+(DB.users.find(u=>u.id===o)?.name||"موظف آخر")+" ولا يمكنك إنجازها")}return _attach.apply(this,arguments)};
 
 /* tracker view: owner row + lock icons */
 const _tv2=window.trackerView;window.trackerView=function(id){_tv2(id);const p=DB.projects.find(x=>x.id===id);if(!p)return;const tr=document.querySelector(".trk tr.target");if(!tr)return;const mgr=canEditCreds();
@@ -1562,4 +1632,765 @@ const _itNav=window.buildNav;window.buildNav=function(){_itNav();if(!ME)return;c
  try{if(window.ME&&$("#nav"))buildNav()}catch(e){}
 })();
 </script>
+<style>
+.ftd{margin-bottom:18px;position:relative;overflow:hidden}
+.ftd::before{content:"";position:absolute;inset:0 0 auto 0;height:3px;background:var(--grad)}
+.ftd-head{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.ftd-head h3{margin:0 0 4px;font-size:19px}
+.ftd-head p{margin:0;color:var(--muted);font-size:13px;line-height:1.7}
+.ftd-ring{--p:0;width:92px;height:92px;border-radius:50%;display:grid;place-items:center;flex:none;background:conic-gradient(var(--ok) calc(var(--p)*1%),var(--line-strong) 0)}
+.ftd-ring>div{width:74px;height:74px;border-radius:50%;background:var(--bg-2);display:grid;place-items:center;align-content:center;text-align:center}
+.ftd-ring b{font-size:20px;line-height:1}.ftd-ring small{font-size:11px;color:var(--muted);margin-top:3px}
+.ftd-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px}
+.ftd-kpi{border:1px solid var(--line-strong);border-radius:12px;padding:10px 12px}
+.ftd-kpi b{display:block;font-size:20px}.ftd-kpi span{font-size:12px;color:var(--muted)}
+.ftd-kpi.ok b{color:var(--ok)}.ftd-kpi.warn b{color:var(--warn)}.ftd-kpi.bad b{color:var(--bad)}
+.ftd-sec{font-size:14px;margin:18px 0 10px;display:flex;align-items:center;gap:8px}
+.ftd-sec small{color:var(--muted);font-weight:400}
+.ftd-list{display:grid;gap:10px}
+.ftd-task{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid var(--line-strong);border-radius:14px;cursor:pointer;transition:border-color .2s,transform .2s,background .2s;position:relative}
+.ftd-task:hover,.ftd-task:focus-visible{border-color:var(--cyan);transform:translateY(-1px);outline:none}
+.ftd-task.st-todo{border-inline-start:4px solid var(--cyan)}
+.ftd-task.st-rejected{border-inline-start:4px solid var(--bad);background:linear-gradient(90deg,rgba(255,93,108,.06),transparent)}
+.ftd-task.st-pending{border-inline-start:4px solid var(--warn)}
+.ftd-task.st-done{border-inline-start:4px solid var(--ok);opacity:.78}
+.ftd-ic{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:22px;flex:none;background:var(--surface-1,rgba(255,255,255,.04));border:1px solid var(--line-strong)}
+.ftd-body{flex:1;min-width:0}
+.ftd-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.ftd-top b{font-size:15px}
+.ftd-meta{font-size:12px;color:var(--muted);margin-top:3px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.ftd-req{font-size:13px;line-height:1.75;margin-top:8px}
+.ftd-req em{font-style:normal;color:var(--muted)}
+.ftd-note{font-size:12px;margin-top:6px;padding:6px 10px;border-radius:9px;border:1px dashed var(--line-strong);color:var(--muted)}
+.ftd-note.bad{border-color:rgba(255,93,108,.45);color:var(--bad)}
+.ftd-prog{display:flex;align-items:center;gap:10px;margin-top:10px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.ftd-prog .bar{flex:1;min-width:120px}
+.ftd-cta{align-self:center;flex:none;font-size:13px;font-weight:600;padding:8px 12px;border-radius:10px;white-space:nowrap}
+.st-todo .ftd-cta,.st-rejected .ftd-cta{background:var(--grad);color:#fff}
+.st-pending .ftd-cta,.st-done .ftd-cta{border:1px solid var(--line-strong);color:var(--muted)}
+.ftd-empty{text-align:center;color:var(--muted);padding:26px 10px;border:1px dashed var(--line-strong);border-radius:14px;line-height:1.9}
+.ftd-empty b{display:block;font-size:26px;margin-bottom:4px}
+.ftd-details summary{cursor:pointer;list-style:none}
+.ftd-details summary::-webkit-details-marker{display:none}
+.ftd-mrow{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,2fr) auto;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
+.ftd-mrow:last-child{border-bottom:0}
+.ftd-mrow small{color:var(--muted)}
+.ftd-foot{display:flex;justify-content:flex-end;margin-top:12px}
+.ftd-mine-note{font-size:12px;color:var(--muted);margin:-4px 0 12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.ftd-seg{display:inline-flex;border:1px solid var(--line-strong);border-radius:10px;overflow:hidden}
+.ftd-seg button{background:none;border:0;color:var(--muted);padding:6px 12px;font:inherit;font-size:12px;cursor:pointer}
+.ftd-seg button.on{background:var(--grad);color:#fff}
+.daily-task.ftd-flash{animation:ftdFlash 1.6s ease 2}
+@keyframes ftdFlash{0%,100%{box-shadow:none}50%{box-shadow:0 0 0 2px var(--cyan)}}
+.ftd-up{margin-inline-start:auto}
+@media(max-width:720px){.ftd-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}.ftd-task{flex-wrap:wrap}.ftd-cta{width:100%;text-align:center}.ftd-mrow{grid-template-columns:1fr}.ftd-ring{width:78px;height:78px}.ftd-ring>div{width:62px;height:62px}}
+</style>
+<script>
+/* ===== My tasks today (dashboard) + calendar shows only the employee's own tasks =====
+   A task belongs to an employee when they are its primary or extra owner (FTMT.list).
+   Admin and supervisor keep the full calendar; team leads can switch between "mine" and "team". */
+(function(){
+ const T=(ar,en)=>LANG==="en"?en:ar;
+ const KEYS=TASKS.map(t=>t[0]);
+ const ICON={stories:"📱",posts:"🖼️",reels:"🎬",design:"🎨",ads:"📣",content:"✍️"};
+ const GUIDE={
+  stories:["ستوري واحدة تُنشر على حسابات العميل. بعد النشر ارفع لقطة شاشة أو ملف الستوري.","One story published on the client's accounts. After publishing, upload a screenshot or the story file."],
+  posts:["بوست احترافي واحد حسب هوية العميل. بعد النشر ارفع التصميم النهائي أو لقطة المنشور.","One professional post in the client's brand style. After publishing, upload the final design or a screenshot."],
+  reels:["ريلز واحد (تصوير/مونتاج). ارفع الفيديو النهائي أو لقطة بعد النشر.","One reel (shoot/edit). Upload the final video or a screenshot after publishing."],
+  design:["تصميم واحد حسب طلب العميل وهويته. ارفع ملف التصميم النهائي.","One design following the client's brief and brand. Upload the final design file."],
+  ads:["إعلان ممول أو متابعة حملة. ارفع لقطة من مدير الإعلانات توضّح الإعلان ونتائجه.","A paid ad or campaign follow-up. Upload a screenshot from Ads Manager showing the ad and results."],
+  content:["مهمة صانع محتوى (تصوير/فكرة/نص). ارفع الملف أو المحتوى المنجز.","A content-creator task (shoot/idea/copy). Upload the finished file or content."]
+ };
+ const owners=(p,k)=>window.FTMT?FTMT.list(p,k):[p?.assign?.[k]].filter(Boolean);
+ const mine=(p,k)=>!!ME&&owners(p,k).includes(ME.id);
+ const isManager=()=>!!ME&&["admin","supervisor"].includes(ME.role);
+ const isLead=()=>!!ME&&["it_lead","marketing_lead","photography_lead"].includes(ME.role);
+ let CALMINE=true;
+ const calMineOn=()=>!isManager()&&(!isLead()||CALMINE);
+ const addDays=(d,n)=>{const x=new Date(d+"T12:00:00Z");x.setUTCDate(x.getUTCDate()+n);return x.toISOString().slice(0,10)};
+ const fmtDay=d=>new Date(d+"T12:00:00").toLocaleDateString(LANG==="en"?"en-GB":"ar-JO",{weekday:"long",day:"numeric",month:"long"});
+ const myProjects=()=>visibleProjects().filter(p=>p.status!=="completed"&&KEYS.some(k=>mine(p,k)));
+
+ function state(p,d,k){
+  const s=window.FTWF&&FTWF.subOf?FTWF.subOf(p.id,d,k):null,tr=!!DB.tracker[p.id]?.[d]?.[k];
+  if(s&&s.status==="approved")return{st:"done",s,label:T("معتمدة ✓","Approved ✓"),cls:"b-ok"};
+  if(s&&s.status==="rej_emp")return{st:"rejected",s,label:T("مرفوضة — أعد الرفع","Rejected — re-upload"),cls:"b-bad"};
+  if(s)return{st:"pending",s,label:STAGE(s.status),cls:"b-warn"};
+  if(tr)return{st:"done",s:null,label:T("منجزة ✓","Done ✓"),cls:"b-ok"};
+  return{st:"todo",s:null,label:T("مطلوب رفعها","To upload"),cls:"b-plan"};
+ }
+ function itemsFor(d){
+  return FTDaily.entries(myProjects(),DB.tracker||{},d,KEYS).filter(r=>mine(r.project,r.key)).map(r=>({p:r.project,k:r.key,d,...state(r.project,d,r.key)}));
+ }
+ function taskStats(p,k){const g=+(p.targets?.[k]||0),done=Math.min(g,countDone(DB.tracker[p.id]||{},k));return{g,done,left:Math.max(0,g-done),pct:g?Math.round(done/g*100):0}}
+ const STAGE=st=>({lead:T("بانتظار مسؤول الفريق","Awaiting team lead"),sup:T("بانتظار المسؤول","Awaiting supervisor"),admin:T("بانتظار المدير العام","Awaiting general manager"),ret_lead:T("قيد المراجعة لدى مسؤول الفريق","Under team-lead review"),ret_sup:T("قيد المراجعة لدى المسؤول","Under supervisor review")})[st]||T("بانتظار الموافقة","Awaiting approval");
+ const doAttach=(pid,d,k)=>window.attachModal?window.attachModal(pid,d,k):FTWF.attach(pid,d,k);
+ const ORDER={rejected:0,todo:1,pending:2,done:3};
+
+ function card(x,showDay){
+  const t=taskStats(x.p,x.k),daysLeft_=Math.max(0,Math.ceil((new Date(x.p.end+"T12:00:00Z")-new Date(today()+"T12:00:00Z"))/864e5)),team=owners(x.p,x.k).length;
+  const rej=x.st==="rejected"?((x.s.history||[]).slice(-1)[0]?.note||""):"",dayNote=DB.tracker[x.p.id]?.[x.d]?.note||"";
+  const cta={todo:T("ارفع المهمة ←","Upload task →"),rejected:T("أعد الرفع ←","Re-upload →"),pending:T("عرض الحالة","View status"),done:T("عرض","View")}[x.st];
+  return `<div class="ftd-task st-${x.st}" role="button" tabindex="0" onclick="FTDASH.open('${esc(x.p.id)}','${x.d}','${x.k}')" onkeydown="if(event.key==='Enter')this.click()">
+   <div class="ftd-ic">${ICON[x.k]||"•"}</div>
+   <div class="ftd-body">
+    <div class="ftd-top"><b>${esc(TNAME(x.k))}</b><span class="badge ${x.cls}">${esc(x.label)}</span>${showDay?`<span class="badge b-mut">${esc(fmtDay(x.d))}</span>`:""}</div>
+    <div class="ftd-meta"><span>👤 ${esc(x.p.client)}</span><span class="badge b-plan">${esc(x.p.plan||"")}</span>${x.p.deadline?`<span>Deadline: ${deadlineBadge(x.p)}</span>`:""}${team>1?`<span>👥 ${T("مشتركة مع","Shared with")} ${team-1}</span>`:""}</div>
+    <div class="ftd-req"><em>${T("المطلوب منك:","What you need to do:")}</em> ${esc(GUIDE[x.k]?.[LANG==="en"?1:0]||"")}</div>
+    ${rej?`<div class="ftd-note bad">❌ ${T("سبب الرفض:","Rejection reason:")} ${esc(rej)}</div>`:""}
+    ${dayNote?`<div class="ftd-note">📝 ${esc(dayNote)}</div>`:""}
+    ${t.g?`<div class="ftd-prog"><span>${T("تقدّم المشروع","Project progress")}</span><div class="bar"><i style="width:${t.pct}%"></i></div><b class="en">${t.done}/${t.g}</b><span>· ${T("متبقٍ","left")} <b class="en">${t.left}</b> · ${T("ينتهي بعد","ends in")} <b class="en">${daysLeft_}</b> ${T("يوم","days")}</span></div>`:""}
+   </div>
+   <div class="ftd-cta">${cta}</div>
+  </div>`;
+ }
+
+ function section(){
+  const d=today(),items=itemsFor(d).sort((a,b)=>ORDER[a.st]-ORDER[b.st]);
+  const done=items.filter(x=>x.st==="done").length,pend=items.filter(x=>x.st==="pending").length,left=items.filter(x=>x.st==="todo"||x.st==="rejected").length;
+  const overdue=[];for(let i=1;i<=14;i++){const day=addDays(d,-i);itemsFor(day).forEach(x=>{if(x.st==="todo"||x.st==="rejected")overdue.push(x)})}
+  const pct=items.length?Math.round(done/items.length*100):0;
+  const month=[];myProjects().forEach(p=>KEYS.forEach(k=>{if(mine(p,k)){const t=taskStats(p,k);if(t.g)month.push({p,k,...t})}}));
+  month.sort((a,b)=>b.left-a.left);
+  const mg=month.reduce((s,x)=>s+x.g,0),md=month.reduce((s,x)=>s+x.done,0);
+  const headTxt=!items.length?T("لا توجد مهام مطلوبة منك اليوم","Nothing is due from you today"):left?T(`لديك ${left} من ${items.length} مهام بانتظار الرفع اليوم`,`You have ${left} of ${items.length} tasks to upload today`):pend?T("رفعت كل مهامك، بعضها بانتظار الموافقة","All uploaded — some are awaiting approval"):T("أحسنت! أنجزت كل مهام اليوم 🎉","Great job! All of today's tasks are done 🎉");
+  return `<section class="card ftd" id="ftdToday">
+   <div class="ftd-head"><div><h3>🎯 ${T("مهامي اليوم","My tasks today")}</h3><p>${esc(fmtDay(d))} · ${headTxt}</p><p>${T("انقر على أي مهمة لرفع إثبات الإنجاز في مكانها المخصص.","Click any task to upload its proof in the right place.")}</p></div>
+    <div class="ftd-ring" style="--p:${pct}" title="${done}/${items.length}"><div><b class="en">${pct}%</b><small class="en">${done}/${items.length}</small></div></div></div>
+   <div class="ftd-kpis">
+    <div class="ftd-kpi ok"><b class="en">${done}</b><span>${T("مكتملة اليوم","Done today")}</span></div>
+    <div class="ftd-kpi warn"><b class="en">${pend}</b><span>${T("بانتظار الموافقة","Awaiting approval")}</span></div>
+    <div class="ftd-kpi"><b class="en">${left}</b><span>${T("متبقية اليوم","Left today")}</span></div>
+    <div class="ftd-kpi bad"><b class="en">${overdue.length}</b><span>${T("متأخرة (آخر 14 يوم)","Overdue (14 days)")}</span></div>
+   </div>
+   <div class="ftd-list">${items.length?items.map(x=>card(x,false)).join(""):`<div class="ftd-empty"><b>☕</b>${T("لا توجد مهام مجدولة لك اليوم. تابع مهامك القادمة من تقويم المهام.","No tasks scheduled for you today. Check upcoming tasks in the calendar.")}</div>`}</div>
+   ${overdue.length?`<details class="ftd-details" ${left?"":"open"}><summary class="ftd-sec">⏰ ${T("مهام فائتة لم تُرفع بعد","Missed tasks not uploaded yet")} <span class="badge b-bad en">${overdue.length}</span> <small>${T("(انقر للعرض)","(click to show)")}</small></summary><div class="ftd-list">${overdue.slice(0,20).map(x=>card(x,true)).join("")}</div></details>`:""}
+   ${month.length?`<div class="ftd-sec">📊 ${T("تقدّمي في المشاريع","My progress across projects")} <small class="en">${md}/${mg} · ${T("متبقٍ","left")} ${Math.max(0,mg-md)}</small></div>
+    <div>${month.slice(0,8).map(x=>`<div class="ftd-mrow"><div><b>${ICON[x.k]||""} ${esc(TNAME(x.k))}</b><br><small>${esc(x.p.client)}</small></div><div style="display:flex;align-items:center;gap:8px"><div class="bar" style="flex:1"><i style="width:${x.pct}%"></i></div><small class="en">${x.pct}%</small></div><div style="text-align:end"><b class="en">${x.done}/${x.g}</b><br><small>${x.left?T("متبقٍ ","Left ")+x.left:T("مكتمل ✓","Complete ✓")}</small></div></div>`).join("")}</div>
+    <div class="ftd-foot"><button class="btn sm" onclick="go('mytasks')">${T("كل مهامي ←","All my tasks →")}</button> <button class="btn sm" onclick="go('calendar')" style="margin-inline-start:8px">${T("تقويم مهامي","My calendar")}</button></div>`:""}
+  </section>`;
+ }
+
+ const _dash=VIEWS.dashboard;
+ VIEWS.dashboard=function(){_dash.apply(this,arguments);if(!ME||isManager())return;
+  const top=document.querySelector("#main .top");if(top)top.insertAdjacentHTML("afterend",section());};
+
+ /* Calendar: only the employee's own tasks */
+ const _rows=window.calendarRows;
+ window.calendarRows=calendarRows=function(d){const r=_rows(d);return calMineOn()?r.filter(x=>mine(x.project,x.key)):r};
+ const _cal=VIEWS.calendar;
+ VIEWS.calendar=function(){_cal.apply(this,arguments);if(!ME||isManager())return;
+  const on=calMineOn(),sel=$("#calProject");
+  if(sel&&on)[...sel.options].forEach(o=>{if(o.value&&!myProjects().some(p=>p.id===o.value))o.remove()});
+  const tb=document.querySelector("#main .toolbar");
+  if(tb)tb.insertAdjacentHTML("afterend",`<div class="ftd-mine-note">${isLead()?`<span class="ftd-seg"><button class="${on?"on":""}" onclick="FTDASH.calMine(true)">${T("مهامي فقط","Only mine")}</button><button class="${on?"":"on"}" onclick="FTDASH.calMine(false)">${T("مهام الفريق","Team tasks")}</button></span>`:""}<span>${on?T("🔒 يظهر هنا فقط المهام المسندة إليك. انقر على المهمة لرفع إثبات الإنجاز.","🔒 Only tasks assigned to you are shown. Click a task to upload its proof."):T("تعرض كل مهام المشاريع التي تتابعها.","Showing all tasks of projects you follow.")}</span></div>`);
+  if(CALDAY<=today())document.querySelectorAll(".daily-task").forEach(el=>{const cb=el.querySelector("input[type=checkbox]");const m=(cb?.getAttribute("onchange")||"").match(/'([^']+)','([^']+)','([^']+)'/);if(!m)return;const p=DB.projects.find(x=>x.id===m[1]);if(!p||!mine(p,m[3]))return;const st=state(p,m[2],m[3]).st;
+   if(st==="todo"||st==="rejected")el.insertAdjacentHTML("beforeend",`<button class="btn sm primary ftd-up" onclick="event.stopPropagation();FTDASH.attach('${esc(m[1])}','${m[2]}','${m[3]}')">📎 ${st==="rejected"?T("إعادة الرفع","Re-upload"):T("رفع المهمة","Upload")}</button>`)});
+ };
+
+ function open(pid,d,k){
+  const p=DB.projects.find(x=>x.id===pid);if(!p)return;const st=state(p,d,k);
+  CALDAY=d;CALMONTH=d.slice(0,7);CALPROJECT="";
+  const after=()=>{const cb=[...document.querySelectorAll(".daily-task input[type=checkbox]")].find(c=>(c.getAttribute("onchange")||"").includes(`'${pid}','${d}','${k}'`));const row=cb&&cb.closest(".daily-task");if(row){row.classList.add("ftd-flash");row.scrollIntoView({block:"center",behavior:"smooth"})}
+   if(st.st!=="done"||st.s)doAttach(pid,d,k)};
+  if(location.hash.slice(1)==="calendar"){VIEWS.calendar();setTimeout(after,60)}else{go("calendar");setTimeout(after,180)}
+ }
+ window.FTDASH={open,attach:doAttach,calMine(v){CALMINE=!!v;VIEWS.calendar()},itemsFor};
+ try{if(ME&&$("#main")&&(location.hash.slice(1)||"dashboard").split("/")[0]==="dashboard")VIEWS.dashboard()}catch(e){}
+})();
+</script>
+
+<style id="ft-plans-admin-css">
+.pl-adminbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 16px;margin-bottom:16px;border:1px dashed var(--line-strong,var(--line));border-radius:14px;font-size:13px;color:var(--muted)}
+.pl-adminbar b{color:inherit}
+.plan .pl-tools{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:10px;border-top:1px solid var(--line)}
+.plan .pl-tools .btn{flex:1;justify-content:center}
+.pl-empty{text-align:center;padding:48px 20px}
+.pl-empty .ic{font-size:44px;margin-bottom:8px}
+.pl-empty p{color:var(--muted);font-size:13px;line-height:1.8;margin:6px 0 18px}
+.pl-form .pl-sec{grid-column:1/-1;font-size:12px;font-weight:700;letter-spacing:.4px;color:var(--muted);margin:6px 0 -4px;padding-top:10px;border-top:1px solid var(--line)}
+.pl-form .pl-row{display:flex;gap:8px}
+.pl-form .pl-row>*{flex:1;min-width:0}
+.pl-form .pl-row>.pl-cur{flex:0 0 96px}
+.pl-tg{grid-column:1/-1;display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+.pl-tg label{font-size:11px;margin-bottom:4px;display:block;color:var(--muted)}
+.pl-tg input{text-align:center}
+.pl-chk{display:flex;gap:8px;align-items:center;font-size:13px;cursor:pointer;margin:0}
+.pl-chk input{width:auto}
+.pl-hint{font-size:11px;color:var(--muted);margin-top:4px;line-height:1.6}
+.pl-del-name{display:inline-flex;gap:6px;align-items:center;padding:6px 12px;border-radius:999px;border:1px solid rgba(255,93,108,.4);font-weight:700;margin:4px 0 12px}
+.pl-warn{padding:10px 12px;border-radius:12px;font-size:12px;line-height:1.8;color:var(--muted);border:1px solid var(--line);margin-bottom:12px}
+.pl-warn b{color:var(--bad)}
+.pl-gone{font-size:11px;color:var(--bad)}
+@media(max-width:640px){.pl-tg{grid-template-columns:repeat(3,1fr)}}
+</style>
+<script id="ft-plans-admin-js">
+/* ===== Plans management (admin): add / edit / delete / delete all — stored in Supabase (ft_plans) ===== */
+(function(){
+ const T=(ar,en)=>LANG==="en"?en:ar;
+ const KEYS=[["stories","Stories"],["posts","Posts"],["reels","Reels"],["design","Design"],["ads","Ads"],["content","Content"]];
+ const ERR={bad_name:["اسم الباقة غير صالح (أحرف وأرقام ومسافات فقط، حتى 40 حرفاً)","Invalid plan name (letters, digits and spaces, up to 40 characters)"],exists:["يوجد باقة بنفس الاسم","A plan with this name already exists"],not_found:["الباقة غير موجودة، ربما حُذفت","Plan not found, it may have been deleted"],bad_link:["رابط PDF يجب أن يبدأ بـ https://","PDF link must start with https://"],forbidden:["هذا الإجراء متاح للمدير العام فقط","Only the general manager can do this"],bad_password:["كلمة المرور غير صحيحة","Incorrect password"],invalid:["بيانات غير صالحة","Invalid data"]};
+ const errMsg=e=>{const m=ERR[e];return m?T(m[0],m[1]):T("تعذّر الحفظ","Couldn't save")};
+ let LOADED=false,FAILS=0,LOCK=0;
+
+ function setPlans(list){
+  PLANS.items.splice(0,PLANS.items.length,...(Array.isArray(list)?list:[]));
+  Object.keys(PLAN_TARGETS).forEach(k=>delete PLAN_TARGETS[k]);
+  PLANS.items.forEach(p=>{PLAN_TARGETS[p.name]={...(p.targets||{})}});
+ }
+ function redraw(){
+  if(!ME)return;
+  const pg=(location.hash.slice(1)||"dashboard").split("/")[0];
+  if(!["plans","projects","dashboard"].includes(pg))return;
+  if(busy()){PENDING=true;return}
+  rerender();
+ }
+ async function loadPlans(){
+  if(!TOK)return;
+  try{const r=await rpc("ft_plans_get",{p_token:TOK});if(!r||r.disabled||!Array.isArray(r.plans))return;setPlans(r.plans);LOADED=true;redraw()}catch(e){}
+ }
+ window.FTPLANS={load:loadPlans,set:setPlans,loaded:()=>LOADED};
+
+ const _start=start;start=function(){const r=_start.apply(this,arguments);loadPlans();return r};
+ try{SB.channel("ft-plans").on("broadcast",{event:"changed"},()=>loadPlans()).subscribe()}catch(e){}
+ document.addEventListener("visibilitychange",()=>{if(!document.hidden)loadPlans()});
+ if(TOK&&ME)loadPlans();
+
+ const used=n=>(DB&&DB.projects||[]).filter(x=>x.plan===n).length;
+
+ /* ---- Plans page ---- */
+ VIEWS.plans=function(){
+  const adm=isAdmin(),items=PLANS.items;
+  const btns=adm?`<button class="btn primary" onclick="FTPLANS.edit()">＋ ${T("إضافة باقة","Add plan")}</button>${items.length?`<button class="btn danger" onclick="FTPLANS.clearAll()">🗑 ${T("حذف جميع الباقات","Delete all plans")}</button>`:""}`:"";
+  const bar=adm?`<div class="pl-adminbar"><span>🛠 ${T("إدارة الباقات","Plans management")} — <b class="en">${items.length}</b> ${T("باقة","plans")} · <b class="en">${(DB.projects||[]).length}</b> ${T("مشروع","projects")}</span><span>${T("أي تعديل يظهر فوراً لدى جميع المستخدمين","Changes appear instantly for all users")}</span></div>`:"";
+  const card=p=>`<div class="card plan ${p.featured?"featured":""}">${p.badge?`<span class="badge b-plan tag">${esc(p.badge)}</span>`:""}<div class="ic">${esc(p.icon||"📦")}</div><h3>${esc(p.name)}</h3><div style="color:var(--muted);font-size:13px">${esc(p.desc)}</div><div class="pr en">${esc(p.price)} <small>${esc(p.period)}</small></div><div style="font-size:12px;color:var(--muted)">${used(p.name)} ${T("مشروع على هذه الباقة","projects on this plan")}</div><ul>${(p.features||[]).map(f=>`<li>${esc(f)}</li>`).join("")}</ul><div style="margin-top:auto;display:flex;gap:8px;flex-wrap:wrap">${p.publicPdf?`<a class="btn sm" href="${esc(p.publicPdf)}" target="_blank" rel="noopener">📄 PDF</a>`:""}${canPublish()?`<button class="btn sm primary" onclick="projectModal(null,'${esc(p.name)}')">＋ ${T("مشروع بهذه الباقة","Project with this plan")}</button>`:""}</div>${adm?`<div class="pl-tools"><button class="btn sm" onclick="FTPLANS.edit('${esc(p.name)}')">✏️ ${T("تعديل","Edit")}</button><button class="btn sm danger" onclick="FTPLANS.del('${esc(p.name)}')">🗑 ${T("حذف الباقة","Delete plan")}</button></div>`:""}</div>`;
+  const empty=`<div class="card pl-empty"><div class="ic">📦</div><h3 style="margin:0">${T("لا توجد باقات حالياً","No plans yet")}</h3><p>${adm?T("ابدأ بإضافة أول باقة لتتمكن من ربط المشاريع بها","Add your first plan so projects can be linked to it"):T("لم تتم إضافة أي باقة بعد من قبل الإدارة","Management hasn't added any plans yet")}</p>${adm?`<button class="btn primary" onclick="FTPLANS.edit()">＋ ${T("إضافة باقة","Add plan")}</button>`:""}</div>`;
+  $("#main").innerHTML=header(T("باقات Fast Techno","Fast Techno Plans"),T("الباقات المعتمدة من موقع fasttechnoagency.com","Official plans from fasttechnoagency.com"),btns)+bar+(items.length?`<div class="grid plans">${items.map(card).join("")}</div>`:empty);
+ };
+
+ /* ---- Add / edit modal ---- */
+ function edit(name){
+  if(!isAdmin())return toast(T("غير مسموح","Not allowed"));
+  const cur=name?PLANS.items.find(p=>p.name===name):null;
+  if(name&&!cur)return toast(errMsg("not_found"));
+  const p=cur||{name:"",icon:"📦",desc:"",price:"",period:"/ month",badge:"",featured:false,publicPdf:"",features:[],targets:{content:4,stories:8,posts:8,reels:1,design:1,ads:1}};
+  const m=String(p.price||"").match(/^\s*([\d.,]+)\s*(.*)$/),amt=m?m[1].replace(/,/g,""):"",curr=(m?m[2]:"")||"JOD";
+  modal(`<h3>${cur?T("تعديل الباقة","Edit plan")+" — "+esc(p.name):"＋ "+T("إضافة باقة جديدة","Add a new plan")}</h3>
+  <form id="plf" class="form pl-form" autocomplete="off">
+   <div><label>${T("اسم الباقة","Plan name")}</label><input id="pln" value="${esc(p.name)}" maxlength="40" placeholder="PLUTO" ${cur?"disabled":""} required>${cur?`<div class="pl-hint">${T("لا يمكن تغيير الاسم لأنه مرتبط بالمشاريع","Name can't be changed because projects are linked to it")}</div>`:""}</div>
+   <div><label>${T("الأيقونة","Icon")}</label><input id="pli" value="${esc(p.icon)}" maxlength="8" placeholder="🚀"></div>
+   <div><label>${T("السعر","Price")}</label><div class="pl-row"><input id="plp" dir="ltr" type="number" min="0" step="any" value="${esc(amt)}" placeholder="300" required><input id="plc" dir="ltr" class="pl-cur" value="${esc(curr)}" maxlength="8"></div></div>
+   <div><label>${T("الفترة","Period")}</label><input id="plper" dir="ltr" value="${esc(p.period)}" maxlength="30" list="plperl"><datalist id="plperl"><option value="/ month"><option value="/ 3 months"><option value="/ year"><option value="one-time"></datalist></div>
+   <div class="full"><label>${T("وصف مختصر","Short description")}</label><input id="pld" value="${esc(p.desc)}" maxlength="300"></div>
+   <div><label>${T("الشارة (اختياري)","Badge (optional)")}</label><input id="plb" value="${esc(p.badge)}" maxlength="40" placeholder="Most popular"></div>
+   <div><label>${T("رابط ملف PDF (اختياري)","PDF link (optional)")}</label><input id="plpdf" value="${esc(p.publicPdf)}" maxlength="500" placeholder="https://..." dir="ltr"></div>
+   <div class="full"><label class="pl-chk"><input type="checkbox" id="plf_feat" ${p.featured?"checked":""}> ⭐ ${T("تمييز هذه الباقة (الأكثر طلباً)","Highlight this plan (most popular)")}</label></div>
+   <div class="full"><label>${T("مميزات الباقة — ميزة في كل سطر","Plan features — one per line")}</label><textarea id="plfe" rows="6">${esc((p.features||[]).join("\n"))}</textarea></div>
+   <div class="pl-sec">🎯 ${T("الأهداف الشهرية الافتراضية لكل مهمة (تُطبّق على المشاريع الجديدة)","Default monthly targets per task (applied to new projects)")}</div>
+   <div class="pl-tg">${KEYS.map(([k,l])=>`<div><label>${l}</label><input type="number" min="0" max="999" data-tk="${k}" value="${+(p.targets?.[k]||0)}"></div>`).join("")}</div>
+   <div class="full err" id="plerr"></div>
+  </form><div class="actions"><button class="btn" onclick="closeModal()">${T("إلغاء","Cancel")}</button><button class="btn primary" id="plsave">${cur?T("حفظ التعديلات","Save changes"):T("إضافة الباقة","Add plan")}</button></div>`);
+  setTimeout(()=>$(cur?"#pld":"#pln")?.focus(),50);
+  const err=$("#plerr"),btn=$("#plsave");
+  const submit=async e=>{
+   e&&e.preventDefault();
+   const v={name:(cur?p.name:$("#pln").value).trim(),icon:$("#pli").value.trim(),desc:$("#pld").value.trim(),period:$("#plper").value.trim(),badge:$("#plb").value.trim(),publicPdf:$("#plpdf").value.trim(),featured:$("#plf_feat").checked,features:$("#plfe").value.split("\n").map(s=>s.trim()).filter(Boolean),targets:{}};
+   const a=$("#plp").value.trim(),c=$("#plc").value.trim()||"JOD";
+   document.querySelectorAll("[data-tk]").forEach(i=>{v.targets[i.dataset.tk]=Math.max(0,Math.min(999,Math.floor(+i.value||0)))});
+   if(!v.name)return err.textContent=T("يرجى كتابة اسم الباقة","Please enter the plan name");
+   if(!/^[\p{L}\p{N} _.+-]{1,40}$/u.test(v.name))return err.textContent=errMsg("bad_name");
+   if(!cur&&PLANS.items.some(x=>x.name.toLowerCase()===v.name.toLowerCase()))return err.textContent=errMsg("exists");
+   if(a===""||isNaN(+a)||+a<0)return err.textContent=T("يرجى إدخال سعر صحيح","Please enter a valid price");
+   if(v.publicPdf&&!/^https:\/\/\S+$/.test(v.publicPdf))return err.textContent=errMsg("bad_link");
+   v.price=`${+a} ${c}`;
+   btn.disabled=true;btn.textContent=T("جارٍ الحفظ…","Saving…");err.textContent="";
+   let r;try{r=await rpc("ft_plan_save",{p_token:TOK,p_plan:v,p_new:!cur})}catch(x){r={error:"net"}}
+   if(r&&r.disabled)return kicked();
+   if(!r||r.error){btn.disabled=false;btn.textContent=cur?T("حفظ التعديلات","Save changes"):T("إضافة الباقة","Add plan");err.textContent=r&&r.error==="net"?T("تعذّر الاتصال بالخادم، لم يتم الحفظ","Couldn't reach the server, nothing was saved"):errMsg(r&&r.error);return}
+   setPlans(r.plans);closeModal();VIEWS.plans();toast(cur?T("تم حفظ تعديلات الباقة ✓","Plan updated ✓"):T("تمت إضافة الباقة ✓","Plan added ✓"));
+  };
+  $("#plf").onsubmit=submit;btn.onclick=submit;
+ }
+
+ /* ---- Delete one ---- */
+ function del(name){
+  if(!isAdmin())return toast(T("غير مسموح","Not allowed"));
+  const p=PLANS.items.find(x=>x.name===name);if(!p)return toast(errMsg("not_found"));
+  const n=used(name);
+  modal(`<div class="wipe"><div class="wipe-ic">🗑</div><h3 style="margin:0 0 6px">${T("حذف الباقة","Delete plan")}</h3>
+   <div class="pl-del-name">${esc(p.icon||"")} <span class="en">${esc(p.name)}</span> — <span class="en">${esc(p.price)}</span></div>
+   <div class="pl-warn">${n?`<b>${T("تنبيه:","Note:")}</b> ${T(`يوجد ${n} مشروع مرتبط بهذه الباقة. لن تُحذف هذه المشاريع وستحتفظ باسم الباقة وأهدافها الحالية، لكن لن تظهر الباقة عند إنشاء مشاريع جديدة.`,`${n} project(s) use this plan. They won't be deleted and will keep the plan name and current targets, but the plan won't be available for new projects.`)}`:T("لا توجد مشاريع مرتبطة بهذه الباقة.","No projects use this plan.")}</div>
+   <div class="wipe-err" id="pderr"></div>
+   <div class="wipe-actions"><button type="button" class="btn" onclick="closeModal()">${T("إلغاء","Cancel")}</button><button class="btn danger-solid" id="pdgo">🗑 ${T("حذف الباقة","Delete plan")}</button></div></div>`);
+  const b=$("#pdgo");
+  b.onclick=async()=>{
+   b.disabled=true;b.textContent=T("جارٍ الحذف…","Deleting…");
+   let r;try{r=await rpc("ft_plan_delete",{p_token:TOK,p_name:name})}catch(x){r={error:"net"}}
+   if(r&&r.disabled)return kicked();
+   if(!r||r.error){b.disabled=false;b.textContent="🗑 "+T("حذف الباقة","Delete plan");$("#pderr").textContent=r&&r.error==="net"?T("تعذّر الاتصال بالخادم، لم يتم الحذف","Couldn't reach the server, nothing was deleted"):errMsg(r&&r.error);return}
+   setPlans(r.plans);closeModal();VIEWS.plans();toast(T("تم حذف الباقة ✓","Plan deleted ✓"));
+  };
+ }
+
+ /* ---- Delete all (password required) ---- */
+ function clearAll(){
+  if(!isAdmin())return toast(T("غير مسموح","Not allowed"));
+  const total=PLANS.items.length,linked=(DB.projects||[]).filter(x=>PLANS.items.some(p=>p.name===x.plan)).length;
+  modal(`<div class="wipe"><div class="wipe-ic">⚠</div><h3 style="margin:0 0 6px">${T("حذف جميع الباقات","Delete all plans")}</h3>
+   <p class="wipe-sub">${T(`سيتم حذف ${total} باقة نهائياً لدى جميع المستخدمين. المشاريع الحالية (${linked}) لن تُحذف وستحتفظ بأسماء باقاتها، لكن لن تتمكن من إنشاء مشاريع جديدة حتى تضيف باقة.`,`${total} plan(s) will be permanently deleted for all users. Existing projects (${linked}) won't be deleted and keep their plan names, but no new projects can be created until you add a plan.`)}</p>
+   <form id="pcf" autocomplete="off">
+    <label>${T("كلمة مرور حسابك للتأكيد","Your account password to confirm")}</label><input type="password" id="pcpw" autocomplete="current-password" required>
+    <label class="wipe-ack"><input type="checkbox" id="pcack"> ${T("أفهم أن جميع الباقات ستُحذف نهائياً","I understand all plans will be permanently deleted")}</label>
+    <div class="wipe-err" id="pcerr"></div>
+    <div class="wipe-actions"><button type="button" class="btn" onclick="closeModal()">${T("إلغاء","Cancel")}</button><button class="btn danger-solid" id="pcgo" disabled>🗑 ${T("حذف جميع الباقات","Delete all plans")}</button></div>
+   </form></div>`);
+  const f=$("#pcf"),pw=$("#pcpw"),ack=$("#pcack"),b=$("#pcgo"),err=$("#pcerr"),lbl="🗑 "+T("حذف جميع الباقات","Delete all plans");
+  const sync=()=>{b.disabled=!(pw.value&&ack.checked)||Date.now()<LOCK};
+  pw.oninput=()=>{err.textContent="";sync()};ack.onchange=sync;setTimeout(()=>pw.focus(),50);
+  f.onsubmit=async e=>{
+   e.preventDefault();if(!isAdmin())return;
+   if(Date.now()<LOCK){err.textContent=T(`محاولات كثيرة، حاول بعد ${Math.ceil((LOCK-Date.now())/1000)} ثانية`,`Too many attempts, try again in ${Math.ceil((LOCK-Date.now())/1000)}s`);return}
+   if(!pw.value||!ack.checked)return;
+   const h=await sha(pw.value);
+   if(h!==ME.pass){FAILS++;pw.value="";sync();
+    if(FAILS>=5){FAILS=0;LOCK=Date.now()+60000;err.textContent=T("محاولات كثيرة، تم إيقاف المحاولة لمدة 60 ثانية","Too many attempts, locked for 60 seconds");setTimeout(sync,60100)}
+    else err.textContent=T(`كلمة المرور غير صحيحة (${5-FAILS} محاولات متبقية)`,`Incorrect password (${5-FAILS} attempts left)`);
+    return}
+   b.disabled=true;b.textContent=T("جارٍ الحذف…","Deleting…");pw.disabled=true;
+   let r;try{r=await rpc("ft_plans_clear",{p_token:TOK,p_hash:h})}catch(x){r={error:"net"}}
+   if(r&&r.disabled)return kicked();
+   if(!r||r.error){b.textContent=lbl;pw.disabled=false;pw.value="";sync();err.textContent=r&&r.error==="net"?T("تعذّر الاتصال بالخادم، لم يتم حذف أي باقة","Couldn't reach the server, nothing was deleted"):errMsg(r&&r.error);return}
+   FAILS=0;setPlans([]);closeModal();VIEWS.plans();toast(T("تم حذف جميع الباقات ✓","All plans deleted ✓"));
+  };
+ }
+ Object.assign(window.FTPLANS,{edit,del,clearAll});
+
+ /* ---- Project modal: keep a deleted plan selected, block new projects when no plans exist ---- */
+ const _pm=projectModal;
+ projectModal=function(id,planName){
+  const r=_pm.apply(this,arguments);
+  const sel=$("#pp");if(!sel)return r;
+  const p=id?DB.projects.find(x=>x.id===id):null;
+  if(p&&p.plan&&!PLANS.items.some(x=>x.name===p.plan)){const o=document.createElement("option");o.value=p.plan;o.textContent=`${p.plan} — ${T("باقة محذوفة","deleted plan")}`;sel.prepend(o);sel.value=p.plan}
+  if(!sel.options.length){
+   sel.insertAdjacentHTML("afterend",`<div class="pl-gone" style="margin-top:6px">${T("لا توجد باقات — يجب إضافة باقة من صفحة الباقات أولاً","No plans — add a plan from the Plans page first")}${isAdmin()?` <a href="#" onclick="closeModal();go('plans');return false">${T("الذهاب للباقات","Go to plans")}</a>`:""}</div>`);
+   sel.disabled=true;
+   const sv=document.querySelector('#modalRoot .actions .btn.primary');if(sv)sv.disabled=true;
+  }
+  return r;
+ };
+ const _sp=saveProject;
+ saveProject=function(id){
+  const sel=$("#pp");
+  if(sel&&(!sel.value||sel.disabled)){const e=$("#perr");if(e)e.textContent=T("يرجى إضافة باقة أولاً","Please add a plan first");return}
+  return _sp.apply(this,arguments);
+ };
+
+ try{if(ME&&(location.hash.slice(1)||"").split("/")[0]==="plans")VIEWS.plans()}catch(e){}
+})();
+</script>
+
+<style id="ft-departments-css">
+.dp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.dp-card{display:flex;flex-direction:column;gap:10px}
+.dp-card h3{margin:0;font-size:17px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.dp-meta{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+.dp-meta b{color:var(--text,inherit)}
+.dp-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto}
+.dp-warn{padding:12px 16px;margin-bottom:16px;border:1px solid rgba(255,181,71,.45);border-radius:14px;font-size:13px;line-height:1.8;color:var(--warn)}
+.dp-count{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700}
+</style>
+<script id="ft-departments-js">
+/* ===== Departments management: admin + supervisor can add / rename / delete extra departments (stored in Supabase: ft_departments) =====
+   Built-in departments stay fixed (they are tied to the lead roles). Each added department can have its own department lead
+   (lead_id = one employee of that department); the other employees report to that lead (manager_id = lead_id). Without a lead
+   they report directly to the general manager and the supervisor (manager_id = null). */
+(function(){
+ const T=(ar,en)=>LANG==="en"?en:ar;
+ const H=FTHierarchy,D=H.departments,BUILTIN=new Set(Object.keys(D));
+ const CUSTOM={};let STATE="loading";/* loading | ok | missing | error */
+ const KEY_RE=/^c_[a-z0-9]{4,24}$/,NAME_RE=/^[\p{L}\p{N}][\p{L}\p{N} &/()._+-]{0,39}$/u;
+ const CACHE="ft_depts_cache";
+ const ERR={forbidden:["إدارة الأقسام متاحة فقط للمدير العام والمسؤول","Only the general manager and supervisor can manage departments"],bad_name:["اسم القسم غير صالح (حتى 40 حرفاً: أحرف وأرقام ومسافات)","Invalid department name (up to 40 letters, digits and spaces)"],exists:["يوجد قسم بنفس الاسم","A department with this name already exists"],not_found:["القسم غير موجود، ربما حُذف","Department not found, it may have been deleted"],in_use:["لا يمكن حذف قسم فيه موظفون — انقلهم إلى قسم آخر أولاً","Can't delete a department that has employees — move them first"],bad_lead:["مسؤول القسم يجب أن يكون موظفاً نشطاً في القسم نفسه","The department lead must be an active employee of the same department"],is_lead:["هذا الموظف مسؤول القسم — اختر مسؤولاً آخر للقسم أو أزله أولاً","This employee leads the department — pick another lead or remove them first"],builtin:["الأقسام الأساسية لا يمكن تعديلها أو حذفها","Built-in departments can't be changed or deleted"],invalid:["بيانات غير صالحة","Invalid data"]};
+ const errMsg=e=>{const m=ERR[e];return m?T(m[0],m[1]):T("تعذّر الحفظ","Couldn't save")};
+ const canDepts=()=>Boolean(ME&&(ME.role==="admin"||ME.role==="supervisor"));
+ const isCustom=k=>Object.hasOwn(CUSTOM,k);
+ const members=k=>(DB&&DB.users||[]).filter(u=>u.department===k);
+ const leadOf=k=>{const c=CUSTOM[k];if(!c||!c.lead_id)return null;const u=(DB&&DB.users||[]).find(x=>x.id===c.lead_id&&!x.disabled);return u&&u.department===k&&u.role==="employee"?u:null};
+ const ledDept=a=>a?Object.keys(CUSTOM).find(k=>CUSTOM[k].lead_id===a.id&&a.department===k&&a.role==="employee")||null:null;
+ const LEAD={management:"",it:"it_lead",marketing:"marketing_lead",design:"marketing_lead",photography:"photography_lead",legal:""};
+
+ function setDepts(list){
+  Object.keys(CUSTOM).forEach(k=>{delete CUSTOM[k];if(!BUILTIN.has(k))delete D[k]});
+  (Array.isArray(list)?list:[]).forEach(d=>{
+   if(!d||!KEY_RE.test(d.key||"")||BUILTIN.has(d.key)||typeof d.name!=="string")return;
+   const name=d.name.trim().slice(0,40);if(!name)return;
+   CUSTOM[d.key]={key:d.key,name,lead_id:typeof d.lead_id==="string"&&d.lead_id?d.lead_id:null,created_at:d.created_at||null};D[d.key]=name;
+  });
+  try{sessionStorage.setItem(CACHE,JSON.stringify(Object.values(CUSTOM)))}catch(e){}
+ }
+ try{setDepts(JSON.parse(sessionStorage.getItem(CACHE)||"[]"))}catch(e){}
+
+ function redraw(){
+  if(!ME)return;
+  const pg=(location.hash.slice(1)||"dashboard").split("/")[0];
+  if(!["departments","team","hub"].includes(pg))return;
+  if(busy()){PENDING=true;return}
+  rerender();
+ }
+ async function load(){
+  if(!TOK)return;
+  try{const r=await rpc("ft_depts_get",{p_token:TOK});if(!r||r.disabled)return;if(r.error){STATE="error";return redraw()}setDepts(r.departments);STATE="ok";try{buildNav()}catch(e){}redraw()}
+  catch(x){STATE=(x&&(x.code==="PGRST202"||/ft_depts_get/.test(x.message||"")))?"missing":"error";redraw()}
+ }
+ const ping=()=>{try{SB.channel("ft-depts").send({type:"broadcast",event:"changed",payload:{}})}catch(e){}};
+
+ /* ---- Rules: employees of an added department report to its lead (or directly to admin + supervisor when it has none) ---- */
+ const _va=H.validAssignment;
+ H.validAssignment=function(user,users){
+  if(user&&isCustom(user.department)){
+   if(user.role!=="employee")return false;
+   const c=CUSTOM[user.department];
+   if(!c.lead_id||c.lead_id===user.id)return !user.manager_id;
+   return user.manager_id===c.lead_id;
+  }
+  return _va.apply(this,arguments);
+ };
+ /* the lead of an added department manages only the employees of that department who report to them */
+ const _cm=H.canManage,_cmt=H.canManageTeam;
+ H.canManage=function(actor,target){
+  const k=ledDept(actor);
+  if(k&&target&&actor.id!==target.id)return target.role==="employee"&&target.department===k&&target.manager_id===actor.id;
+  return _cm.apply(this,arguments);
+ };
+ H.canManageTeam=function(actor){return Boolean(ledDept(actor))||_cmt.apply(this,arguments)};
+ const _cn=H.canNote;
+ H.canNote=function(actor,target){if(ledDept(actor))return Boolean(target&&H.canManage(actor,target));return _cn.apply(this,arguments)};
+ H.teamOf=function(actor,users){return (users||[]).filter(u=>H.canNote(actor,u))};
+ H.leadOfDept=leadOf;H.ledDept=ledDept;
+
+ /* ---- Employee form: added departments are selectable by admin + supervisor ---- */
+ const _um=userModal;
+ userModal=function(id){
+  const r=_um.apply(this,arguments);
+  const sel=$("#ud");if(!sel||!canDepts())return r;
+  const keys=Object.keys(CUSTOM);
+  if(keys.length){
+   [...sel.options].forEach(o=>{if(isCustom(o.value))o.remove()});
+   const g=document.createElement("optgroup");g.label=T("أقسام مضافة","Added departments");
+   const u=id?DB.users.find(x=>x.id===id):null;
+   keys.forEach(k=>{const o=document.createElement("option");o.value=k;o.textContent=CUSTOM[k].name;if(u&&u.department===k)o.selected=true;g.appendChild(o)});
+   sel.appendChild(g);
+   /* role list: "مسؤول <قسم مضاف>" for every added department */
+   const ur=$("#ur");
+   if(ur){
+    [...ur.querySelectorAll('option[value^="lead:"]')].forEach(o=>o.remove());
+    const g2=document.createElement("optgroup");g2.label=T("مسؤولو الأقسام المضافة","Added department leads");
+    keys.forEach(k=>{const o=document.createElement("option");o.value="lead:"+k;o.textContent=roleName(k);const L=leadOf(k);if(u&&L&&L.id===u.id)o.selected=true;g2.appendChild(o)});
+    ur.appendChild(g2);
+   }
+  }
+  const um=$("#um");if(um)um.dataset.uid=id||"";
+  const lbl=sel.previousElementSibling;
+  if(lbl&&!lbl.querySelector(".dp-add"))lbl.insertAdjacentHTML("beforeend",` <a href="#" class="dp-add" style="font-size:11px;font-weight:600" onclick="closeModal();go('departments');return false">＋ ${T("قسم جديد","New department")}</a>`);
+  syncUserForm();
+  return r;
+ };
+ const _suf=syncUserForm;
+ syncUserForm=function(){
+  const r=_suf.apply(this,arguments);
+  const d=$("#ud"),m=$("#um"),rv=$("#ur")?$("#ur").value:"";
+  const old=$("#urHint");if(old)old.remove();
+  if(d&&m&&rv.startsWith("lead:")&&isCustom(rv.slice(5))){
+   const k=rv.slice(5),L=leadOf(k),self=L&&L.id===(m.dataset.uid||"");
+   d.value=k;d.disabled=true;
+   m.innerHTML=`<option value="">${T("— يتبع مباشرة للمدير العام والمسؤول","— Reports directly to the general manager and supervisor")}</option>`;m.value="";m.disabled=true;m.dataset.locked="1";
+   m.insertAdjacentHTML("afterend",`<div class="pl-hint" id="urHint">${L&&!self?T(`سيصبح مسؤول ${esc(CUSTOM[k].name)} بدلاً من ${esc(L.name)}، ويتبعه ${esc(L.name)} وباقي موظفي القسم.`,`Will lead ${esc(CUSTOM[k].name)} instead of ${esc(L.name)}; ${esc(L.name)} and the rest of the department will report to them.`):T(`سيتبعه جميع موظفي ${esc(CUSTOM[k].name)}، ويرى فريقه ويضيف ملاحظاته ويوزّع عليهم المهام، ويرفع مهامه هو فقط.`,`Everyone in ${esc(CUSTOM[k].name)} will report to them; they see the team, add notes and assign tasks, but upload only their own tasks.`)}</div>`);
+   return r;
+  }
+  if(d&&m&&isCustom(d.value)){
+   const L=leadOf(d.value),self=L&&L.id===(m.dataset.uid||"");
+   m.innerHTML=L&&!self?`<option value="${esc(L.id)}">${esc(L.name)} — ${T("مسؤول القسم","Department lead")}</option>`
+    :self?`<option value="">${T("— سيتوقف عن كونه مسؤول القسم ويتبع مباشرة للمدير العام والمسؤول","— Will stop leading the department and report directly to the general manager and supervisor")}</option>`
+    :`<option value="">${T("— لا يوجد مسؤول للقسم: يتبع مباشرة للمدير العام والمسؤول","— No department lead: reports directly to the general manager and supervisor")}</option>`;
+   m.value=L&&!self?L.id:"";m.disabled=!(L&&!self);
+   if(m.disabled)m.dataset.locked="1";else delete m.dataset.locked;
+  }
+  return r;
+ };
+ /* a department lead can't be moved out of their department or promoted until another lead is chosen */
+ const _su=saveUser;
+ async function setLead(k,lead){
+  let r;try{r=await rpc("ft_dept_save",{p_token:TOK,p_dept:{key:k,name:CUSTOM[k].name,lead_id:lead||null},p_new:false})}catch(x){r={error:"net"}}
+  if(r&&r.ok){setDepts(r.departments);if(Array.isArray(r.users))DB.users=r.users;else members(k).forEach(u=>{if(u.role==="employee")u.manager_id=lead&&u.id!==lead?lead:null});ping()}
+  return r||{error:"net"};
+ }
+ const ledBy=id=>id?Object.keys(CUSTOM).find(x=>{const L=leadOf(x);return L&&L.id===id})||null:null;
+ async function saveAsLead(id,k,led){
+  const e=$("#uerr"),btn=$("#userSave");
+  if(!canDepts())return e.textContent=errMsg("forbidden");
+  if(!isCustom(k))return e.textContent=errMsg("not_found");
+  const pw=$("#upw").value,name=$("#un").value.trim(),username=$("#uu").value.trim().toLowerCase(),title=$("#ut").value.trim();
+  if(!name||name.length>100||title.length>100||!/^[a-z0-9._-]{3,50}$/.test(username))return e.textContent="الاسم و Username مطلوبان (3–50 حرفاً إنجليزياً)";
+  if((!id||pw)&&pw.length<6)return e.textContent="كلمة المرور 6 أحرف على الأقل";
+  const old=id?DB.users.find(x=>x.id===id):null;if(id&&(!old||!H.canManage(ME,old)))return e.textContent=errMsg("forbidden");
+  btn.disabled=true;e.textContent="";
+  let cleared=null;
+  try{
+   if(led&&led!==k){const r0=await setLead(led,null);if(r0.error){e.textContent=errMsg(r0.error);return}cleared=led}
+   const L=leadOf(k),nid=id||uid();
+   const u={id:nid,name,username,title,role:"employee",department:k,manager_id:L&&L.id!==nid?L.id:null};
+   u.pass=pw?await sha(pw):"";
+   const r=await rpc("ft_user_save",{p_token:TOK,p_user:u,p_new:!id});
+   if(r.error){e.textContent=USER_ERRORS[r.error]||errMsg(r.error);if(cleared)await setLead(cleared,id);return}
+   if(!apply(r))return;
+   if(!L||L.id!==nid){const r2=await setLead(k,nid);if(r2.error){closeModal();rerender();toast(T("تم حفظ الحساب، لكن تعذّر تعيينه مسؤولاً للقسم — أعد المحاولة من صفحة الأقسام","Account saved, but couldn't make them the department lead — retry from the Departments page"));return}}
+   closeModal();rerender();toast(T("تم حفظ الحساب كمسؤول ","Saved as lead of ")+CUSTOM[k].name+" ✓");
+  }catch(x){if($("#uerr"))$("#uerr").textContent=T("تعذّر الحفظ؛ تحقق من اتصال الإنترنت","Couldn't save; check your internet connection");if(cleared)try{await setLead(cleared,id)}catch(y){}}
+  finally{if($("#userSave"))$("#userSave").disabled=false}
+ }
+ saveUser=async function(id){
+  const rv=$("#ur")?$("#ur").value:"",led=ledBy(id);
+  if(rv.startsWith("lead:"))return saveAsLead(id,rv.slice(5),led);
+  if(!led)return _su.apply(this,arguments);
+  /* the current lead becomes a normal employee / moves: free the lead seat first, give it back if saving fails */
+  const e=$("#uerr");if(!canDepts()){if(e)e.textContent=errMsg("is_lead");return}
+  const r0=await setLead(led,null);if(r0.error){if(e)e.textContent=errMsg(r0.error);return}
+  if($("#um")&&$("#ud").value===led){$("#um").innerHTML='<option value=""></option>';$("#um").value=""}
+  await _su.apply(this,arguments);
+  if($("#userSave"))await setLead(led,id);
+ };
+
+ function roleName(k){return T("مسؤول ","Lead of ")+(CUSTOM[k]?CUSTOM[k].name:"")}
+ H.roleLabel=u=>{const k=ledDept(u);return k?roleName(k):(H.roles[u&&u.role]||"")};
+ /* ---- Departments page ---- */
+ function leadText(k){
+  if(isCustom(k)){const L=leadOf(k);return L?L.name+" — "+T("مسؤول القسم","Department lead"):T("لا يوجد مسؤول — المدير العام والمسؤول مباشرة","No lead — general manager & supervisor directly")}
+  if(k==="legal")return T("المدير العام والمسؤول مباشرة","General manager & supervisor directly");
+  if(k==="management")return T("الإدارة العليا","Top management");
+  return H.roles[LEAD[k]]||"—";
+ }
+ VIEWS.departments=function(){
+  if(!canDepts())return go("dashboard");
+  const all=Object.keys(D),custom=all.filter(isCustom);
+  const ready=STATE==="ok";
+  const btn=`<button class="btn primary" onclick="FTDEPT.edit()" ${ready?"":"disabled"}>＋ ${T("قسم جديد","New department")}</button>`;
+  const warn=STATE==="missing"?`<div class="dp-warn">⚠️ ${T("إضافة الأقسام تحتاج تحديثاً لخادم النظام لم يُطبّق بعد. الأقسام الحالية تعمل كالمعتاد، وزر الإضافة سيعمل فور تطبيق التحديث.","Adding departments needs a server update that hasn't been applied yet. Current departments work as usual; the add button works once the update is applied.")}</div>`
+   :STATE==="error"?`<div class="dp-warn">⚠️ ${T("تعذّر تحميل الأقسام من الخادم.","Couldn't load departments from the server.")} <a href="#" onclick="FTDEPT.load();return false">${T("إعادة المحاولة","Retry")}</a></div>`
+   :STATE==="loading"?`<div class="dp-warn" style="color:var(--muted);border-color:var(--line)">${T("جارٍ تحميل الأقسام…","Loading departments…")}</div>`:"";
+  const card=k=>{const n=members(k).length,c=isCustom(k);
+   return `<div class="card dp-card"><h3>🏢 ${esc(D[k])} <span class="badge ${c?"b-ok":"b-mut"}">${c?T("مضاف","Added"):T("أساسي","Built-in")}</span></h3>
+   <div class="dp-meta"><span><span class="dp-count en">${n}</span> ${T("موظف","employees")}</span><span>${T("يتبع لـ","Reports to")}: <b>${esc(leadText(k))}</b></span></div>
+   <div class="dp-actions">${n?`<button class="btn sm" onclick="FTDEPT.show('${k}')">👥 ${T("عرض الموظفين","View employees")}</button>`:""}${c?`<button class="btn sm" onclick="FTDEPT.edit('${k}')" ${ready?"":"disabled"}>✎ ${T("تعديل القسم والمسؤول","Edit name & lead")}</button><button class="btn sm danger" onclick="FTDEPT.del('${k}')" ${ready?"":"disabled"} title="${n?esc(errMsg("in_use")):""}">🗑 ${T("حذف","Delete")}</button>`:""}</div></div>`};
+  $("#main").innerHTML=header(T("الأقسام الوظيفية","Departments"),T("أضف أقساماً جديدة للنظام وتابع عدد الموظفين في كل قسم","Add new departments and see how many employees each has"),btn)+warn+
+   `<div class="pl-adminbar"><span>🛠 <b class="en">${all.length}</b> ${T("قسم","departments")} · <b class="en">${custom.length}</b> ${T("مضاف","added")}</span><span>${T("لكل قسم مضاف مسؤول خاص به يدير فريقه، وبدونه يتبع موظفوه مباشرة للمدير العام والمسؤول","Each added department can have its own lead who manages its team; without one, its employees report directly to the general manager and supervisor")}</span></div>`+
+   `<div class="dp-grid">${all.map(card).join("")}</div>`;
+ };
+
+ function edit(key){
+  if(!canDepts())return toast(errMsg("forbidden"));
+  if(STATE!=="ok")return toast(T("الخادم لم يُحدَّث بعد لدعم الأقسام","The server hasn't been updated for departments yet"));
+  const cur=key?CUSTOM[key]:null;if(key&&!cur)return toast(errMsg(BUILTIN.has(key)?"builtin":"not_found"));
+  const cands=cur?members(key).filter(u=>u.role==="employee"&&!u.disabled):[];
+  modal(`<h3>${cur?T("تعديل القسم","Edit department")+" — "+esc(cur.name):"＋ "+T("إضافة قسم وظيفي جديد","Add a new department")}</h3>
+  <form id="dpf" class="form" autocomplete="off" onsubmit="return false">
+   <div class="full"><label for="dpn">${T("اسم القسم","Department name")}</label><input id="dpn" maxlength="40" value="${esc(cur?cur.name:"")}" placeholder="${T("مثال: المبيعات","e.g. Sales")}"><div class="pl-hint">${T("سيظهر القسم فوراً لدى جميع المستخدمين، ويمكنك بعدها إضافة موظفين إليه من صفحة الموظفين.","The department appears instantly for everyone; then add employees to it from the Employees page.")}</div></div>
+   <div class="full"><label for="dpl">${T("مسؤول القسم","Department lead")}</label><select id="dpl"${cands.length?"":" disabled"}><option value="">${T("— بدون مسؤول (يتبع الموظفون للمدير العام والمسؤول مباشرة)","— No lead (employees report directly to the general manager and supervisor)")}</option>${cands.map(u=>`<option value="${esc(u.id)}" ${cur&&cur.lead_id===u.id?"selected":""}>${esc(u.name)}${u.title?" — "+esc(u.title):""}</option>`).join("")}</select><div class="pl-hint">${cands.length?T("يختار المسؤول من موظفي القسم نفسه. سيتبعه باقي موظفي القسم، ويرى فريقه ويضيف ملاحظاته، ويرفع مهامه هو فقط.","Pick the lead from this department's employees. The others will report to them; the lead sees the team and adds notes, but uploads only their own tasks."):T("أضف موظفين إلى هذا القسم أولاً، ثم عُد لاختيار مسؤول له منهم.","Add employees to this department first, then come back to choose its lead.")}</div></div>
+   <div class="full err" id="dperr"></div>
+  </form><div class="actions"><button class="btn" onclick="closeModal()">${T("إلغاء","Cancel")}</button><button class="btn primary" id="dpsave">${cur?T("حفظ","Save"):T("إضافة القسم","Add department")}</button></div>`);
+  const inp=$("#dpn"),err=$("#dperr"),btn=$("#dpsave");setTimeout(()=>inp.focus(),50);
+  const submit=async()=>{
+   const name=inp.value.trim().replace(/\s+/g," ");
+   if(!name)return err.textContent=T("يرجى كتابة اسم القسم","Please enter the department name");
+   if(!NAME_RE.test(name))return err.textContent=errMsg("bad_name");
+   if(Object.entries(D).some(([k,v])=>k!==key&&String(v).trim().toLowerCase()===name.toLowerCase()))return err.textContent=errMsg("exists");
+   btn.disabled=true;err.textContent="";
+   const lv=$("#dpl")?$("#dpl").value:"";
+   if(lv&&!cands.some(u=>u.id===lv))return err.textContent=errMsg("bad_lead");
+   const dep={key:cur?cur.key:"c_"+uid().replace(/[^a-z0-9]/g,"").slice(0,16),name,lead_id:lv||null};
+   let r;try{r=await rpc("ft_dept_save",{p_token:TOK,p_dept:dep,p_new:!cur})}catch(x){r={error:"net"}}
+   if(r&&r.disabled)return kicked();
+   if(!r||r.error){btn.disabled=false;err.textContent=r&&r.error==="net"?T("تعذّر الاتصال بالخادم، لم يتم الحفظ","Couldn't reach the server, nothing was saved"):errMsg(r&&r.error);return}
+   setDepts(r.departments);
+   if(Array.isArray(r.users))DB.users=r.users;else members(dep.key).forEach(u=>{u.manager_id=dep.lead_id&&u.id!==dep.lead_id?dep.lead_id:null});
+   ping();closeModal();VIEWS.departments();toast(cur?T("تم تعديل القسم ✓","Department updated ✓"):T("تمت إضافة القسم ✓","Department added ✓"));
+  };
+  btn.onclick=submit;inp.onkeydown=e=>{if(e.key==="Enter"){e.preventDefault();submit()}};
+ }
+ async function del(key){
+  if(!canDepts())return toast(errMsg("forbidden"));
+  const cur=CUSTOM[key];if(!cur)return toast(errMsg(BUILTIN.has(key)?"builtin":"not_found"));
+  if(members(key).length)return toast(errMsg("in_use"));
+  if(!confirm(T(`حذف قسم "${cur.name}"؟`,`Delete the "${cur.name}" department?`)))return;
+  let r;try{r=await rpc("ft_dept_delete",{p_token:TOK,p_key:key})}catch(x){r={error:"net"}}
+  if(r&&r.disabled)return kicked();
+  if(!r||r.error)return toast(r&&r.error==="net"?T("تعذّر الاتصال بالخادم","Couldn't reach the server"):errMsg(r&&r.error));
+  setDepts(r.departments);ping();VIEWS.departments();toast(T("تم حذف القسم ✓","Department deleted ✓"));
+ }
+ function show(key){try{sessionStorage.setItem("ft_dept_filter",key)}catch(e){}go("team")}
+ window.FTDEPT={load,edit,del,show,list:()=>({...CUSTOM}),isCustom,state:()=>STATE};
+
+ /* ---- Employees page: department shortcut + preset filter, correct label for added departments ---- */
+ const _team=VIEWS.team;
+ VIEWS.team=function(arg){
+  const r=_team.apply(this,arguments);
+  if(arg)return r;
+  const f=$("#deptFilter");let pre=null;try{pre=sessionStorage.getItem("ft_dept_filter");sessionStorage.removeItem("ft_dept_filter")}catch(e){}
+  const fixRows=()=>document.querySelectorAll("#teamRows tr").forEach(tr=>{const c=tr.children;if(c.length<3)return;const un=c[1].textContent,u=(DB.users||[]).find(x=>x.username===un),k=u&&ledDept(u),b=c[2].querySelector(".badge");if(k&&b)b.textContent=roleName(k)});
+  if(f){const oc=f.onchange;f.onchange=function(){if(oc)oc.apply(this,arguments);fixRows()}}fixRows();
+  if(f&&pre&&f.querySelector(`option[value="${pre}"]`)){f.value=pre;f.onchange&&f.onchange()}
+  if(canDepts()){const box=document.querySelector("#main .top > div:last-child");if(box&&!box.querySelector(".dp-btn"))box.insertAdjacentHTML("afterbegin",`<button class="btn dp-btn" onclick="go('departments')">🏢 ${T("الأقسام","Departments")}</button>`)}
+  return r;
+ };
+
+ /* ---- Sidebar ---- */
+ const _bn=window.buildNav;
+ window.buildNav=buildNav=function(){
+  const r=_bn.apply(this,arguments);
+  {const k=ledDept(ME),mr=$("#meRole");if(k&&mr)mr.textContent=roleName(k)}
+  if(canDepts()){const n=$("#nav");if(n&&!n.querySelector('[data-k="departments"]')){const a=`<a data-k="departments" onclick="go('departments')"><span>🏢</span>${T("الأقسام","Departments")}</a>`;const t=n.querySelector('[data-k="team"]');t?t.insertAdjacentHTML("afterend",a):n.insertAdjacentHTML("beforeend",a)}
+   const pg=(location.hash.slice(1)||"").split("/")[0];n&&n.querySelectorAll("a").forEach(x=>{if(x.dataset.k==="departments")x.classList.toggle("active",pg==="departments")})}
+  return r;
+ };
+
+ const _start=start;start=function(){const r=_start.apply(this,arguments);load();return r};
+ try{SB.channel("ft-depts").on("broadcast",{event:"changed"},()=>load()).subscribe()}catch(e){}
+ document.addEventListener("visibilitychange",()=>{if(!document.hidden&&TOK)load()});
+ if(TOK&&ME){load();try{buildNav();if((location.hash.slice(1)||"").split("/")[0]==="departments")VIEWS.departments()}catch(e){}}
+})();
+</script>
+<script id="ft-strict-ownership-js">
+/* ===== Strict task ownership (v9) =====
+   Rule: an employee can upload proof ONLY for a task assigned to them, and only in its own slot
+   (its project, its task type, a day inside the project's dates, not in the future, with a target > 0).
+   Unassigned tasks are locked for everyone except the roles listed in OWN_BYPASS_ROLES. */
+(function(){
+ const OWN_BYPASS_ROLES=["admin","supervisor"]; /* roles allowed to upload on behalf of others */
+ const L=(ar,en)=>LANG==="en"?en:ar;
+ const bypass=()=>!!ME&&OWN_BYPASS_ROLES.includes(ME.role);
+ const ownersOf=p=>k=>window.FTMT&&FTMT.list?FTMT.list(p,k):[p?.assign?.[k]].filter(Boolean);
+ const proj=pid=>(DB&&DB.projects||[]).find(x=>x.id===pid);
+ const name=id=>(DB.users.find(u=>u.id===id)||{}).name||L("موظف آخر","another employee");
+ /* returns null when allowed, otherwise an error code */
+ function check(pid,d,k){
+  if(!ME||!DB)return "session";
+  const p=proj(pid);if(!p)return "project";
+  if(!TASKS.some(t=>t[0]===k))return "invalid";
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(String(d||"")))return "invalid";
+  if(d>today())return "future";
+  if(bypass())return null;
+  const o=ownersOf(p)(k);
+  if(!o.length)return "unassigned";
+  if(!o.includes(ME.id))return "other";
+  if(!p.start||!p.end||d<p.start||d>p.end)return "range";
+  if(!(+(p.targets?.[k]||0)))return "notarget";
+  return null;
+ }
+ function msg(code,pid,k){
+  const p=proj(pid),o=p?ownersOf(p)(k):[];
+  return ({
+   session:L("انتهت الجلسة، سجّل الدخول مجدداً","Session expired, sign in again"),
+   project:L("المشروع غير موجود","Project not found"),
+   invalid:L("بيانات غير صالحة","Invalid data"),
+   future:L("لا يمكن إنجاز مهمة مستقبلية","You can't complete a future task"),
+   unassigned:L("🔒 هذه المهمة غير مسندة إليك بعد — لا يمكنك رفعها حتى يسندها إليك مسؤول الفريق","🔒 This task isn't assigned to you — you can't upload it until your team lead assigns it to you"),
+   other:L("🔒 هذه المهمة مسندة إلى ","🔒 This task is assigned to ")+o.map(name).join(L("، ",", "))+L(" — يمكنك رفع مهامك فقط"," — you can only upload your own tasks"),
+   range:L("🔒 هذا اليوم خارج فترة المشروع","🔒 This day is outside the project period"),
+   notarget:L("🔒 هذه المهمة غير مطلوبة في باقة هذا المشروع","🔒 This task is not part of this project's plan")
+  })[code]||L("غير مسموح","Not allowed");
+ }
+ const canReview=()=>!!ME&&FTHierarchy.canManageTeam(ME);
+ window.FTOWN={check,msg,bypass};
+
+ /* 1) Upload entry point */
+ const BASE=window.attachModal;
+ const guarded=function(pid,d,k){
+  if(!ME||!DB)return;
+  const s=window.FTWF&&FTWF.subOf?FTWF.subOf(pid,d,k):null;
+  const ownRejected=s&&s.status==="rej_emp"&&s.user_id===ME.id;
+  if(s&&!ownRejected){ /* already uploaded: view only, for its uploader and reviewers */
+   if(s.user_id===ME.id||canReview()||bypass())return FTWF.review(pid,d,k);
+   return toast(msg("other",pid,k));
+  }
+  const e=check(pid,d,k);if(e)return toast(msg(e,pid,k));
+  const r=BASE.apply(this,arguments);
+  /* re-check at the moment of sending, with the latest assignment */
+  const btn=document.querySelector("#pfGo");
+  if(btn&&btn.onclick){const send=btn.onclick;btn.onclick=async function(ev){
+   try{const latest=await rpc("ft_get",{p_token:TOK});if(latest&&!latest.error)apply(latest)}catch(_){}
+   const e2=check(pid,d,k);if(e2){const er=document.querySelector("#pfErr");if(er)er.textContent=msg(e2,pid,k);return}
+   return send.call(this,ev)}}
+  return r;
+ };
+ window.attachModal=guarded;
+ if(window.FTWF)FTWF.attach=guarded;
+ if(window.FTDASH)FTDASH.attach=guarded;
+
+ /* 2) Tick entry points (project table + calendar) */
+ window.tick=function(pid,d,k){if(d>today())return toast(msg("future"));guarded(pid,d,k)};
+ window.calendarTick=function(pid,d,k){if(d>today())return;guarded(pid,d,k);setTimeout(()=>{if(!$("#modalRoot").innerHTML)VIEWS.calendar()},50)};
+
+ /* 3) Last line of defence before the server: block uploads / direct ticks for tasks that aren't yours */
+ const RPC=window.rpc;
+ try{if(DB&&DB.tracker)window.__FT_TRK_SNAP=JSON.parse(JSON.stringify(DB.tracker))}catch(_){}
+ window.rpc=async function(fn,args){
+  if(fn==="ft_sub_create"&&args){const e=check(args.p_project,args.p_day,args.p_key);if(e)return{error:e==="other"||e==="unassigned"?"not_assigned":"forbidden"}}
+  if(fn==="ft_save"&&args&&args.p_scope&&Array.isArray(args.p_scope.tracker)&&!bypass()&&window.__FT_TRK_SNAP){
+   /* direct check-marks are only allowed by managers; employees must upload proof */
+   const snap=window.__FT_TRK_SNAP;
+   for(const pid of args.p_scope.tracker){const now=(args.p_data&&args.p_data.tracker||{})[pid]||{},was=snap[pid]||{};
+    for(const d of new Set([...Object.keys(now),...Object.keys(was)]))for(const [k] of TASKS)if(!!(now[d]||{})[k]!==!!(was[d]||{})[k])return{error:"forbidden"}}
+  }
+  const r=await RPC.apply(this,arguments);
+  if(r&&r.data&&r.data.tracker)try{window.__FT_TRK_SNAP=JSON.parse(JSON.stringify(r.data.tracker))}catch(_){}
+  return r;
+ };
+
+ /* 4) Project table: lock every cell that isn't yours */
+ const _tv=window.trackerView;
+ window.trackerView=function(id){
+  _tv.apply(this,arguments);const p=proj(id);if(!p||!ME)return;
+  if(bypass())return;
+  const own=ownersOf(p),mineKeys=TASKS.filter(([k])=>own(k).includes(ME.id)&&+(p.targets?.[k]||0)).map(([k])=>k);
+  document.querySelectorAll(".trk .cb").forEach(el=>{
+   const m=(el.getAttribute("onclick")||"").match(/'([^']+)','([^']+)','([^']+)'/);if(!m)return;
+   const e=check(m[1],m[2],m[3]);
+   if(e==="other"||e==="unassigned"||e==="range"||e==="notarget"){el.classList.add("cb-lock");el.classList.remove("cb-mine");el.title=msg(e,m[1],m[3]).replace("🔒 ","")}
+   else if(!e){el.classList.add("cb-mine");el.title=L("مهمتك — انقر لرفع الإثبات","Your task — click to upload proof")}
+  });
+  const tbl=document.querySelector(".trk");
+  if(tbl&&!document.querySelector(".own-banner"))tbl.closest(".card").insertAdjacentHTML("beforebegin",`<div class="own-banner">${mineKeys.length
+   ?L("🔒 يمكنك رفع مهامك فقط في هذا المشروع: ","🔒 You can only upload your own tasks in this project: ")+mineKeys.map(k=>`<b>${esc(TNAME(k))}</b>`).join(" · ")
+   :L("🔒 لا توجد مهام مسندة إليك في هذا المشروع — لا يمكنك رفع أي مهمة هنا","🔒 No tasks are assigned to you in this project — you can't upload anything here")}</div>`);
+ };
+
+ /* 5) Calendar: disable tasks that aren't yours */
+ const _cal=VIEWS.calendar;
+ VIEWS.calendar=function(){
+  _cal.apply(this,arguments);if(!ME||bypass())return;
+  document.querySelectorAll(".daily-task").forEach(row=>{
+   const cb=row.querySelector("input[type=checkbox]");if(!cb)return;
+   const m=(cb.getAttribute("onchange")||"").match(/'([^']+)','([^']+)','([^']+)'/);if(!m)return;
+   const e=check(m[1],m[2],m[3]);
+   if(e==="other"||e==="unassigned"||e==="range"||e==="notarget"){
+    cb.disabled=true;cb.onclick=ev=>ev.preventDefault();row.classList.add("own-locked");
+    row.querySelectorAll(".ftd-up").forEach(b=>b.remove());
+    if(e==="unassigned"&&!row.querySelector(".own-un"))row.insertAdjacentHTML("beforeend",`<span class="badge b-mut own-un">🔒 ${L("غير مسندة","Unassigned")}</span>`);
+   }
+  });
+ };
+
+ /* refresh the current screen so the new rules apply immediately */
+ try{if(ME&&$("#main")&&typeof rerender==="function")rerender()}catch(_){}
+})();
+</script>
+<style id="ft-strict-ownership-css">
+.trk .cb.cb-lock{pointer-events:auto;cursor:not-allowed}
+.trk .cb.cb-mine:not(.on){border-color:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 22%,transparent)}
+.own-banner{margin:0 0 12px;padding:10px 14px;border:1px solid var(--line-strong);border-radius:12px;background:var(--glass);font-size:13px;color:var(--muted)}
+.own-banner b{color:var(--ok)}
+.daily-task.own-locked{opacity:.55}
+.daily-task.own-locked input[type=checkbox]{cursor:not-allowed}
+</style>
+
 </html>
